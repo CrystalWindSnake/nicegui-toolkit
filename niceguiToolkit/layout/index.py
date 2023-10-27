@@ -4,6 +4,7 @@ import nicegui as ng_vars
 
 
 from dataclasses import dataclass
+from niceguiToolkit.utils import astCore
 
 
 @dataclass
@@ -20,7 +21,18 @@ def inject_layout_tool():
     # when select cp
     def trigger_select_component_event(id: int):
         info = cpStore.get_info(id)
-        print(info)
+
+        classes_str = astCore.get_call_content(
+            info.sourceCodeInfo, info.astInfo.classes
+        )
+
+        styles_str = astCore.get_call_content(info.sourceCodeInfo, info.astInfo.style)
+
+        props_str = astCore.get_call_content(info.sourceCodeInfo, info.astInfo.props)
+        print(
+            f"name:{info.typeName},classes:{classes_str},styles_str:{styles_str},props_str={props_str}"
+        )
+        # print(info)
 
     #
     @ng_vars.app.on_connect
