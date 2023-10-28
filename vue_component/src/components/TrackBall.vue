@@ -2,6 +2,7 @@
 // import { ref } from "vue";
 
 import Aiming from "./Aiming.vue";
+import Panel from "./Panel.vue";
 
 import {
   useHoverVisTarget,
@@ -55,6 +56,10 @@ watch(selectedElement, (target) => {
 </script>
 
 <template>
+  <Panel>
+    <slot></slot>
+  </Panel>
+
   <svg
     class="vis-hover"
     :viewBox="viewBox"

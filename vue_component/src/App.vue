@@ -33,7 +33,9 @@ function onclick() {
         idAttr: 'layout-tool-ele-id',
         elementTypeAttr: 'layout-tool-ele-type',
       }"
-    ></TrackBall>
+    >
+      <button>test1</button>
+    </TrackBall>
   </div>
 </template>
 

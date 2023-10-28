@@ -191,6 +191,12 @@ export function hookPageMouseEvent(hoverElement: ComputedRef<HTMLElement | null>
         document.querySelector("body"),
         "click",
         (e) => {
+
+            const target = e.target as HTMLElement
+            if (target.closest('[layout-tool-panel]')) {
+                return
+            }
+
             selectedElement.value = hoverElement.value;
 
             e.stopPropagation();
