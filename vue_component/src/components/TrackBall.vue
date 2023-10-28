@@ -91,14 +91,16 @@ watch(selectedElement, (target) => {
     ></line>
   </svg>
 
-  <div
-    class="vis-type-name fixed top-0 left-0 pointer-events-none shadow z-9999 rounded p-1 bg-green-400"
-    :style="typeNameTagStyles"
-  >
-    {{ typeName }}
-  </div>
-
   <Aiming :selected-element="selectedElement"></Aiming>
+
+  <Teleport to="body">
+    <div
+      class="vis-type-name fixed top-0 left-0 pointer-events-none shadow z-9999 rounded p-1 bg-green-400"
+      :style="typeNameTagStyles"
+    >
+      {{ typeName }}
+    </div>
+  </Teleport>
 </template>
 
 <style scoped></style>
