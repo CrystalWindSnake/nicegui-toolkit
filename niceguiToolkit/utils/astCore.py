@@ -3,7 +3,7 @@ import ast
 from ast import AST
 from pathlib import Path
 
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Optional, Iterable
 from typing_extensions import Literal
 from dataclasses import dataclass
 from functools import lru_cache
@@ -26,10 +26,6 @@ class CallerStemNodeVisitor(ast.NodeVisitor):
             hasattr(node, "lineno")
             and node.lineno == self.positions.lineno
             and node.col_offset == self.positions.col_offset
-            # and node.end_col_offset == self.info.end_col_offset
-            # and isinstance(node, ast.Attribute)
-            # and isinstance(node.value, ast.Name)
-            # and node.attr == "element"
         ):
             self.target = node
             return
@@ -64,16 +60,7 @@ class AttrStemNodeVisitor(ast.NodeVisitor):
         )
 
     def visit(self, node: AST) -> Any:
-        if (
-            self.check(node)
-            # and isinstance(node, ast.Attribute)
-            # # and isinstance(node.func, ast.Attribute)
-            # and node.attr == self.target_attr
-            # and isinstance(node.value, ast.Call)
-            # and len(node.value.args) > 0
-            # and isinstance(node.value.args[0], ast.Constant)
-            # and isinstance(node.value.args[0].value, str)
-        ):
+        if self.check(node):
             self.target = node.args[0]  # type: ignore
             return
         return super().visit(node)
@@ -100,6 +87,7 @@ def clear_ast_code_cache():
 @dataclass
 class _T_ast_info:
     has: bool
+    lineno: int = 0
     end_lineno: Optional[int] = None
     col_offset: int = 0
     end_col_offset: Optional[int] = None
@@ -120,6 +108,7 @@ def _get_ast_info(source_code: _T_get_source_code_info, call_name: _T_call_name)
     if attr_stem_node:
         return _T_ast_info(
             True,
+            attr_stem_node.lineno,
             attr_stem_node.end_lineno,
             attr_stem_node.col_offset,
             attr_stem_node.end_col_offset,
@@ -134,9 +123,27 @@ def get_call_content(source_code: _T_get_source_code_info, ast_info: _T_ast_info
     code, _ = _get_ast4file(source_code.callerSourceCodeFile)
     lines = code.splitlines()
     assert ast_info.end_lineno
+    assert ast_info.end_col_offset
     return lines[ast_info.end_lineno - 1][
         ast_info.col_offset + 1 : ast_info.end_col_offset - 1
     ]
+
+
+@dataclass
+class _T_apply_code_record:
+    code: str
+    lineno: int
+    col_offset: int
+
+
+def apply_code(source_code_file: Path, records: Iterable[_T_apply_code_record]):
+    code, _ = _get_ast4file(source_code_file)
+    lines = code.splitlines()
+
+    for record in sorted(records, key=lambda x: (x.lineno, x.col_offset), reverse=True):
+        pass
+
+    return lines
 
 
 @dataclass

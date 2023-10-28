@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Dict, List
 from . import hooker
 import nicegui as ng_vars
 
@@ -10,6 +10,8 @@ from niceguiToolkit.utils import astCore
 @dataclass
 class _T_inject_layout_tool:
     trigger_select_component_event: Callable[[int], None]
+    trigger_change_styles: Callable[[int, Dict[str, str]], None]
+    trigger_change_classes: Callable[[int, List[str]], None]
 
 
 def inject_layout_tool():
@@ -34,10 +36,20 @@ def inject_layout_tool():
         )
         # print(info)
 
+    # when change style in ui
+    def trigger_change_styles(id: int, styles: Dict[str, str]):
+        cpStore.change_styles(id, styles)
+
+    # when change classes in ui
+    def trigger_change_classes(id: int, classes: List[str]):
+        cpStore.change_classes(id, classes)
+
     #
     @ng_vars.app.on_connect
     def _(client: ng_vars.Client):
         # collect cp style,props,class
         cpStore.collect_component_infos(client)
 
-    return _T_inject_layout_tool(trigger_select_component_event)
+    return _T_inject_layout_tool(
+        trigger_select_component_event, trigger_change_styles, trigger_change_classes
+    )
