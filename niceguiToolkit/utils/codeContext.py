@@ -18,13 +18,13 @@ def get_static_functions(classIns: type):
     return [
         _Tget_static_functions(name, obj, _isReturnUiElement(obj))
         for name, obj in classIns.__dict__.items()
-        if isinstance(obj, staticmethod) and (not name.startswith("_"))
+        if isinstance(obj, staticmethod) and (not name.startswith("__"))
     ]
 
 
 def _isReturnUiElement(func):
     hints = get_type_hints(func)
-    if "return" not in hints:
+    if "return" not in hints or (not inspect.isclass(hints["return"])):
         return False
 
     return issubclass(hints["return"], ng_vars.ui.element)

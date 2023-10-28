@@ -12,6 +12,7 @@ class _T_inject_layout_tool:
     trigger_select_component_event: Callable[[int], None]
     trigger_change_styles: Callable[[int, Dict[str, str]], None]
     trigger_change_classes: Callable[[int, List[str]], None]
+    trigger_apply_changed: Callable[..., None]
 
 
 def inject_layout_tool():
@@ -44,6 +45,9 @@ def inject_layout_tool():
     def trigger_change_classes(id: int, classes: List[str]):
         cpStore.change_classes(id, classes)
 
+    def trigger_apply_changed():
+        cpStore.create_changed_records()
+
     #
     @ng_vars.app.on_connect
     def _(client: ng_vars.Client):
@@ -51,5 +55,8 @@ def inject_layout_tool():
         cpStore.collect_component_infos(client)
 
     return _T_inject_layout_tool(
-        trigger_select_component_event, trigger_change_styles, trigger_change_classes
+        trigger_select_component_event,
+        trigger_change_styles,
+        trigger_change_classes,
+        trigger_apply_changed,
     )

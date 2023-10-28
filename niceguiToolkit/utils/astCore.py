@@ -134,6 +134,11 @@ class _T_apply_code_record:
     code: str
     lineno: int
     col_offset: int
+    end_col_offset: int
+
+
+def _replace_str_by_position(content: str, replace: str, start: int, end: int):
+    return f"{content[:start]}{replace}{content[end:]}"
 
 
 def apply_code(source_code_file: Path, records: Iterable[_T_apply_code_record]):
@@ -141,7 +146,15 @@ def apply_code(source_code_file: Path, records: Iterable[_T_apply_code_record]):
     lines = code.splitlines()
 
     for record in sorted(records, key=lambda x: (x.lineno, x.col_offset), reverse=True):
-        pass
+        if record.lineno <= 0 or record.col_offset <= 0:
+            continue
+
+        lines[record.lineno - 1] = _replace_str_by_position(
+            lines[record.lineno - 1],
+            record.code,
+            record.col_offset,
+            record.end_col_offset,
+        )
 
     return lines
 

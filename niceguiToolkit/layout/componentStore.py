@@ -32,13 +32,21 @@ class ComponentInfo:
             self.astInfo.style.lineno
             if has_style_call
             else self.sourceCodeInfo.positions.lineno
-        )
+        ) or 0
         col_offset = (
-            self.astInfo.style.col_offset
+            self.astInfo.style.col_offset + 1
             if has_style_call
             else self.sourceCodeInfo.positions.col_offset
-        )
-        return astCore._T_apply_code_record("", lineno or 0, col_offset or 0)
+        ) or 0
+        end_col_offset = (
+            (self.astInfo.style.end_col_offset or 0) - 1
+            if has_style_call
+            else self.sourceCodeInfo.positions.end_col_offset
+        ) or col_offset
+
+        code = ";".join(f"{name}:{value}" for name, value in self.stylesHistory.items())
+
+        return astCore._T_apply_code_record(code, lineno, col_offset, end_col_offset)
 
     def create_classes_code(self):
         has_classes_call = self.astInfo.classes.has
@@ -46,13 +54,21 @@ class ComponentInfo:
             self.astInfo.classes.lineno
             if has_classes_call
             else self.sourceCodeInfo.positions.lineno
-        )
+        ) or 0
         col_offset = (
             self.astInfo.classes.col_offset
             if has_classes_call
             else self.sourceCodeInfo.positions.col_offset
-        )
-        return astCore._T_apply_code_record("", lineno or 0, col_offset or 0)
+        ) or 0
+        end_col_offset = (
+            self.astInfo.classes.end_col_offset
+            if has_classes_call
+            else self.sourceCodeInfo.positions.end_col_offset
+        ) or col_offset
+
+        code = " ".join(self.classesHistory)
+
+        return astCore._T_apply_code_record(code, lineno, col_offset, end_col_offset)
 
 
 class ComponentStore:
@@ -64,9 +80,18 @@ class ComponentStore:
     def set_componentInfo(self, component: ng_vars.ui.element):
         code_info = codeContext.get_source_code_info()
         ast_info = astCore.get_ast_infos(code_info)
-        self.cpMapper[component.id] = ComponentInfo(
-            type(component).__name__, code_info, ast_info
-        )
+        cp_info = ComponentInfo(type(component).__name__, code_info, ast_info)
+        self.cpMapper[component.id] = cp_info
+
+        if ast_info.style.has:
+            style_str = astCore.get_call_content(code_info, ast_info.style)
+            cp_info.stylesHistory.update(ng_vars.ui.element._parse_style(style_str))
+
+        if ast_info.classes.has:
+            classes_str = astCore.get_call_content(code_info, ast_info.classes)
+            cp_info.classesHistory = ng_vars.ui.element._update_classes_list(
+                cp_info.classesHistory, classes_str
+            )
 
     def collect_component_infos(self, client: ng_vars.Client):
         for id, info in self.cpMapper.items():
@@ -86,7 +111,7 @@ class ComponentStore:
         self.get_info(id).classesHistory.extend(classes)
         self._classes_records.add(id)
 
-    def apply_changed(self):
+    def create_changed_records(self):
         style_infos = (self.get_info(id) for id in self._styles_records)
         style_infos = [(info, info.create_style_code()) for info in style_infos]
 
@@ -95,9 +120,12 @@ class ComponentStore:
 
         need_infos = chain(style_infos, classes_infos)
 
-        for key, gp in groupby(
+        for file_path, gp in groupby(
             sorted(need_infos, key=lambda m: m[0].sourceCodeInfo.callerSourceCodeFile),
             key=lambda m: m[0].sourceCodeInfo.callerSourceCodeFile,
         ):
             records = (item[1] for item in gp)
-            astCore.apply_code(key, records)
+            code_lines = astCore.apply_code(file_path, records)
+
+            print("\n".join(code_lines))
+            # file_path.write_text("\n".join(code_lines))
