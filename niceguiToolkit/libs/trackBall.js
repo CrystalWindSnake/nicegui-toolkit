@@ -528,7 +528,7 @@ function Pe(e) {
     if (s.value === null)
       return null;
     const p = s.value.closest(e.selectors);
-    return p === null ? null : p;
+    return p === null || p.closest("[layout-tool-panel]") ? null : p;
   }), o = Z(te(i));
   E("scroll", o.update, !0);
   const u = y(() => i.value ? {

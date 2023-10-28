@@ -34,7 +34,14 @@ function onclick() {
         elementTypeAttr: 'layout-tool-ele-type',
       }"
     >
-      <button>test1</button>
+      <button
+        class="ex4ng-ng_cp"
+        layout-tool-mark="true"
+        layout-tool-ele-id="3"
+        layout-tool-ele-type="button"
+      >
+        test1
+      </button>
     </TrackBall>
   </div>
 </template>

@@ -78,6 +78,11 @@ export function useHoverVisTarget(config: TSelectorConfig) {
             return null;
         }
 
+        // if panel child
+        if (target.closest('[layout-tool-panel]')) {
+            return null
+        }
+
         return target as HTMLElement;
     });
 
