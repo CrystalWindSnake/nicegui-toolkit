@@ -7,7 +7,7 @@ from niceguiToolkit.utils import codeContext
 
 
 def _mark_element(ele: ng_vars.ui.element):
-    ele.classes("ex4ng-ng_cp")
+    # ele.classes("ex4ng-ng_cp")
     ele.props("layout-tool-mark")
     ele._props["layout-tool-ele-id"] = ele.id
     ele._props["layout-tool-ele-type"] = type(ele).__name__

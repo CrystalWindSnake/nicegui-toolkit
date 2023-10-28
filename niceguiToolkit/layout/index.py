@@ -6,6 +6,7 @@ import nicegui as ng_vars
 from dataclasses import dataclass
 from niceguiToolkit.utils import astCore
 from niceguiToolkit.layout.componentStore import ComponentStore
+from niceguiToolkit.layout import webui
 
 
 @dataclass
@@ -55,6 +56,8 @@ def inject_layout_tool():
     def _(client: ng_vars.Client):
         # collect cp style,props,class
         cpStore.collect_component_infos(client)
+
+    webui.build_TrackBall(cpStore)
 
     return _T_inject_layout_tool(
         cpStore,
