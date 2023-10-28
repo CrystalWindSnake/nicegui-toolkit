@@ -56,9 +56,11 @@ watch(selectedElement, (target) => {
 </script>
 
 <template>
-  <Panel>
-    <slot></slot>
-  </Panel>
+  <Teleport to="body">
+    <Panel>
+      <slot></slot>
+    </Panel>
+  </Teleport>
 
   <svg
     class="vis-hover"
