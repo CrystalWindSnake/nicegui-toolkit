@@ -4,7 +4,7 @@ import shutil
 
 
 
-EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'niceguiToolkit'
+EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'niceguiToolkit/libs'
 
 DIST_ROOT = Path(__file__).parent.parent / 'dist'
 
@@ -21,7 +21,7 @@ def tran_vue_imports(js_file_name_without_ex:str):
 
     js_file_name = f'{js_file_name_without_ex}.js'
 
-    file = DIST_ROOT / js_file_name_without_ex / js_file_name
+    file = DIST_ROOT / js_file_name
     lines = file.read_text(encoding="utf8").splitlines()
     import_stm = lines[0]
     match = RE_import_stm.match(import_stm)
@@ -49,6 +49,8 @@ def tran_vue_imports(js_file_name_without_ex:str):
             f.write(const_stms)
             f.write("\n".join(lines[1:]))
 
+        print(f'create file[{str(to_file)}]')
+
     # print(RE_import_stm.match(import_stm))
 
 
@@ -60,7 +62,7 @@ def copy2styls(dist_file, dest_file):
 
     shutil.copy(src, to_file)
 
-cp_name='TrackBall'
+cp_name='trackBall'
 tran_vue_imports(cp_name)
 copy2styls(f'{cp_name}/style.css',f'{cp_name}.css')
 

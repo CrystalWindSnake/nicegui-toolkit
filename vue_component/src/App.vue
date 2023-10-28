@@ -31,6 +31,7 @@ function onclick() {
       :selector-config="{
         selectors: '[layout-tool-mark]',
         idAttr: 'layout-tool-ele-id',
+        elementTypeAttr: 'layout-tool-ele-type',
       }"
     ></TrackBall>
   </div>
