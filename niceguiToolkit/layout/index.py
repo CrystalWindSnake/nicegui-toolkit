@@ -5,10 +5,12 @@ import nicegui as ng_vars
 
 from dataclasses import dataclass
 from niceguiToolkit.utils import astCore
+from niceguiToolkit.layout.componentStore import ComponentStore
 
 
 @dataclass
 class _T_inject_layout_tool:
+    store: ComponentStore
     trigger_select_component_event: Callable[[int], None]
     trigger_change_styles: Callable[[int, Dict[str, str]], None]
     trigger_change_classes: Callable[[int, List[str]], None]
@@ -55,6 +57,7 @@ def inject_layout_tool():
         cpStore.collect_component_infos(client)
 
     return _T_inject_layout_tool(
+        cpStore,
         trigger_select_component_event,
         trigger_change_styles,
         trigger_change_classes,

@@ -4,7 +4,7 @@ from typing import Any, Dict, List, TYPE_CHECKING, Set
 from itertools import groupby, chain
 import nicegui as ng_vars
 from copy import deepcopy
-
+from pathlib import Path
 from dataclasses import dataclass, field
 from niceguiToolkit.utils.types import _TNiceguiComponentId
 from niceguiToolkit.utils import codeContext, astCore
@@ -36,7 +36,7 @@ class ComponentInfo:
         col_offset = (
             self.astInfo.style.col_offset + 1
             if has_style_call
-            else self.sourceCodeInfo.positions.col_offset
+            else self.sourceCodeInfo.positions.end_col_offset
         ) or 0
         end_col_offset = (
             (self.astInfo.style.end_col_offset or 0) - 1
@@ -45,6 +45,8 @@ class ComponentInfo:
         ) or col_offset
 
         code = ";".join(f"{name}:{value}" for name, value in self.stylesHistory.items())
+        if not has_style_call:
+            code = f'.style("{code}")'
 
         return astCore._T_apply_code_record(code, lineno, col_offset, end_col_offset)
 
@@ -58,7 +60,7 @@ class ComponentInfo:
         col_offset = (
             self.astInfo.classes.col_offset
             if has_classes_call
-            else self.sourceCodeInfo.positions.col_offset
+            else self.sourceCodeInfo.positions.end_col_offset
         ) or 0
         end_col_offset = (
             self.astInfo.classes.end_col_offset
@@ -71,17 +73,27 @@ class ComponentInfo:
         return astCore._T_apply_code_record(code, lineno, col_offset, end_col_offset)
 
 
+@dataclass
+class _T_create_changed_records:
+    file: Path
+    code: str
+
+
 class ComponentStore:
     def __init__(self) -> None:
         self.cpMapper: Dict[_TNiceguiComponentId, ComponentInfo] = {}
         self._styles_records: Set[_TNiceguiComponentId] = set()
         self._classes_records: Set[_TNiceguiComponentId] = set()
 
-    def set_componentInfo(self, component: ng_vars.ui.element):
-        code_info = codeContext.get_source_code_info()
+    def _set_componentInfo(
+        self,
+        component_type_name: str,
+        component_id: _TNiceguiComponentId,
+        code_info: _T_get_source_code_info,
+    ):
         ast_info = astCore.get_ast_infos(code_info)
-        cp_info = ComponentInfo(type(component).__name__, code_info, ast_info)
-        self.cpMapper[component.id] = cp_info
+        cp_info = ComponentInfo(component_type_name, code_info, ast_info)
+        self.cpMapper[component_id] = cp_info
 
         if ast_info.style.has:
             style_str = astCore.get_call_content(code_info, ast_info.style)
@@ -93,12 +105,22 @@ class ComponentStore:
                 cp_info.classesHistory, classes_str
             )
 
+        # print(code_info, component_type_name)
+
+    def set_componentInfo(self, component: ng_vars.ui.element):
+        code_info = codeContext.get_source_code_info()
+        self._set_componentInfo(type(component).__name__, component.id, code_info)
+
+    def _collect_component_info(
+        self, component_info: ComponentInfo, styles: Dict[str, str], cleasses: List[str]
+    ):
+        component_info.styles = {**styles}
+        component_info.classes = [c for c in cleasses]
+
     def collect_component_infos(self, client: ng_vars.Client):
         for id, info in self.cpMapper.items():
             ele = client.elements[id]
-            info.styles = {**ele._style}
-            info.props = deepcopy(ele._props)
-            info.classes = [c for c in ele._classes]
+            self._collect_component_info(info, ele._style, ele._classes)
 
     def get_info(self, id: _TNiceguiComponentId):
         return self.cpMapper[id]
@@ -127,5 +149,5 @@ class ComponentStore:
             records = (item[1] for item in gp)
             code_lines = astCore.apply_code(file_path, records)
 
-            print("\n".join(code_lines))
-            # file_path.write_text("\n".join(code_lines))
+            code = "\n".join(code_lines)
+            yield _T_create_changed_records(file_path, code)

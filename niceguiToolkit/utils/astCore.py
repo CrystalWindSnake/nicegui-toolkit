@@ -62,13 +62,13 @@ class AttrStemNodeVisitor(ast.NodeVisitor):
     def visit(self, node: AST) -> Any:
         if self.check(node):
             self.target = node.args[0]  # type: ignore
-            return
+
         return super().visit(node)
 
     def get_target(self, node: Any) -> AST:
         self.target = None
         if self.check(node):
-            return node.args[0]
+            self.target = node.args[0]
         self.generic_visit(node)
         return self.target  # type: ignore
 
