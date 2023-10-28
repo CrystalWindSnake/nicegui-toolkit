@@ -7,7 +7,7 @@ const G = Vue.nextTick
 const y = Vue.ref
 const J = Vue.isRef
 const A = Vue.watch
-const p = Vue.computed
+const v = Vue.computed
 const K = Vue.readonly
 const Z = Vue.watchEffect
 const ee = Vue.toRef
@@ -74,14 +74,14 @@ function S(...t) {
   Array.isArray(o) || (o = [o]), Array.isArray(e) || (e = [e]);
   const s = [], r = () => {
     s.forEach((a) => a()), s.length = 0;
-  }, i = (a, f, d, v) => (a.addEventListener(f, d, v), () => a.removeEventListener(f, d, v)), u = A(
+  }, i = (a, f, d, p) => (a.addEventListener(f, d, p), () => a.removeEventListener(f, d, p)), u = A(
     () => [I(n), E(l)],
     ([a, f]) => {
       if (r(), !a)
         return;
       const d = ie(f) ? { ...f } : f;
       s.push(
-        ...o.flatMap((v) => e.map((g) => i(a, v, g, d)))
+        ...o.flatMap((p) => e.map((g) => i(a, p, g, d)))
       );
     },
     { immediate: !0, flush: "post" }
@@ -98,7 +98,7 @@ function ce() {
 }
 function W(t) {
   const n = ce();
-  return p(() => (n.value, !!t()));
+  return v(() => (n.value, !!t()));
 }
 function ae(t, n = {}) {
   const {
@@ -110,12 +110,12 @@ function ae(t, n = {}) {
   function c(d) {
     if (!s.value || !l)
       return;
-    const v = d - (i || d);
-    if (r && v < r) {
+    const p = d - (i || d);
+    if (r && p < r) {
       u = l.requestAnimationFrame(c);
       return;
     }
-    t({ delta: v, timestamp: d }), i = d, u = l.requestAnimationFrame(c);
+    t({ delta: p, timestamp: d }), i = d, u = l.requestAnimationFrame(c);
   }
   function a() {
     !s.value && l && (s.value = !0, u = l.requestAnimationFrame(c));
@@ -148,7 +148,7 @@ function de(t, n, o = {}) {
   let s;
   const r = W(() => e && "ResizeObserver" in e), i = () => {
     s && (s.disconnect(), s = void 0);
-  }, u = p(() => Array.isArray(t) ? t.map((f) => I(f)) : [I(t)]), c = A(
+  }, u = v(() => Array.isArray(t) ? t.map((f) => I(f)) : [I(t)]), c = A(
     u,
     (f) => {
       if (i(), r.value && e) {
@@ -172,15 +172,15 @@ function R(t, n = {}) {
     windowResize: e = !0,
     windowScroll: l = !0,
     immediate: s = !0
-  } = n, r = y(0), i = y(0), u = y(0), c = y(0), a = y(0), f = y(0), d = y(0), v = y(0);
+  } = n, r = y(0), i = y(0), u = y(0), c = y(0), a = y(0), f = y(0), d = y(0), p = y(0);
   function g() {
     const x = I(t);
     if (!x) {
-      o && (r.value = 0, i.value = 0, u.value = 0, c.value = 0, a.value = 0, f.value = 0, d.value = 0, v.value = 0);
+      o && (r.value = 0, i.value = 0, u.value = 0, c.value = 0, a.value = 0, f.value = 0, d.value = 0, p.value = 0);
       return;
     }
     const w = x.getBoundingClientRect();
-    r.value = w.height, i.value = w.bottom, u.value = w.left, c.value = w.right, a.value = w.top, f.value = w.width, d.value = w.x, v.value = w.y;
+    r.value = w.height, i.value = w.bottom, u.value = w.left, c.value = w.right, a.value = w.top, f.value = w.width, d.value = w.x, p.value = w.y;
   }
   return de(t, g), A(() => I(t), (x) => !x && g()), l && S("scroll", g, { capture: !0, passive: !0 }), e && S("resize", g, { passive: !0 }), z(() => {
     s && g();
@@ -192,11 +192,11 @@ function R(t, n = {}) {
     top: a,
     width: f,
     x: d,
-    y: v,
+    y: p,
     update: g
   };
 }
-function pe(t) {
+function ve(t) {
   const {
     x: n,
     y: o,
@@ -214,7 +214,7 @@ function pe(t) {
     ...a
   };
 }
-const ve = {
+const pe = {
   page: (t) => [t.pageX, t.pageY],
   client: (t) => [t.clientX, t.clientY],
   screen: (t) => [t.screenX, t.screenY],
@@ -232,18 +232,18 @@ function $(t = {}) {
     eventFilter: u
   } = t;
   let c = null;
-  const a = y(l.x), f = y(l.y), d = y(null), v = typeof n == "function" ? n : ve[n], g = (h) => {
-    const L = v(h);
+  const a = y(l.x), f = y(l.y), d = y(null), p = typeof n == "function" ? n : pe[n], g = (h) => {
+    const L = p(h);
     c = h, L && ([a.value, f.value] = L, d.value = "mouse");
   }, x = (h) => {
     if (h.touches.length > 0) {
-      const L = v(h.touches[0]);
+      const L = p(h.touches[0]);
       L && ([a.value, f.value] = L, d.value = "touch");
     }
   }, w = () => {
     if (!c || !s)
       return;
-    const h = v(c);
+    const h = p(c);
     c instanceof MouseEvent && h && (a.value = h[0] + s.scrollX, f.value = h[1] + s.scrollY);
   }, Y = () => {
     a.value = l.x, f.value = l.y;
@@ -275,7 +275,7 @@ function O(t = {}) {
   return { width: r, height: i };
 }
 function q() {
-  const { width: t, height: n } = O(), o = p(() => `0 0 ${t.value} ${n.value}`), e = p(() => ({
+  const { width: t, height: n } = O(), o = v(() => `0 0 ${t.value} ${n.value}`), e = v(() => ({
     width: t.value,
     height: n.value
   }));
@@ -287,7 +287,7 @@ function q() {
 function he(t) {
   const n = ee(t), o = q(), e = P(R(t));
   S("scroll", e.update, !0);
-  const l = p(() => n.value ? {
+  const l = v(() => n.value ? {
     display: "block",
     width: e.width,
     height: e.height,
@@ -299,42 +299,42 @@ function he(t) {
     height: 0,
     x: 0,
     y: 0
-  }), s = p(() => n.value ? {
+  }), s = v(() => n.value ? {
     cx: e.x,
     cy: e.y
   } : {
     r: 0
-  }), r = p(() => n.value ? {
+  }), r = v(() => n.value ? {
     cx: e.x + e.width / 2,
     cy: e.y
   } : {
     r: 0
-  }), i = p(() => n.value ? {
+  }), i = v(() => n.value ? {
     cx: e.x + e.width,
     cy: e.y
   } : {
     r: 0
-  }), u = p(() => n.value ? {
+  }), u = v(() => n.value ? {
     cx: e.x + e.width,
     cy: e.y + e.height / 2
   } : {
     r: 0
-  }), c = p(() => n.value ? {
+  }), c = v(() => n.value ? {
     cx: e.x + e.width,
     cy: e.y + e.height
   } : {
     r: 0
-  }), a = p(() => n.value ? {
+  }), a = v(() => n.value ? {
     cx: e.x + e.width / 2,
     cy: e.y + e.height
   } : {
     r: 0
-  }), f = p(() => n.value ? {
+  }), f = v(() => n.value ? {
     cx: e.x,
     cy: e.y + e.height
   } : {
     r: 0
-  }), d = p(() => n.value ? {
+  }), d = v(() => n.value ? {
     cx: e.x,
     cy: e.y + e.height / 2
   } : {
@@ -359,7 +359,7 @@ const me = ["viewBox"], ye = /* @__PURE__ */ V({
     selectedElement: {}
   },
   setup(t) {
-    const n = t, o = p(() => n.selectedElement), {
+    const n = t, o = v(() => n.selectedElement), {
       svgConfig: { viewBox: e, styles: l },
       rectStyles: s,
       p1: r,
@@ -369,7 +369,7 @@ const me = ["viewBox"], ye = /* @__PURE__ */ V({
       p5: a,
       p6: f,
       p7: d,
-      p8: v
+      p8: p
     } = he(o);
     return (g, x) => (B(), M("svg", {
       class: "vis-aiming",
@@ -404,15 +404,15 @@ const me = ["viewBox"], ye = /* @__PURE__ */ V({
         stroke: "hotpink",
         fill: "white"
       }, m(d), { r: "2" }), null, 16),
-      k("circle", b({ fill: "hotpink" }, m(v), { r: "2" }), null, 16)
+      k("circle", b({ fill: "hotpink" }, m(p), { r: "2" }), null, 16)
     ], 12, me));
   }
 }), ge = q;
 function we(t, n) {
-  const { width: o } = O(), { x: e, y: l } = $({ type: "client" }), s = p(() => {
+  const { width: o } = O(), { x: e, y: l } = $({ type: "client" }), s = v(() => {
     let u = e.value, c = l.value;
     return o.value - e.value < 10 && (u -= 10), l.value < 10 && (c += 10), { x: u, y: c };
-  }), r = p(() => n.value ? {
+  }), r = v(() => n.value ? {
     display: "block",
     left: `${s.value.x}px`,
     top: `${s.value.y}px`,
@@ -421,19 +421,19 @@ function we(t, n) {
     display: "none"
   });
   return {
-    message: p(() => n.value ? n.value.getAttribute(t.elementTypeAttr) : null),
+    message: v(() => n.value ? n.value.getAttribute(t.elementTypeAttr) : null),
     typeNameTagStyles: r
   };
 }
 function xe(t) {
-  const { width: n, height: o } = O(), { x: e, y: l } = $({ type: "client" }), { element: s } = pe({ x: e, y: l }), r = p(() => {
+  const { width: n, height: o } = O(), { x: e, y: l } = $({ type: "client" }), { element: s } = ve({ x: e, y: l }), r = v(() => {
     if (s.value === null)
       return null;
-    const v = s.value.closest(t.selectors);
-    return v === null ? null : v;
+    const p = s.value.closest(t.selectors);
+    return p === null ? null : p;
   }), i = P(R(r));
   S("scroll", i.update, !0);
-  const u = p(() => r.value ? {
+  const u = v(() => r.value ? {
     display: "block",
     width: i.width,
     height: i.height,
@@ -445,7 +445,7 @@ function xe(t) {
     height: 0,
     x: 0,
     y: 0
-  }), c = p(() => r.value ? {
+  }), c = v(() => r.value ? {
     x1: 0,
     y1: i.top,
     x2: n.value,
@@ -454,8 +454,9 @@ function xe(t) {
     x1: 0,
     y1: 8,
     x2: i.width,
-    y2: 8
-  }), a = p(() => r.value ? {
+    y2: 8,
+    "stroke-width": 0
+  }), a = v(() => r.value ? {
     x1: i.left + i.width,
     y1: 0,
     x2: i.left + i.width,
@@ -464,8 +465,9 @@ function xe(t) {
     x1: n.value,
     y1: 8,
     x2: n.value,
-    y2: o.value
-  }), f = p(() => r.value ? {
+    y2: o.value,
+    "stroke-width": 0
+  }), f = v(() => r.value ? {
     x1: 0,
     y1: i.top + i.height,
     x2: n.value,
@@ -474,8 +476,9 @@ function xe(t) {
     x1: 0,
     y1: 8,
     x2: i.width,
-    y2: 8
-  }), d = p(() => r.value ? {
+    y2: 8,
+    "stroke-width": 0
+  }), d = v(() => r.value ? {
     x1: i.left,
     y1: 0,
     x2: i.left,
@@ -484,7 +487,8 @@ function xe(t) {
     x1: n.value,
     y1: 8,
     x2: n.value,
-    y2: o.value
+    y2: o.value,
+    "stroke-width": 0
   });
   return { hoverElement: r, rectStyles: u, topLine: c, rightLine: a, bottomLine: f, leftLine: d };
 }
@@ -512,7 +516,7 @@ const be = ["viewBox"], Ee = /* @__PURE__ */ V({
   },
   emits: ["hoverChange", "selectedChange"],
   setup(t, { emit: n }) {
-    const o = t, e = n, { viewBox: l, styles: s } = ge(), { hoverElement: r, rectStyles: i, topLine: u, rightLine: c, bottomLine: a, leftLine: f } = xe(o.selectorConfig), { typeNameTagStyles: d, message: v } = we(
+    const o = t, e = n, { viewBox: l, styles: s } = ge(), { hoverElement: r, rectStyles: i, topLine: u, rightLine: c, bottomLine: a, leftLine: f } = xe(o.selectorConfig), { typeNameTagStyles: d, message: p } = we(
       o.selectorConfig,
       r
     ), g = y(null);
@@ -532,6 +536,7 @@ const be = ["viewBox"], Ee = /* @__PURE__ */ V({
       e("selectedChange", { id: null });
     }), (x, w) => (B(), M(te, null, [
       (B(), M("svg", {
+        class: "vis-hover",
         viewBox: m(l),
         version: "1.1",
         xmlns: "http://www.w3.org/2000/svg",
@@ -563,7 +568,7 @@ const be = ["viewBox"], Ee = /* @__PURE__ */ V({
       k("div", {
         class: "vis-type-name fixed top-0 left-0 pointer-events-none shadow z-9999 rounded p-1 bg-green-400",
         style: F(m(d))
-      }, ne(m(v)), 5),
+      }, ne(m(p)), 5),
       oe(ye, { "selected-element": g.value }, null, 8, ["selected-element"])
     ], 64));
   }

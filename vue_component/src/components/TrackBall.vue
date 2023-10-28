@@ -56,6 +56,7 @@ watch(selectedElement, (target) => {
 
 <template>
   <svg
+    class="vis-hover"
     :viewBox="viewBox"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +64,7 @@ watch(selectedElement, (target) => {
     :style="svgStyles"
   >
     <rect fill="none" stroke="red" stroke-width="1" :style="rectStyles"></rect>
+
     <line
       class="top"
       v-bind="topLine"

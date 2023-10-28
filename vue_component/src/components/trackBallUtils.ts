@@ -119,6 +119,7 @@ export function useHoverVisTarget(config: TSelectorConfig) {
             y1: 8,
             x2: bounding.width,
             y2: 8,
+            'stroke-width': 0
         };
     });
 
@@ -137,6 +138,7 @@ export function useHoverVisTarget(config: TSelectorConfig) {
             y1: 8,
             x2: winWidth.value,
             y2: winHeight.value,
+            'stroke-width': 0
         };
     });
 
@@ -155,6 +157,7 @@ export function useHoverVisTarget(config: TSelectorConfig) {
             y1: 8,
             x2: bounding.width,
             y2: 8,
+            'stroke-width': 0
         };
     });
 
@@ -173,6 +176,7 @@ export function useHoverVisTarget(config: TSelectorConfig) {
             y1: 8,
             x2: winWidth.value,
             y2: winHeight.value,
+            'stroke-width': 0
         };
     });
 
