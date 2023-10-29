@@ -57,50 +57,53 @@ watch(selectedElement, (target) => {
 
 <template>
   <Teleport to="body">
+    <svg
+      class="vis-hover"
+      :viewBox="viewBox"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      style="position: absolute; top: 0; left: 0; pointer-events: none"
+      :style="svgStyles"
+    >
+      <rect
+        fill="none"
+        stroke="red"
+        stroke-width="1"
+        :style="rectStyles"
+      ></rect>
+
+      <line
+        class="top"
+        v-bind="topLine"
+        stroke="red"
+        stroke-dasharray="3 2"
+      ></line>
+      <line
+        class="right"
+        v-bind="rightLine"
+        stroke="red"
+        stroke-dasharray="3 2"
+      ></line>
+      <line
+        class="bottom"
+        v-bind="bottomLine"
+        stroke="red"
+        stroke-dasharray="3 2"
+      ></line>
+      <line
+        class="left"
+        v-bind="leftLine"
+        stroke="red"
+        stroke-dasharray="3 2"
+      ></line>
+    </svg>
+
+    <Aiming :selected-element="selectedElement"></Aiming>
+
     <Panel>
       <slot></slot>
     </Panel>
-  </Teleport>
 
-  <svg
-    class="vis-hover"
-    :viewBox="viewBox"
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    style="position: absolute; top: 0; left: 0; pointer-events: none"
-    :style="svgStyles"
-  >
-    <rect fill="none" stroke="red" stroke-width="1" :style="rectStyles"></rect>
-
-    <line
-      class="top"
-      v-bind="topLine"
-      stroke="red"
-      stroke-dasharray="3 2"
-    ></line>
-    <line
-      class="right"
-      v-bind="rightLine"
-      stroke="red"
-      stroke-dasharray="3 2"
-    ></line>
-    <line
-      class="bottom"
-      v-bind="bottomLine"
-      stroke="red"
-      stroke-dasharray="3 2"
-    ></line>
-    <line
-      class="left"
-      v-bind="leftLine"
-      stroke="red"
-      stroke-dasharray="3 2"
-    ></line>
-  </svg>
-
-  <Aiming :selected-element="selectedElement"></Aiming>
-
-  <Teleport to="body">
     <div
       class="vis-type-name fixed top-0 left-0 pointer-events-none shadow z-9999 rounded p-1 bg-green-400"
       :style="typeNameTagStyles"
