@@ -13,16 +13,13 @@ import {
 } from "./trackBallUtils";
 
 import * as utils from "./trackBallUtils";
-import { type TSelectorConfig } from "./types";
+import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 import { ref, watch } from "vue";
 
 const props = defineProps<{ selectorConfig: TSelectorConfig }>();
 const emit = defineEmits<{
   (event: "hoverChange", args: { id: number | null }): void;
-  (
-    event: "selectedChange",
-    args: { id: number | null; parentBoxId: number | null }
-  ): void;
+  (event: "selectedChange", args: TSelectedChangeEventArgs): void;
 }>();
 
 const { viewBox, styles: svgStyles } = useSvgConfigs();
@@ -51,17 +48,23 @@ watch(hoverElement, (target) => {
 });
 
 watch(selectedElement, (target) => {
+  const flexInfo = {
+    isFlex: false,
+    direction: null,
+  } as TSelectedChangeEventArgs["flexInfo"];
+
   if (target) {
     const id = parseInt(target.getAttribute(props.selectorConfig.idAttr)!);
 
     emit("selectedChange", {
       id,
       parentBoxId: utils.getBoxParentId(target, props.selectorConfig),
+      flexInfo: utils.getFlexInfo(target, props.selectorConfig),
     });
     return;
   }
 
-  emit("selectedChange", { id: null, parentBoxId: null });
+  emit("selectedChange", { id: null, parentBoxId: null, flexInfo });
 });
 
 defineExpose(getComponentExpose(props.selectorConfig, selectedElement));

@@ -23,6 +23,8 @@ def apply_zone(store: Optional[ComponentStore] = None, enable=False):
 
 
 def build_TrackBall(store: ComponentStore):
+    ui.tooltip.default_style("font-size:1rem")
+
     with TrackBall() as ball, ui.card():
         provider = Provider(ball, store, message_zone, functional_zone, apply_zone)
 
@@ -34,10 +36,11 @@ def build_TrackBall(store: ComponentStore):
 
     def selectdChange(e: TrackBallSelectdEventArguments):
         id = e.id
+
         if id:
             info = store.get_info(id)
             message_zone.refresh(info=info, select_event_args=e)
-            functional_zone.refresh(info=info)
+            functional_zone.refresh(info=info, select_event_args=e)
         else:
             message_zone.refresh(info=None)
             functional_zone.refresh(info=None)

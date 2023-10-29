@@ -3,17 +3,23 @@ from typing import Optional, TYPE_CHECKING
 from nicegui import ui, context
 
 if TYPE_CHECKING:
-    from niceguiToolkit.layout.componentStore import ComponentStore, ComponentInfo
-    from niceguiToolkit.libs.trackBall import TrackBall
+    from niceguiToolkit.layout.componentStore import ComponentInfo
     from .injection import Provider
+    from niceguiToolkit.layout.events import TrackBallSelectdEventArguments
 
 
 @ui.refreshable
-async def functional_zone(provider: Provider, info: ComponentInfo):
+def functional_zone(
+    provider: Provider,
+    info: Optional[ComponentInfo] = None,
+    select_event_args: Optional[TrackBallSelectdEventArguments] = None,
+):
     if not info:
         return
 
-    await try_build_container_box(provider, info)
+    assert select_event_args
+
+    try_build_container_box(provider, info, select_event_args)
     # return
 
     # with ui.row():
@@ -21,14 +27,15 @@ async def functional_zone(provider: Provider, info: ComponentInfo):
     #     color = to_ref(info.stylesHistory.get("color", ""))
 
 
-async def try_build_container_box(provider: Provider, info: ComponentInfo):
+def try_build_container_box(
+    provider: Provider,
+    info: ComponentInfo,
+    select_event_args: TrackBallSelectdEventArguments,
+):
     style_name = "flex-direction"
     cp = context.get_client().elements[info.id]
 
-    style_display = await provider.track_ball.query_style(info.id, "display")
-    is_flex = style_display == "flex"
-
-    if is_flex:
+    if select_event_args.flexInfo.isFlex:
         cp = context.get_client().elements[info.id]
 
         def onchange(e):
@@ -38,6 +45,6 @@ async def try_build_container_box(provider: Provider, info: ComponentInfo):
 
             provider.apply_zone.refresh(enable=True)
 
-        init_value = await provider.track_ball.query_style(info.id, style_name)
+        init_value = select_event_args.flexInfo.direction
 
         ui.radio({"row": "横向", "column": "竖向"}, value=init_value, on_change=onchange)

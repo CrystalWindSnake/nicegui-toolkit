@@ -1,5 +1,5 @@
 import { ComputedRef, Ref, computed, reactive, ref, watchEffect } from 'vue'
-import { type TSelectorConfig } from "./types";
+import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 
 import {
     useElementBounding,
@@ -237,6 +237,20 @@ export function getBoxParentId(target: HTMLElement, config: TSelectorConfig) {
     return null
 }
 
+export function getFlexInfo(target: HTMLElement, config: TSelectorConfig): TSelectedChangeEventArgs['flexInfo'] {
+    const cpStyle = window.getComputedStyle(target, null)
+    const isFlex = cpStyle.getPropertyValue('display') === 'flex'
+
+    let direction = null
+    if (isFlex) {
+        direction = cpStyle.getPropertyValue('flex-direction')
+    }
+
+    return {
+        isFlex,
+        direction
+    }
+}
 
 function queryTarget(id: number, config: TSelectorConfig) {
     const selector = `[${config.idAttr}="${id}"]`

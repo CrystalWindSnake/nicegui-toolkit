@@ -1,8 +1,7 @@
 from typing import Callable
 from nicegui.element import Element
 from niceguiToolkit.utils.types import _TNiceguiComponentId
-from niceguiToolkit.layout.events import TrackBallSelectdEventArguments
-from nicegui.events import handle_event
+from niceguiToolkit.layout.events import TrackBallSelectdEventArguments, FlexInfo
 
 
 class TrackBall(Element, component="trackBall.js"):
@@ -22,13 +21,15 @@ class TrackBall(Element, component="trackBall.js"):
 
     def on_select(self, handler: Callable[[TrackBallSelectdEventArguments], None]):
         def inner_handler(e):
-            args = TrackBallSelectdEventArguments(
+            args = e.args
+            arg = TrackBallSelectdEventArguments(
                 sender=self,
                 client=self.client,
-                id=e.args["id"],
-                parentBoxId=e.args["parentBoxId"],
+                id=args["id"],
+                parentBoxId=args["parentBoxId"],
+                flexInfo=FlexInfo(**args["flexInfo"]),
             )
-            handler(args)
+            handler(arg)
 
         return self.on("selectedChange", inner_handler)
 

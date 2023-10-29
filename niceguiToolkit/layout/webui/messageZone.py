@@ -1,9 +1,7 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
-from nicegui import ui, context
-from niceguiToolkit.libs.trackBall import TrackBall
+from nicegui import ui
 
-from .configZone import functional_zone
 
 if TYPE_CHECKING:
     from niceguiToolkit.layout.componentStore import ComponentStore, ComponentInfo
@@ -20,28 +18,36 @@ def message_zone(
     if not info:
         return
 
-    ui.link(
-        "jump to code",
-        f"vscode://file/{info.sourceCodeInfo.callerSourceCodeFile.resolve()}:{info.sourceCodeInfo.positions.lineno}:{info.sourceCodeInfo.positions.end_col_offset}",
-    )
+    with ui.row() as first_row:
+        ui.button(icon="code").props("round ").on(
+            "click",
+            lambda: ui.open(
+                f"vscode://file/{info.sourceCodeInfo.callerSourceCodeFile.resolve()}:{info.sourceCodeInfo.positions.lineno}:{info.sourceCodeInfo.positions.end_col_offset}"
+            ),
+        ).tooltip("jump to code[only vscode]")
 
     assert select_event_args
 
     if select_event_args.parentBoxId:
+        with first_row:
 
-        def onclick():
-            provider.track_ball.select_target(select_event_args.parentBoxId)  # type: ignore
+            def onclick():
+                provider.track_ball.select_target(select_event_args.parentBoxId)  # type: ignore
 
-        ui.button("select parent box", on_click=onclick)
+            with ui.button(icon="outbox").props("round ").on(
+                "click",
+                onclick,
+            ):
+                ui.tooltip("select parent box")
 
     with ui.row():
         ui.label("type:")
         ui.label(info.typeName)
 
-    with ui.row():
-        ui.label("styles:")
-        ui.label(str(info.stylesHistory))
+    # with ui.row():
+    #     ui.label("styles:")
+    #     ui.label(str(info.stylesHistory))
 
-    with ui.row():
-        ui.label("classes:")
-        ui.label(str(info.classesHistory))
+    # with ui.row():
+    #     ui.label("classes:")
+    #     ui.label(str(info.classesHistory))
