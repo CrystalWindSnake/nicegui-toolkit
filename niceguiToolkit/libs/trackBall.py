@@ -1,5 +1,6 @@
 from typing import Callable
 from nicegui.element import Element
+from niceguiToolkit.utils.types import _TNiceguiComponentId
 
 
 class TrackBall(Element, component="trackBall.js"):
@@ -22,3 +23,6 @@ class TrackBall(Element, component="trackBall.js"):
             handler(e.args["id"])
 
         return self.on("selectedChange", inner_handler)
+
+    def query_style(self, id: _TNiceguiComponentId, name: str):
+        return self.run_method("queryStyle", id, name)

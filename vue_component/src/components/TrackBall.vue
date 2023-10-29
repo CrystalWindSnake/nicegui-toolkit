@@ -9,6 +9,7 @@ import {
   useSvgConfigs,
   hookPageMouseEvent,
   useTypeNameTag,
+  getComponentExpose,
 } from "./trackBallUtils";
 import { type TSelectorConfig } from "./types";
 import { ref, watch } from "vue";
@@ -53,6 +54,8 @@ watch(selectedElement, (target) => {
 
   emit("selectedChange", { id: null });
 });
+
+defineExpose(getComponentExpose(props.selectorConfig));
 </script>
 
 <template>

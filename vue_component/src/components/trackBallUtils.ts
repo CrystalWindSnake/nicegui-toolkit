@@ -221,3 +221,15 @@ export function hookPageMouseEvent(hoverElement: ComputedRef<HTMLElement | null>
     );
 
 }
+
+
+
+export function getComponentExpose(config: TSelectorConfig) {
+
+    function queryStyle(id: number, styleName: string) {
+        const selector = `[${config.idAttr}="${id}"]`
+        return window.getComputedStyle(document.querySelector(selector)!,).getPropertyValue(styleName)
+    }
+
+    return { queryStyle }
+}

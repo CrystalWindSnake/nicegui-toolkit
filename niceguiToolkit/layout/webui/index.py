@@ -47,12 +47,12 @@ def build_TrackBall(store: ComponentStore):
         ui.icon("gps_fixed")
 
         message_zone()
-        functional_zone(apply_zone)
+        functional_zone(ball, apply_zone)
         apply_zone(store)
 
     def hoverChange(id: int):
         info = store.get_info(id)
-        message_zone.refresh(info)
+        message_zone.refresh(info=info)
         functional_zone.refresh(store=store, info=info)
 
     ball.on_select(hoverChange)
