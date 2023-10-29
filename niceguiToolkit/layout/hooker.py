@@ -4,6 +4,7 @@ import nicegui as ng_vars
 from dataclasses import dataclass
 from .componentStore import ComponentStore
 from niceguiToolkit.utils import codeContext
+from pathlib import Path
 
 
 def _mark_element(ele: ng_vars.ui.element):
@@ -13,7 +14,7 @@ def _mark_element(ele: ng_vars.ui.element):
     ele._props["layout-tool-ele-type"] = type(ele).__name__
 
 
-def hook_ui_element_method():
+def hook_ui_element_method(code_file_includes: List[Path]):
     store = ComponentStore()
 
     for func_info in codeContext.get_all_element_funcs(ng_vars.ui):
@@ -22,8 +23,12 @@ def hook_ui_element_method():
         def wrap(org_init=org_init):
             def wrap_init(self, *args, **kws):
                 org_init(self, *args, **kws)
-                _mark_element(self)
-                store.set_componentInfo(self)
+                frame_info = codeContext.get_frame_info_match_file(code_file_includes)
+                if frame_info:
+                    _mark_element(self)
+                    store.set_componentInfo(
+                        self, codeContext.frame_info_to_code_info(frame_info)
+                    )
 
             return wrap_init
 

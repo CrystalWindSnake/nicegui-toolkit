@@ -1,10 +1,10 @@
 from typing import Callable, Dict, List
 from . import hooker
 import nicegui as ng_vars
-
+from pathlib import Path
 
 from dataclasses import dataclass
-from niceguiToolkit.utils import astCore
+from niceguiToolkit.utils import astCore, codeContext
 from niceguiToolkit.layout.componentStore import ComponentStore
 from niceguiToolkit.layout import webui
 
@@ -19,7 +19,9 @@ class _T_inject_layout_tool:
 
 
 def inject_layout_tool():
-    cpStore = hooker.hook_ui_element_method()
+    cpStore = hooker.hook_ui_element_method(
+        code_file_includes=[Path(codeContext.get_frame_info(-1).filename)]
+    )
 
     # create tool ui
     pass

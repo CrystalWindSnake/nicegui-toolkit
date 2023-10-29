@@ -7,7 +7,7 @@ from copy import deepcopy
 from pathlib import Path
 from dataclasses import dataclass, field
 from niceguiToolkit.utils.types import _TNiceguiComponentId
-from niceguiToolkit.utils import codeContext, astCore
+from niceguiToolkit.utils import astCore
 
 
 if TYPE_CHECKING:
@@ -108,8 +108,9 @@ class ComponentStore:
 
         # print(code_info, component_type_name)
 
-    def set_componentInfo(self, component: ng_vars.ui.element):
-        code_info = codeContext.get_source_code_info()
+    def set_componentInfo(
+        self, component: ng_vars.ui.element, code_info: _T_get_source_code_info
+    ):
         self._set_componentInfo(type(component).__name__, component.id, code_info)
 
     def _collect_component_info(

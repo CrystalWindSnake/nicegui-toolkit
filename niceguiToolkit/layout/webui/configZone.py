@@ -36,6 +36,7 @@ def try_build_container_box(
     cp = context.get_client().elements[info.id]
 
     if select_event_args.flexInfo.isFlex:
+        print("is flex:", select_event_args.flexInfo.isFlex)
         cp = context.get_client().elements[info.id]
 
         def onchange(e):

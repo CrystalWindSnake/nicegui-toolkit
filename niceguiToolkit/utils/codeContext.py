@@ -80,18 +80,38 @@ class _T_get_source_code_info:
     positions: dis.Positions
 
 
-def get_source_code_info():
+def get_frame_info(level=0):
+    level = level - 1
     cur_frame = inspect.currentframe()
-    assert cur_frame
-    cur_frame = cur_frame.f_back
-    assert cur_frame
-    cur_frame = cur_frame.f_back
-    assert cur_frame
-    cur_frame = cur_frame.f_back
-    assert cur_frame
 
-    finfo = inspect.getframeinfo(cur_frame)
-    positions = finfo.positions
+    for _ in range(level, 0):
+        assert cur_frame
+        cur_frame = cur_frame.f_back
+
+    assert cur_frame
+    return inspect.getframeinfo(cur_frame)
+
+
+def get_frame_info_match_file(targets: List[Path]):
+    targets_set = set(targets)
+    cur_frame = inspect.currentframe()
+
+    while cur_frame:
+        info = inspect.getframeinfo(cur_frame)
+        if Path(info.filename) in targets_set:
+            return info
+        cur_frame = cur_frame.f_back
+
+    return None
+
+
+def frame_info_to_code_info(frame_info: inspect.Traceback):
+    positions = frame_info.positions
     assert positions
+    return _T_get_source_code_info(Path(frame_info.filename), positions)
 
-    return _T_get_source_code_info(Path(finfo.filename), positions)
+
+def get_source_code_info():
+    finfo = get_frame_info(-2)
+
+    return frame_info_to_code_info(finfo)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
-from nicegui import ui
-
+from nicegui import ui, run
+import os
 
 if TYPE_CHECKING:
     from niceguiToolkit.layout.componentStore import ComponentStore, ComponentInfo
@@ -19,11 +19,17 @@ def message_zone(
         return
 
     with ui.row() as first_row:
+
+        async def onclick():
+            await run.io_bound(
+                lambda: os.system(
+                    f"code -g {info.sourceCodeInfo.callerSourceCodeFile.resolve()}:{info.sourceCodeInfo.positions.lineno}:{info.sourceCodeInfo.positions.end_col_offset}"
+                )
+            )
+
         with ui.button(icon="code").props("round ").on(
             "click",
-            lambda: ui.open(
-                f"vscode://file/{info.sourceCodeInfo.callerSourceCodeFile.resolve()}:{info.sourceCodeInfo.positions.lineno}:{info.sourceCodeInfo.positions.end_col_offset}"
-            ),
+            onclick,
         ):
             ui.tooltip("jump to code[only vscode]")
 

@@ -237,7 +237,19 @@ export function getBoxParentId(target: HTMLElement, config: TSelectorConfig) {
     return null
 }
 
+
+const FlexCheckTargets = new Set(['Row', 'Column', 'Element'])
+
 export function getFlexInfo(target: HTMLElement, config: TSelectorConfig): TSelectedChangeEventArgs['flexInfo'] {
+
+    if (!FlexCheckTargets.has(target.getAttribute(config.elementTypeAttr)!)) {
+        return {
+            isFlex: false,
+            direction: null
+        }
+    }
+
+
     const cpStyle = window.getComputedStyle(target, null)
     const isFlex = cpStyle.getPropertyValue('display') === 'flex'
 
