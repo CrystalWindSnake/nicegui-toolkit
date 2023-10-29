@@ -5,21 +5,15 @@ from nicegui import ui, context
 if TYPE_CHECKING:
     from niceguiToolkit.layout.componentStore import ComponentStore, ComponentInfo
     from niceguiToolkit.libs.trackBall import TrackBall
+    from .injection import Provider
 
 
 @ui.refreshable
-async def functional_zone(
-    ball: TrackBall,
-    apply_zone: ui.refreshable,
-    store: Optional[ComponentStore] = None,
-    info: Optional[ComponentInfo] = None,
-):
+async def functional_zone(provider: Provider, info: ComponentInfo):
     if not info:
         return
 
-    assert store
-
-    await try_build_container_box(ball, apply_zone, store, info)
+    await try_build_container_box(provider, info)
     # return
 
     # with ui.row():
@@ -27,28 +21,23 @@ async def functional_zone(
     #     color = to_ref(info.stylesHistory.get("color", ""))
 
 
-async def try_build_container_box(
-    ball: TrackBall,
-    apply_zone: ui.refreshable,
-    store: ComponentStore,
-    info: ComponentInfo,
-):
+async def try_build_container_box(provider: Provider, info: ComponentInfo):
     style_name = "flex-direction"
     cp = context.get_client().elements[info.id]
 
-    style_display = await ball.query_style(info.id, "display")
+    style_display = await provider.track_ball.query_style(info.id, "display")
     is_flex = style_display == "flex"
 
     if is_flex:
         cp = context.get_client().elements[info.id]
 
         def onchange(e):
-            store.change_styles(info.id, {style_name: e.value})
+            provider.store.change_styles(info.id, {style_name: e.value})
             cp._style[style_name] = e.value
             cp.update()
 
-            apply_zone.refresh(enable=True)
+            provider.apply_zone.refresh(enable=True)
 
-        init_value = await ball.query_style(info.id, style_name)
+        init_value = await provider.track_ball.query_style(info.id, style_name)
 
         ui.radio({"row": "横向", "column": "竖向"}, value=init_value, on_change=onchange)

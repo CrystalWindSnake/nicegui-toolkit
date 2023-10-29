@@ -1,6 +1,8 @@
 from typing import Callable
 from nicegui.element import Element
 from niceguiToolkit.utils.types import _TNiceguiComponentId
+from niceguiToolkit.layout.events import TrackBallSelectdEventArguments
+from nicegui.events import handle_event
 
 
 class TrackBall(Element, component="trackBall.js"):
@@ -18,11 +20,20 @@ class TrackBall(Element, component="trackBall.js"):
 
         return self.on("hoverChange", inner_handler)
 
-    def on_select(self, handler: Callable[[int], None]):
+    def on_select(self, handler: Callable[[TrackBallSelectdEventArguments], None]):
         def inner_handler(e):
-            handler(e.args["id"])
+            args = TrackBallSelectdEventArguments(
+                sender=self,
+                client=self.client,
+                id=e.args["id"],
+                parentBoxId=e.args["parentBoxId"],
+            )
+            handler(args)
 
         return self.on("selectedChange", inner_handler)
 
-    def query_style(self, id: _TNiceguiComponentId, name: str):
-        return self.run_method("queryStyle", id, name)
+    async def query_style(self, id: _TNiceguiComponentId, name: str):
+        return await self.run_method("queryStyle", id, name)
+
+    def select_target(self, id: _TNiceguiComponentId):
+        self.run_method("selectTarget", id)

@@ -1,0 +1,10 @@
+from typing import Optional
+from nicegui.dataclasses import KWONLY_SLOTS
+from nicegui.events import handle_event, UiEventArguments
+from dataclasses import dataclass
+
+
+@dataclass(**KWONLY_SLOTS)
+class TrackBallSelectdEventArguments(UiEventArguments):
+    id: Optional[int]
+    parentBoxId: Optional[int]

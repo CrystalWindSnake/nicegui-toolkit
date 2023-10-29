@@ -222,14 +222,39 @@ export function hookPageMouseEvent(hoverElement: ComputedRef<HTMLElement | null>
 
 }
 
+export function getBoxParentId(target: HTMLElement, config: TSelectorConfig) {
+    let box = target.parentElement!.closest(`${config.selectors}`)
 
+    while (box !== null) {
+        const display = window.getComputedStyle(box, null).getPropertyValue('display')
+        if (display === 'flex') {
+            return parseInt(box.getAttribute(config.idAttr)!)
+        }
 
-export function getComponentExpose(config: TSelectorConfig) {
-
-    function queryStyle(id: number, styleName: string) {
-        const selector = `[${config.idAttr}="${id}"]`
-        return window.getComputedStyle(document.querySelector(selector)!,).getPropertyValue(styleName)
+        box = box.parentElement!.closest(`${config.selectors}`)
     }
 
-    return { queryStyle }
+    return null
+}
+
+
+function queryTarget(id: number, config: TSelectorConfig) {
+    const selector = `[${config.idAttr}="${id}"]`
+    return document.querySelector(selector)!
+}
+
+export function getComponentExpose(config: TSelectorConfig, selectedElement: Ref<HTMLElement | null>) {
+
+    function queryStyle(id: number, styleName: string) {
+        return window.getComputedStyle(queryTarget(id, config), null).getPropertyValue(styleName)
+    }
+
+
+    function selectTarget(id: number) {
+        const target = queryTarget(id, config) as HTMLElement
+        selectedElement.value = target
+    }
+
+
+    return { queryStyle, selectTarget }
 }

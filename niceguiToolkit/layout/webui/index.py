@@ -4,32 +4,12 @@ from nicegui import ui, context
 from niceguiToolkit.libs.trackBall import TrackBall
 
 from .configZone import functional_zone
+from .messageZone import message_zone
+from .injection import Provider
 
 if TYPE_CHECKING:
     from niceguiToolkit.layout.componentStore import ComponentStore, ComponentInfo
-
-
-@ui.refreshable
-def message_zone(info: Optional[ComponentInfo] = None):
-    if not info:
-        return
-
-    ui.link(
-        "jump to code",
-        f"vscode://file/{info.sourceCodeInfo.callerSourceCodeFile.resolve()}:{info.sourceCodeInfo.positions.lineno}:{info.sourceCodeInfo.positions.end_col_offset}",
-    )
-
-    with ui.row():
-        ui.label("type:")
-        ui.label(info.typeName)
-
-    with ui.row():
-        ui.label("styles:")
-        ui.label(str(info.stylesHistory))
-
-    with ui.row():
-        ui.label("classes:")
-        ui.label(str(info.classesHistory))
+    from niceguiToolkit.layout.events import TrackBallSelectdEventArguments
 
 
 @ui.refreshable
@@ -44,15 +24,22 @@ def apply_zone(store: Optional[ComponentStore] = None, enable=False):
 
 def build_TrackBall(store: ComponentStore):
     with TrackBall() as ball, ui.card():
+        provider = Provider(ball, store, message_zone, functional_zone, apply_zone)
+
         ui.icon("gps_fixed")
 
-        message_zone()
-        functional_zone(ball, apply_zone)
+        message_zone(provider)
+        functional_zone(provider)
         apply_zone(store)
 
-    def hoverChange(id: int):
-        info = store.get_info(id)
-        message_zone.refresh(info=info)
-        functional_zone.refresh(store=store, info=info)
+    def selectdChange(e: TrackBallSelectdEventArguments):
+        id = e.id
+        if id:
+            info = store.get_info(id)
+            message_zone.refresh(info=info, select_event_args=e)
+            functional_zone.refresh(info=info)
+        else:
+            message_zone.refresh(info=None)
+            functional_zone.refresh(info=None)
 
-    ball.on_select(hoverChange)
+    ball.on_select(selectdChange)
