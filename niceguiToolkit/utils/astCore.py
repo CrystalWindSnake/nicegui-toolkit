@@ -75,7 +75,7 @@ class AttrStemNodeVisitor(ast.NodeVisitor):
 
 @lru_cache(5)
 def _get_ast4file(file: Path):
-    code_source = Path(file).read_text()
+    code_source = Path(file).read_text(encoding="utf8")
     ast_module = ast.parse(code_source)
     return code_source, ast_module
 

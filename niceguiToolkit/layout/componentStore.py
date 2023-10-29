@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class ComponentInfo:
+    id: _TNiceguiComponentId
     typeName: str
     sourceCodeInfo: _T_get_source_code_info
     astInfo: astCore._T_get_ast_infos
@@ -92,7 +93,7 @@ class ComponentStore:
         code_info: _T_get_source_code_info,
     ):
         ast_info = astCore.get_ast_infos(code_info)
-        cp_info = ComponentInfo(component_type_name, code_info, ast_info)
+        cp_info = ComponentInfo(component_id, component_type_name, code_info, ast_info)
         self.cpMapper[component_id] = cp_info
 
         if ast_info.style.has:
