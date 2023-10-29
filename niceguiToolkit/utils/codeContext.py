@@ -7,6 +7,30 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
+def is_classmethod(cls: type, method_name: str):
+    method = getattr(cls, method_name)
+    return inspect.ismethod(method) and method.__self__ is cls
+
+
+def try_getattr(o: object, name: str):
+    try:
+        return getattr(o, name)
+    except AttributeError:
+        return None
+    except Exception as e:
+        raise e
+
+
+def get_member_items(classIns: type):
+    result = {
+        attr: try_getattr(classIns, attr)
+        for attr in set([*dir(classIns), *classIns.__dict__.keys()])
+        if not attr.startswith("__")
+    }
+
+    return {key: value for key, value in result.items() if value}
+
+
 @dataclass
 class _Tget_static_functions:
     name: str
@@ -17,8 +41,9 @@ class _Tget_static_functions:
 def get_static_functions(classIns: type):
     return [
         _Tget_static_functions(name, obj, _isReturnUiElement(obj))
-        for name, obj in classIns.__dict__.items()
-        if isinstance(obj, staticmethod) and (not name.startswith("__"))
+        for name, obj in get_member_items(classIns).items()
+        if callable(obj)
+        # if isinstance(obj, staticmethod) or is_classmethod(classIns, name)
     ]
 
 
