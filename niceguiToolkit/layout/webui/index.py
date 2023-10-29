@@ -23,7 +23,7 @@ def apply_zone(store: Optional[ComponentStore] = None, enable=False):
 
 
 def build_TrackBall(store: ComponentStore):
-    # ui.tooltip.default_style("font-size:1rem")
+    ui.tooltip.default_style("font-size:1rem")
 
     with TrackBall() as ball, ui.card():
         provider = Provider(ball, store, message_zone, functional_zone, apply_zone)

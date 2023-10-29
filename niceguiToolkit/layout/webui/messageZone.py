@@ -19,12 +19,13 @@ def message_zone(
         return
 
     with ui.row() as first_row:
-        ui.button(icon="code").props("round ").on(
+        with ui.button(icon="code").props("round ").on(
             "click",
             lambda: ui.open(
                 f"vscode://file/{info.sourceCodeInfo.callerSourceCodeFile.resolve()}:{info.sourceCodeInfo.positions.lineno}:{info.sourceCodeInfo.positions.end_col_offset}"
             ),
-        ).tooltip("jump to code[only vscode]")
+        ):
+            ui.tooltip("jump to code[only vscode]")
 
     assert select_event_args
 
