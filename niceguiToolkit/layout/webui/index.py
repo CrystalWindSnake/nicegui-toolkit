@@ -46,3 +46,4 @@ def build_TrackBall(store: ComponentStore):
             functional_zone.refresh(info=None)
 
     ball.on_select(selectdChange)
+    return ball

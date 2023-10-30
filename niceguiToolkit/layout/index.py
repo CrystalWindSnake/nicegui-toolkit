@@ -5,7 +5,7 @@ from pathlib import Path
 
 from dataclasses import dataclass
 from niceguiToolkit.utils import astCore, codeContext
-from niceguiToolkit.layout.componentStore import ComponentStore
+from niceguiToolkit.layout.componentStore import ComponentStore, StoreManager
 from niceguiToolkit.layout import webui
 from types import ModuleType
 
@@ -25,23 +25,34 @@ _T_Param_inject_layout_tool_code_file_includes = Optional[
 ]
 
 
+_m_store_manager = StoreManager()
+
+
 def inject_layout_tool(
     code_file_includes: _T_Param_inject_layout_tool_code_file_includes = None,
 ):
     code_file_paths_includes = get_code_file_includes(code_file_includes)
     code_file_paths_includes.append(Path(codeContext.get_frame_info(-1).filename))
 
+    hooker.hook_ui_element_method(
+        _m_store_manager, code_file_includes=code_file_paths_includes
+    )
+
     #
     @ng_vars.app.on_connect
     def _(client: ng_vars.Client):
-        astCore.clear_ast_code_cache()
-        cpStore = hooker.hook_ui_element_method(
-            code_file_includes=code_file_paths_includes
-        )
         # collect cp style,props,class
-        cpStore.collect_component_infos(client)
+        store = _m_store_manager.build_store_from_shadow(client.id)
+        store.clear_records()
+        store.collect_component_infos(client)
 
-        webui.build_TrackBall(cpStore)
+        if not _m_store_manager.exists_track_ball(client.id):
+            ball = webui.build_TrackBall(store)
+            _m_store_manager.save_track_ball(client.id, ball)
+
+    @ng_vars.app.on_disconnect
+    def _(client: ng_vars.Client):
+        _m_store_manager.remove_resource(client.id)
 
     # # when select cp
     # def trigger_select_component_event(id: int):
@@ -95,7 +106,7 @@ def get_code_file_includes(
     )
 
     code_file_paths_includes = [
-        Path(f.__file__) if isinstance(f, ModuleType) else Path(f)
+        Path(f.__file__) if isinstance(f, ModuleType) else Path(f)  # type: ignore
         for f in code_file_paths_includes
     ]
 

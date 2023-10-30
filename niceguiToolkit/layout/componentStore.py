@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Any, Dict, List, TYPE_CHECKING, Set
+from typing import Any, Dict, List, TYPE_CHECKING, Optional, Set
 from itertools import groupby, chain
 import nicegui as ng_vars
 from copy import deepcopy
@@ -12,6 +12,7 @@ from niceguiToolkit.utils import astCore
 
 if TYPE_CHECKING:
     from niceguiToolkit.utils.codeContext import _T_get_source_code_info
+    from niceguiToolkit.libs.trackBall import TrackBall
 
 
 @dataclass
@@ -153,3 +154,46 @@ class ComponentStore:
 
             code = "\n".join(code_lines)
             yield _T_create_changed_records(file_path, code)
+
+    def clear_records(self):
+        self._styles_records.clear()
+        self._classes_records.clear()
+
+    def clear_all_data(self):
+        self.cpMapper.clear()
+        self.clear_records()
+
+
+class StoreManager:
+    def __init__(self) -> None:
+        self.map: Dict[str, ComponentStore] = {}
+        self.shadow_store_map: Dict[str, ComponentStore] = {}
+        self.track_ball_map: Dict[str, TrackBall] = {}
+
+    def build_store_from_shadow(self, client_id: str):
+        if client_id in self.map:
+            return self.map[client_id]
+        store = self.shadow_store_map[client_id]
+        self.map[client_id] = store
+        del self.shadow_store_map[client_id]
+        return store
+
+    def try_get_shadow_store(self, client_id: str):
+        store = self.shadow_store_map.get(client_id)
+        if store is None:
+            store = ComponentStore()
+            self.shadow_store_map[client_id] = store
+        return store
+
+    def get_store(self, client_id: str):
+        return self.map[client_id]
+
+    def remove_resource(self, client_id: str):
+        self.map[client_id].clear_all_data()
+        del self.map[client_id]
+
+    def exists_track_ball(self, client_id: str):
+        return client_id in self.track_ball_map
+
+    def save_track_ball(self, client_id: str, ball: TrackBall):
+        self.track_ball_map[client_id] = ball
