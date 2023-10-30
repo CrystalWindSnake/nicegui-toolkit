@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Optional, Union
 from . import hooker
 import nicegui as ng_vars
 from pathlib import Path
@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from niceguiToolkit.utils import astCore, codeContext
 from niceguiToolkit.layout.componentStore import ComponentStore
 from niceguiToolkit.layout import webui
+from types import ModuleType
 
 
 @dataclass
@@ -18,10 +19,18 @@ class _T_inject_layout_tool:
     trigger_apply_changed: Callable[..., None]
 
 
-def inject_layout_tool():
-    cpStore = hooker.hook_ui_element_method(
-        code_file_includes=[Path(codeContext.get_frame_info(-1).filename)]
-    )
+_T_Param_inject_layout_tool_code_file_includes = Optional[
+    List[Union[str, Path, ModuleType]]
+]
+
+
+def inject_layout_tool(
+    code_file_includes: _T_Param_inject_layout_tool_code_file_includes = None,
+):
+    code_file_paths_includes = get_code_file_includes(code_file_includes)
+    code_file_paths_includes.append(Path(codeContext.get_frame_info(-1).filename))
+
+    cpStore = hooker.hook_ui_element_method(code_file_includes=code_file_paths_includes)
 
     # create tool ui
     pass
@@ -68,3 +77,15 @@ def inject_layout_tool():
         trigger_change_classes,
         trigger_apply_changed,
     )
+
+
+def get_code_file_includes(
+    code_file_includes: _T_Param_inject_layout_tool_code_file_includes,
+):
+    code_file_includes = code_file_includes or []
+    code_file_paths_includes = [
+        Path(f.__file__) if isinstance(f, ModuleType) else Path(f)
+        for f in code_file_includes
+    ]
+
+    return code_file_paths_includes
