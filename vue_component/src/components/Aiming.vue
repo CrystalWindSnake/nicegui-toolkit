@@ -25,7 +25,7 @@ const {
     class="vis-aiming"
     :viewBox="viewBox"
     version="1.1"
-    style="position: absolute; top: 0; left: 0; pointer-events: none"
+    style="position: fixed; top: 0; left: 0; pointer-events: none"
     :style="styles"
     xmlns="http://www.w3.org/2000/svg"
   >
