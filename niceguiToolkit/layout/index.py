@@ -34,6 +34,7 @@ def inject_layout_tool(
     #
     @ng_vars.app.on_connect
     def _(client: ng_vars.Client):
+        astCore.clear_ast_code_cache()
         cpStore = hooker.hook_ui_element_method(
             code_file_includes=code_file_paths_includes
         )
