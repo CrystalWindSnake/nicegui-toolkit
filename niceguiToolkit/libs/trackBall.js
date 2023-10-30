@@ -16,7 +16,7 @@ const ce = Vue.toRef
 const K = Vue.reactive
 const N = Vue.defineComponent
 const V = Vue.openBlock
-const q = Vue.createElementBlock
+const z = Vue.createElementBlock
 const F = Vue.normalizeStyle
 const E = Vue.createElementVNode
 const C = Vue.mergeProps
@@ -126,7 +126,7 @@ function ke() {
     e.value = !0;
   }), e;
 }
-function z(e) {
+function q(e) {
   const n = ke();
   return y(() => (n.value, !!e()));
 }
@@ -160,7 +160,7 @@ function Se(e, n = {}) {
   };
 }
 function Ee(e, n = {}) {
-  const { window: r = P } = n, t = z(() => r && "matchMedia" in r && typeof r.matchMedia == "function");
+  const { window: r = P } = n, t = q(() => r && "matchMedia" in r && typeof r.matchMedia == "function");
   let o;
   const i = x(!1), s = (a) => {
     i.value = a.matches;
@@ -228,7 +228,7 @@ function _e(e, n = {}) {
 function Ae(e, n, r = {}) {
   const { window: t = P, ...o } = r;
   let i;
-  const s = z(() => t && "ResizeObserver" in t), l = () => {
+  const s = q(() => t && "ResizeObserver" in t), l = () => {
     i && (i.disconnect(), i = void 0);
   }, u = y(() => Array.isArray(e) ? e.map((f) => M(f)) : [M(e)]), a = T(
     u,
@@ -286,7 +286,7 @@ function Ce(e) {
     multiple: o,
     interval: i = "requestAnimationFrame",
     immediate: s = !0
-  } = e, l = z(() => w(o) ? t && "elementsFromPoint" in t : t && "elementFromPoint" in t), u = x(null), a = () => {
+  } = e, l = q(() => w(o) ? t && "elementsFromPoint" in t : t && "elementFromPoint" in t), u = x(null), a = () => {
     var f, p;
     u.value = w(o) ? (f = t == null ? void 0 : t.elementsFromPoint(w(n), w(r))) != null ? f : [] : (p = t == null ? void 0 : t.elementFromPoint(w(n), w(r))) != null ? p : null;
   }, c = i === "requestAnimationFrame" ? Se(a, { immediate: s }) : xe(a, i, { immediate: s });
@@ -453,7 +453,7 @@ const Te = ["viewBox"], Pe = /* @__PURE__ */ N({
       p7: p,
       p8: v
     } = Ie(r);
-    return (k, S) => (V(), q("svg", {
+    return (k, S) => (V(), z("svg", {
       class: "vis-aiming",
       viewBox: g(t),
       version: "1.1",
@@ -495,7 +495,7 @@ const Te = ["viewBox"], Pe = /* @__PURE__ */ N({
     const n = x(null), { style: r } = _e(n, {
       initialValue: { x: 40, y: 40 }
     });
-    return (t, o) => (V(), q("div", {
+    return (t, o) => (V(), z("div", {
       ref_key: "el",
       ref: n,
       style: F([g(r), { position: "fixed" }]),
@@ -643,7 +643,7 @@ function He(e, n) {
   }
   return { queryStyle: r, selectTarget: t };
 }
-const Ne = ["viewBox"], ze = /* @__PURE__ */ N({
+const Ne = ["viewBox"], qe = /* @__PURE__ */ N({
   __name: "TrackBall",
   props: {
     selectorConfig: {}
@@ -677,12 +677,12 @@ const Ne = ["viewBox"], ze = /* @__PURE__ */ N({
       }
       o("selectedChange", { id: null, parentBoxId: null, flexInfo: _ });
     }), n(He(t.selectorConfig, S)), (d, _) => (V(), fe(pe, { to: "body" }, [
-      (V(), q("svg", {
+      (V(), z("svg", {
         class: "vis-hover",
         viewBox: g(i),
         version: "1.1",
         xmlns: "http://www.w3.org/2000/svg",
-        style: F([{ position: "absolute", top: "0", left: "0", "pointer-events": "none" }, g(s)])
+        style: F([{ position: "absolute", top: "0", left: "0", "pointer-events": "none", "z-index": "9999999" }, g(s)])
       }, [
         E("rect", {
           fill: "none",
@@ -707,20 +707,23 @@ const Ne = ["viewBox"], ze = /* @__PURE__ */ N({
           "stroke-dasharray": "3 2"
         }), null, 16)
       ], 12, Ne)),
-      R(Pe, { "selected-element": S.value }, null, 8, ["selected-element"]),
-      R(Fe, null, {
+      R(Pe, {
+        "selected-element": S.value,
+        style: { "z-index": "9999999" }
+      }, null, 8, ["selected-element"]),
+      R(Fe, { style: { "z-index": "9999999" } }, {
         default: de(() => [
           Z(d.$slots, "default")
         ]),
         _: 3
       }),
       E("div", {
-        class: "vis-type-name fixed top-0 left-0 pointer-events-none shadow z-9999 rounded p-1 bg-green-400",
-        style: F(g(v))
+        class: "vis-type-name fixed top-0 left-0 pointer-events-none shadow rounded p-1 bg-green-400",
+        style: F([g(v), { "z-index": "9999999" }])
       }, ve(g(k)), 5)
     ]));
   }
 });
 export {
-  ze as default
+  qe as default
 };

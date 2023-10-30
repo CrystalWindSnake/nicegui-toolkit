@@ -31,7 +31,7 @@ def message_zone(
             "click",
             onclick,
         ):
-            ui.tooltip("jump to code[only vscode]")
+            ui.tooltip("jump to code[only vscode]").style("z-index: 9999999")
 
     assert select_event_args
 
@@ -45,7 +45,7 @@ def message_zone(
                 "click",
                 onclick,
             ):
-                ui.tooltip("select parent box")
+                ui.tooltip("select parent box").style("z-index: 9999999")
 
     with ui.row():
         ui.label("type:")

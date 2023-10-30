@@ -77,7 +77,13 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
       :viewBox="viewBox"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      style="position: absolute; top: 0; left: 0; pointer-events: none"
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 9999999;
+      "
       :style="svgStyles"
     >
       <rect
@@ -113,15 +119,19 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
       ></line>
     </svg>
 
-    <Aiming :selected-element="selectedElement"></Aiming>
+    <Aiming
+      :selected-element="selectedElement"
+      style="z-index: 9999999"
+    ></Aiming>
 
-    <Panel>
+    <Panel style="z-index: 9999999">
       <slot></slot>
     </Panel>
 
     <div
-      class="vis-type-name fixed top-0 left-0 pointer-events-none shadow z-9999 rounded p-1 bg-green-400"
+      class="vis-type-name fixed top-0 left-0 pointer-events-none shadow rounded p-1 bg-green-400"
       :style="typeNameTagStyles"
+      style="z-index: 9999999"
     >
       {{ typeName }}
     </div>
