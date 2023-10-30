@@ -9,6 +9,8 @@ from niceguiToolkit.layout.componentStore import ComponentStore, StoreManager
 from niceguiToolkit.layout import webui
 from types import ModuleType
 
+import inspect
+
 
 @dataclass
 class _T_inject_layout_tool:
@@ -53,44 +55,6 @@ def inject_layout_tool(
     @ng_vars.app.on_disconnect
     def _(client: ng_vars.Client):
         _m_store_manager.remove_resource(client.id)
-
-    # # when select cp
-    # def trigger_select_component_event(id: int):
-    #     info = cpStore.get_info(id)
-
-    #     classes_str = astCore.get_call_content(
-    #         info.sourceCodeInfo, info.astInfo.classes
-    #     )
-
-    #     styles_str = astCore.get_call_content(info.sourceCodeInfo, info.astInfo.style)
-
-    #     props_str = astCore.get_call_content(info.sourceCodeInfo, info.astInfo.props)
-    #     print(
-    #         f"name:{info.typeName},classes:{classes_str},styles_str:{styles_str},props_str={props_str}"
-    #     )
-    #     # print(info)
-
-    # # when change style in ui
-    # def trigger_change_styles(id: int, styles: Dict[str, str]):
-    #     cpStore.change_styles(id, styles)
-
-    # # when change classes in ui
-    # def trigger_change_classes(id: int, classes: List[str]):
-    #     cpStore.change_classes(id, classes)
-
-    # def trigger_apply_changed():
-    #     cpStore.create_changed_records()
-
-    # return _T_inject_layout_tool(
-    #     cpStore,
-    #     trigger_select_component_event,
-    #     trigger_change_styles,
-    #     trigger_change_classes,
-    #     trigger_apply_changed,
-    # )
-
-
-import inspect
 
 
 def get_code_file_includes(
