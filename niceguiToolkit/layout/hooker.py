@@ -1,12 +1,15 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
+from pathlib import Path
+import sysconfig
+from typing import TYPE_CHECKING, Callable, Optional
 import nicegui as ng_vars
 from niceguiToolkit.utils import codeContext
-from pathlib import Path
-from .componentStore import ComponentStore
+import inspect
+from functools import partial
 
 if TYPE_CHECKING:
     from .componentStore import StoreManager
+    from .index import _T_inject_Config
 
 
 def _mark_element(ele: ng_vars.ui.element):
@@ -16,14 +19,35 @@ def _mark_element(ele: ng_vars.ui.element):
     ele._props["layout-tool-ele-type"] = type(ele).__name__
 
 
-def hook_ui_element_method(store_manager: StoreManager, code_file_includes: List[Path]):
+def _create_get_frame_info_finder(
+    config: _T_inject_Config,
+) -> Callable[..., Optional[inspect.Traceback]]:
+    if config.inject_mode == "save":
+        return partial(codeContext.get_frame_info_match_file, config.code_file_includes)
+
+    if config.inject_mode == "penetration":
+        import site
+
+        pk_libs = [Path(p) for p in site.getsitepackages()]
+
+        # pk_lib = Path(sysconfig.get_paths()["purelib"])
+        this_pj_root = Path(__file__).parent.parent
+
+        return partial(codeContext.get_frame_info_exclude_dir, [*pk_libs, this_pj_root])
+
+    raise ValueError(f"not support inject mode:{config.inject_mode}")
+
+
+def hook_ui_element_method(store_manager: StoreManager, config: _T_inject_Config):
     org_init = ng_vars.ui.element.__init__
+
+    get_frame_info_finder = _create_get_frame_info_finder(config)
 
     def wrap_init(self: ng_vars.ui.element, *args, **kws):
         # TODO:Exclude own component construction
         org_init(self, *args, **kws)
 
-        frame_info = codeContext.get_frame_info_match_file(code_file_includes)
+        frame_info = get_frame_info_finder()
         if frame_info:
             store = store_manager.try_get_shadow_store(ng_vars.context.get_client().id)
             _mark_element(self)

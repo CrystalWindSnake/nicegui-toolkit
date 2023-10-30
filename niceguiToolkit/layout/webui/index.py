@@ -17,7 +17,7 @@ def apply_zone(store: Optional[ComponentStore] = None, enable=False):
     def onclick():
         assert store
         for record in store.create_changed_records():
-            record.file.write_text(record.code)
+            record.file.write_text(record.code, "utf8")
 
     ui.button("apply", on_click=onclick)._handle_enabled_change(enable)
 

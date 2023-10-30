@@ -1,9 +1,10 @@
 from typing import Callable, Dict, List, Optional, Union
+from typing_extensions import Literal
 from . import hooker
 import nicegui as ng_vars
 from pathlib import Path
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from niceguiToolkit.utils import astCore, codeContext
 from niceguiToolkit.layout.componentStore import ComponentStore, StoreManager
 from niceguiToolkit.layout import webui
@@ -12,13 +13,13 @@ from types import ModuleType
 import inspect
 
 
+_T_inject_mode = Literal["save", "penetration"]
+
+
 @dataclass
-class _T_inject_layout_tool:
-    store: ComponentStore
-    trigger_select_component_event: Callable[[int], None]
-    trigger_change_styles: Callable[[int, Dict[str, str]], None]
-    trigger_change_classes: Callable[[int, List[str]], None]
-    trigger_apply_changed: Callable[..., None]
+class _T_inject_Config:
+    inject_mode: _T_inject_mode
+    code_file_includes: List[Path] = field(default_factory=list)
 
 
 _T_file_or_module = Union[str, Path, ModuleType, Callable]
@@ -32,13 +33,15 @@ _m_store_manager = StoreManager()
 
 def inject_layout_tool(
     code_file_includes: _T_Param_inject_layout_tool_code_file_includes = None,
+    mode: _T_inject_mode = "save",
 ):
-    code_file_paths_includes = get_code_file_includes(code_file_includes)
-    code_file_paths_includes.append(Path(codeContext.get_frame_info(-1).filename))
+    config = _T_inject_Config(mode)
+    if config.inject_mode == "save":
+        code_file_paths_includes = get_code_file_includes(code_file_includes)
+        code_file_paths_includes.append(Path(codeContext.get_frame_info(-1).filename))
+        config.code_file_includes = code_file_paths_includes
 
-    hooker.hook_ui_element_method(
-        _m_store_manager, code_file_includes=code_file_paths_includes
-    )
+    hooker.hook_ui_element_method(_m_store_manager, config)
 
     #
     @ng_vars.app.on_connect

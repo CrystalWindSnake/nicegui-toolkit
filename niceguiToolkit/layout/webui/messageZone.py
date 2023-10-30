@@ -51,6 +51,18 @@ def message_zone(
         ui.label("type:")
         ui.label(info.typeName)
 
+    with ui.row():
+        ui.label("classes:")
+        ui.label(str(info.astInfo.classes))
+
+    with ui.row():
+        ui.label("style:")
+        ui.label(str(info.astInfo.style))
+
+    with ui.row():
+        ui.label("sourceCodeInfo:")
+        ui.label(str(info.sourceCodeInfo))
+
     # with ui.row():
     #     ui.label("styles:")
     #     ui.label(str(info.stylesHistory))

@@ -96,11 +96,38 @@ def get_frame_info_match_file(targets: List[Path]):
     targets_set = set(targets)
     cur_frame = inspect.currentframe()
 
-    while cur_frame:
-        info = inspect.getframeinfo(cur_frame)
-        if Path(info.filename) in targets_set:
-            return info
-        cur_frame = cur_frame.f_back
+    try:
+        while cur_frame:
+            info = inspect.getframeinfo(cur_frame)
+            if Path(info.filename) in targets_set:
+                return info
+            cur_frame = cur_frame.f_back
+
+    finally:
+        del cur_frame
+
+    return None
+
+
+def get_frame_info_exclude_dir(exclude_dirs: List[Path]):
+    cur_frame = inspect.currentframe()
+
+    try:
+        while cur_frame:
+            info = inspect.getframeinfo(cur_frame)
+            file_path = Path(info.filename)
+            if not file_path.exists():
+                return None
+            file_dir = file_path.parent
+
+            all_exclude = all(
+                not exclude in file_dir.parents for exclude in exclude_dirs
+            )
+            if all_exclude:
+                return info
+            cur_frame = cur_frame.f_back
+    finally:
+        del cur_frame
 
     return None
 

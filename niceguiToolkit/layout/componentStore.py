@@ -107,8 +107,6 @@ class ComponentStore:
                 cp_info.classesHistory, classes_str
             )
 
-        # print(code_info, component_type_name)
-
     def set_componentInfo(
         self, component: ng_vars.ui.element, code_info: _T_get_source_code_info
     ):

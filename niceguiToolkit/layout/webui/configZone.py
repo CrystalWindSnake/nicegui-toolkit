@@ -48,3 +48,12 @@ def try_build_container_box(
         init_value = select_event_args.flexInfo.direction
 
         ui.radio({"row": "横向", "column": "竖向"}, value=init_value, on_change=onchange)
+
+    def onclick():
+        provider.store.change_styles(info.id, {"color": "red"})
+        cp._style["color"] = "red"
+        cp.update()
+
+        provider.apply_zone.refresh(enable=True)
+
+    ui.button("test apply color style", on_click=onclick)
