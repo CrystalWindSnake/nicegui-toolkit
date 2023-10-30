@@ -43,9 +43,9 @@ def inject_layout_tool(
     #
     @ng_vars.app.on_connect
     def _(client: ng_vars.Client):
-        # collect cp style,props,class
         store = _m_store_manager.build_store_from_shadow(client.id)
         store.clear_records()
+        # collect cp style,props,class
         store.collect_component_infos(client)
 
         if not _m_store_manager.exists_track_ball(client.id):
