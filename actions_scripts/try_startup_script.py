@@ -1,5 +1,5 @@
 from niceguiToolkit.layout import inject_layout_tool
-from nicegui import ui, app, Client
+from nicegui import ui, app
 from asyncio import sleep
 
 inject_layout_tool(mode="penetration")
@@ -7,11 +7,10 @@ inject_layout_tool(mode="penetration")
 ui.label("xx")
 
 
-@app.on_connect
-async def _(client: Client):
-    await client.connected()
+@app.on_startup
+async def _():
     await sleep(3)
     app.shutdown()
 
 
-ui.run(reload=False)
+ui.run(reload=False, show=False)
