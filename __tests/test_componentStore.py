@@ -1,8 +1,6 @@
 from niceguiToolkit.layout.componentStore import ComponentStore
-from pathlib import Path
 from niceguiToolkit.utils import astCore
-from utils import get_data_file
-import dis
+from .utils import get_data_file
 
 
 def test_create_new_style_call():
