@@ -1,11 +1,13 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 from nicegui import ui, context
+from niceguiToolkit.layout.webui.functionalSet import get_all_system_builders
+from niceguiToolkit.layout.webui.functionalSet.model import T_BuilderContext
 
 if TYPE_CHECKING:
     from niceguiToolkit.layout.componentStore import ComponentInfo
     from .injection import Provider
-    from niceguiToolkit.layout.events import TrackBallSelectdEventArguments
+    from niceguiToolkit.layout.events import TrackBallSelectdEventArguments, FlexInfo
 
 
 @ui.refreshable
@@ -19,12 +21,13 @@ def functional_zone(
 
     assert select_event_args
 
-    try_build_container_box(provider, info, select_event_args)
-    # return
+    for builder in get_all_system_builders():
+        builder_context = T_BuilderContext(select_event_args.flexInfo, provider, info)
 
-    # with ui.row():
-    #     ui.label("color")
-    #     color = to_ref(info.stylesHistory.get("color", ""))
+        if builder.is_show_fn(builder_context):
+            builder.build_fn(builder_context)
+
+    # try_build_container_box(provider, info, select_event_args)
 
 
 def try_build_container_box(
