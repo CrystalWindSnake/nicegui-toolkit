@@ -79,13 +79,6 @@ def get_all_element_funcs(nicegui_ui_module):
     return target_funcs
 
 
-@dataclass(frozen=True)
-class _T_source_code_info:
-    callerSourceCodeFile: Path
-    function: str
-    positions: _T_entry_point_position
-
-
 def get_frame_info(level=0):
     level = level - 1
     cur_frame = inspect.currentframe()
@@ -98,10 +91,10 @@ def get_frame_info(level=0):
     return inspect.getframeinfo(cur_frame)
 
 
-def frame_info_to_code_info(
-    frame_info: inspect.Traceback, position: _T_entry_point_position
-):
-    return _T_source_code_info(Path(frame_info.filename), frame_info.function, position)
+# def frame_info_to_code_info(
+#     frame_info: inspect.Traceback, position: _T_entry_point_position
+# ):
+#     return _T_source_code_info(Path(frame_info.filename), frame_info.function, position)
 
 
 # def get_source_code_info():

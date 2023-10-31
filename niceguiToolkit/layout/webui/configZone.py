@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
-from nicegui import ui, context
+from nicegui import ui
 from niceguiToolkit.layout.webui.functionalSet import get_all_system_builders
 from niceguiToolkit.layout.webui.functionalSet.model import T_BuilderContext
 

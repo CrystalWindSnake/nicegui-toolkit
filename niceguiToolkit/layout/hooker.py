@@ -1,10 +1,8 @@
 from __future__ import annotations
 from pathlib import Path
-import sysconfig
 from typing import TYPE_CHECKING, Callable, Optional
 import nicegui as ng_vars
 from niceguiToolkit.utils import astCore
-import inspect
 from functools import partial
 
 if TYPE_CHECKING:

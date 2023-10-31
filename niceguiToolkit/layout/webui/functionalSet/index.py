@@ -1,4 +1,4 @@
-from functools import cache
+from functools import lru_cache
 from pathlib import Path
 from importlib.util import spec_from_file_location, module_from_spec
 
@@ -19,7 +19,7 @@ def _get_all_functional_module(folder: Path):
         yield md
 
 
-@cache
+@lru_cache
 def get_all_system_builders():
     folder = Path(__file__).parent / "functionals"
     return [md._get_builder() for md in _get_all_functional_module(folder)]

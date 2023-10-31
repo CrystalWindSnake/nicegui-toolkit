@@ -1,0 +1,18 @@
+name: test
+run-name: test Actions
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  run-all-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3.1.4
+        with:
+          python-version: '3.8'
+      - run: pip install pytest  nicegui>=1.4.0 executing
+      # - run: playwright install
+      - run: pytest __tests/
+ 

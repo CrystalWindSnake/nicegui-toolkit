@@ -1,6 +1,6 @@
 from typing import Optional
 from nicegui.dataclasses import KWONLY_SLOTS
-from nicegui.events import handle_event, UiEventArguments
+from nicegui.events import UiEventArguments
 from dataclasses import dataclass
 
 

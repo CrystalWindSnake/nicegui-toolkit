@@ -4,12 +4,10 @@ from ast import AST
 import inspect
 from pathlib import Path
 
-from typing import TYPE_CHECKING, Any, List, Optional, Iterable, Union
+from typing import Any, List, Optional, Iterable, Union
 from typing_extensions import Literal
 from dataclasses import dataclass
 from functools import lru_cache
-import dis
-
 import executing
 
 
