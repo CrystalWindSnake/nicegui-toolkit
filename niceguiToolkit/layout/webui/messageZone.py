@@ -27,7 +27,7 @@ def message_zone(
                 )
             )
 
-        with ui.button(icon="code").props("round ").on(
+        with ui.button(icon="code").props("round size=sm").on(
             "click",
             on_click_code,
         ):
@@ -41,7 +41,7 @@ def message_zone(
             def onclick():
                 provider.track_ball.select_target(select_event_args.parentBoxId)  # type: ignore
 
-            with ui.button(icon="outbox").props("round ").on(
+            with ui.button(icon="outbox").props("round size=sm").on(
                 "click",
                 onclick,
             ):
@@ -51,22 +51,14 @@ def message_zone(
         ui.label("type:")
         ui.label(info.typeName)
 
-    with ui.row():
-        ui.label("classes:")
-        ui.label(str(info.sourceCodeInfo.classes))
-
-    with ui.row():
-        ui.label("style:")
-        ui.label(str(info.sourceCodeInfo.style))
-
-    with ui.row():
-        ui.label("sourceCodeInfo:")
-        ui.label(str(info.sourceCodeInfo))
-
-    # with ui.row():
-    #     ui.label("styles:")
-    #     ui.label(str(info.stylesHistory))
-
     # with ui.row():
     #     ui.label("classes:")
-    #     ui.label(str(info.classesHistory))
+    #     ui.label(str(info.sourceCodeInfo.classes))
+
+    # with ui.row():
+    #     ui.label("style:")
+    #     ui.label(str(info.sourceCodeInfo.style))
+
+    # with ui.row():
+    #     ui.label("sourceCodeInfo:")
+    #     ui.label(str(info.sourceCodeInfo))

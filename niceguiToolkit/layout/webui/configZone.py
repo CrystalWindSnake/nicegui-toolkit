@@ -47,18 +47,17 @@ def try_build_container_box(
 
         init_value = select_event_args.flexInfo.direction
 
-        ui.radio({"row": "横向", "column": "竖向"}, value=init_value, on_change=onchange)
+        with ui.row().classes("flex-center"):
+            ui.label("元素排列方向")
+            ui.radio(
+                {"row": "横向", "column": "竖向"}, value=init_value, on_change=onchange
+            ).classes("flex")
 
-    def onclick():
-        provider.store.change_styles(info.id, {"color": "red"})
-        cp._style["color"] = "red"
-        cp.update()
+    # def onclick():
+    #     provider.store.change_styles(info.id, {"color": "red"})
+    #     cp._style["color"] = "red"
+    #     cp.update()
 
-        provider.apply_zone.refresh(enable=True)
+    #     provider.apply_zone.refresh(enable=True)
 
-    ui.button("test apply color style", on_click=onclick)
-
-    def on_print_info():
-        print(info.sourceCodeInfo)
-
-    ui.button("print info", on_click=on_print_info)
+    # ui.button("test apply color style", on_click=onclick)
