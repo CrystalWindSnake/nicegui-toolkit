@@ -57,3 +57,8 @@ def try_build_container_box(
         provider.apply_zone.refresh(enable=True)
 
     ui.button("test apply color style", on_click=onclick)
+
+    def on_print_info():
+        print(info.sourceCodeInfo)
+
+    ui.button("print info", on_click=on_print_info)

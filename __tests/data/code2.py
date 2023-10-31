@@ -1,6 +1,9 @@
 from nicegui import ui
 import pandas as pd
 
+# from niceguiToolkit.layout import inject_layout_tool
+
+# inject_layout_tool(mode="penetration")
 ui.mermaid("")
 ui.label("xxxxx")
 
