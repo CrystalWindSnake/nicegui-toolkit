@@ -28,39 +28,3 @@ def functional_zone(
             builder.build_fn(builder_context)
 
     # try_build_container_box(provider, info, select_event_args)
-
-
-def try_build_container_box(
-    provider: Provider,
-    info: ComponentInfo,
-    select_event_args: TrackBallSelectdEventArguments,
-):
-    style_name = "flex-direction"
-    cp = context.get_client().elements[info.id]
-
-    if select_event_args.flexInfo.isFlex:
-        cp = context.get_client().elements[info.id]
-
-        def onchange(e):
-            provider.store.change_styles(info.id, {style_name: e.value})
-            cp._style[style_name] = e.value
-            cp.update()
-
-            provider.apply_zone.refresh(enable=True)
-
-        init_value = select_event_args.flexInfo.direction
-
-        with ui.row().classes("flex-center"):
-            ui.label("元素排列方向")
-            ui.radio(
-                {"row": "横向", "column": "竖向"}, value=init_value, on_change=onchange
-            ).classes("flex")
-
-    # def onclick():
-    #     provider.store.change_styles(info.id, {"color": "red"})
-    #     cp._style["color"] = "red"
-    #     cp.update()
-
-    #     provider.apply_zone.refresh(enable=True)
-
-    # ui.button("test apply color style", on_click=onclick)

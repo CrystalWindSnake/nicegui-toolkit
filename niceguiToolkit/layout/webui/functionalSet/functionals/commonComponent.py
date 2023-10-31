@@ -3,21 +3,19 @@ from niceguiToolkit.layout.webui.functionalSet.model import T_BuilderContext, T_
 
 
 def isShow_fn(context: T_BuilderContext):
-    return context.flex_info.isFlex
+    return True
 
 
 def build_fn(context: T_BuilderContext):
-    style_name = "flex-direction"
+    inin_value = context.element._style.get("width", None)
 
     def onchange(e):
-        context.apply_styles({style_name: e.value})
-
-    init_value = context.flex_info.direction
+        context.apply_styles({"width": e.value})
 
     with ui.row().classes("flex-center"):
-        ui.label("元素排列方向")
+        ui.label("宽度")
         ui.radio(
-            {"row": "横向", "column": "竖向"}, value=init_value, on_change=onchange
+            {"auto": "auto", "100%": "100%"}, value=inin_value, on_change=onchange
         ).classes("flex")
 
 
