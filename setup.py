@@ -7,7 +7,7 @@ import niceguiToolkit
 with open("README.md", encoding="utf8") as readme_file:
     readme = readme_file.read()
 
-requirements = ["nicegui>=1.4.0",,'executing', "typing_extensions"]
+requirements = ["nicegui>=1.4.0", "executing", "typing_extensions"]
 
 test_requirements = ["pytest>=3", "playwright"]
 

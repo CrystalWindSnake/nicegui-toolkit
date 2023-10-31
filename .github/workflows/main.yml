@@ -15,4 +15,20 @@ jobs:
       - run: pip install pytest  nicegui>=1.4.0 executing
       # - run: playwright install
       - run: pytest __tests/
- 
+  try-startup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3.1.4
+        with:
+          python-version: '3.8'
+      - run: pip install nicegui>=1.4.0 executing
+      - run: python setup.py build
+      - run: cp actions_scripts/try_startup_script.py ./build/lib
+      - name: to build lib dir
+        working-directory: ./build/lib
+        run: |
+          ls
+          pwd
+          python try_startup_script.py
+    
