@@ -3,7 +3,7 @@ from pathlib import Path
 import sysconfig
 from typing import TYPE_CHECKING, Callable, Optional
 import nicegui as ng_vars
-from niceguiToolkit.utils import codeContext
+from niceguiToolkit.utils import astCore
 import inspect
 from functools import partial
 
@@ -19,11 +19,11 @@ def _mark_element(ele: ng_vars.ui.element):
     ele._props["layout-tool-ele-type"] = type(ele).__name__
 
 
-def _create_get_frame_info_finder(
+def _create_entry_point_info_finder(
     config: _T_inject_Config,
-) -> Callable[..., Optional[inspect.Traceback]]:
+) -> Callable[..., Optional[astCore._T_entry_point_info]]:
     if config.inject_mode == "save":
-        return partial(codeContext.get_frame_info_match_file, config.code_file_includes)
+        return partial(astCore.get_frame_info_match_file, config.code_file_includes)
 
     if config.inject_mode == "penetration":
         import site
@@ -33,7 +33,7 @@ def _create_get_frame_info_finder(
         # pk_lib = Path(sysconfig.get_paths()["purelib"])
         this_pj_root = Path(__file__).parent.parent
 
-        return partial(codeContext.get_frame_info_exclude_dir, [*pk_libs, this_pj_root])
+        return partial(astCore.get_frame_info_exclude_dir, [*pk_libs, this_pj_root])
 
     raise ValueError(f"not support inject mode:{config.inject_mode}")
 
@@ -41,18 +41,19 @@ def _create_get_frame_info_finder(
 def hook_ui_element_method(store_manager: StoreManager, config: _T_inject_Config):
     org_init = ng_vars.ui.element.__init__
 
-    get_frame_info_finder = _create_get_frame_info_finder(config)
+    get_entry_point_info = _create_entry_point_info_finder(config)
 
     def wrap_init(self: ng_vars.ui.element, *args, **kws):
         # TODO:Exclude own component construction
         org_init(self, *args, **kws)
 
-        frame_info = get_frame_info_finder()
-        if frame_info:
+        entry_point_info = get_entry_point_info()
+        if entry_point_info:
             store = store_manager.try_get_shadow_store(ng_vars.context.get_client().id)
             _mark_element(self)
-            store.set_componentInfo(
-                self, codeContext.frame_info_to_code_info(frame_info)
-            )
+
+            source_info = astCore.get_source_info(entry_point_info)
+
+            store.set_componentInfo(self, source_info)
 
     ng_vars.ui.element.__init__ = wrap_init

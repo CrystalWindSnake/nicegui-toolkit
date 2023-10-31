@@ -20,16 +20,16 @@ def message_zone(
 
     with ui.row() as first_row:
 
-        async def onclick():
+        async def on_click_code():
             await run.io_bound(
                 lambda: os.system(
-                    f"code -g {info.sourceCodeInfo.callerSourceCodeFile.resolve()}:{info.sourceCodeInfo.positions.lineno}:{info.sourceCodeInfo.positions.end_col_offset}"
+                    f"code -g {info.sourceCodeInfo.entry_point.file.resolve()}:{info.sourceCodeInfo.entry_point.positions.lineno}:{info.sourceCodeInfo.entry_point.positions.end_col_offset}"
                 )
             )
 
         with ui.button(icon="code").props("round ").on(
             "click",
-            onclick,
+            on_click_code,
         ):
             ui.tooltip("jump to code[only vscode]").style("z-index: 9999999")
 
@@ -53,11 +53,11 @@ def message_zone(
 
     with ui.row():
         ui.label("classes:")
-        ui.label(str(info.astInfo.classes))
+        ui.label(str(info.sourceCodeInfo.classes))
 
     with ui.row():
         ui.label("style:")
-        ui.label(str(info.astInfo.style))
+        ui.label(str(info.sourceCodeInfo.style))
 
     with ui.row():
         ui.label("sourceCodeInfo:")

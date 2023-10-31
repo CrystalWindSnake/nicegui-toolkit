@@ -1,10 +1,15 @@
+from __future__ import annotations
 import dis
 import inspect
-from typing import Callable, List
+from typing import Callable, List, TYPE_CHECKING
 from typing_extensions import get_type_hints
 import nicegui as ng_vars
 from dataclasses import dataclass
 from pathlib import Path
+import executing
+
+if TYPE_CHECKING:
+    from .astCore import _T_entry_point_position
 
 
 def is_classmethod(cls: type, method_name: str):
@@ -75,9 +80,10 @@ def get_all_element_funcs(nicegui_ui_module):
 
 
 @dataclass(frozen=True)
-class _T_get_source_code_info:
+class _T_source_code_info:
     callerSourceCodeFile: Path
-    positions: dis.Positions
+    function: str
+    positions: _T_entry_point_position
 
 
 def get_frame_info(level=0):
@@ -92,53 +98,13 @@ def get_frame_info(level=0):
     return inspect.getframeinfo(cur_frame)
 
 
-def get_frame_info_match_file(targets: List[Path]):
-    targets_set = set(targets)
-    cur_frame = inspect.currentframe()
-
-    try:
-        while cur_frame:
-            info = inspect.getframeinfo(cur_frame)
-            if Path(info.filename) in targets_set:
-                return info
-            cur_frame = cur_frame.f_back
-
-    finally:
-        del cur_frame
-
-    return None
+def frame_info_to_code_info(
+    frame_info: inspect.Traceback, position: _T_entry_point_position
+):
+    return _T_source_code_info(Path(frame_info.filename), frame_info.function, position)
 
 
-def get_frame_info_exclude_dir(exclude_dirs: List[Path]):
-    cur_frame = inspect.currentframe()
+# def get_source_code_info():
+#     finfo = get_frame_info(-2)
 
-    try:
-        while cur_frame:
-            info = inspect.getframeinfo(cur_frame)
-            file_path = Path(info.filename)
-            if not file_path.exists():
-                return None
-            file_dir = file_path.parent
-
-            all_exclude = all(
-                not exclude in file_dir.parents for exclude in exclude_dirs
-            )
-            if all_exclude:
-                return info
-            cur_frame = cur_frame.f_back
-    finally:
-        del cur_frame
-
-    return None
-
-
-def frame_info_to_code_info(frame_info: inspect.Traceback):
-    positions = frame_info.positions
-    assert positions
-    return _T_get_source_code_info(Path(frame_info.filename), positions)
-
-
-def get_source_code_info():
-    finfo = get_frame_info(-2)
-
-    return frame_info_to_code_info(finfo)
+#     return frame_info_to_code_info(finfo)

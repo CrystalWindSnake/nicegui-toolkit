@@ -11,7 +11,7 @@ def test_create_new_style_call():
 
     store = ComponentStore()
 
-    code_info = codeContext._T_get_source_code_info(
+    code_info = codeContext._T_source_code_info(
         mock_code_file,
         dis.Positions(lineno=8, end_lineno=8, col_offset=4, end_col_offset=43),
     )
@@ -35,7 +35,7 @@ def test_replace_style():
 
     store = ComponentStore()
 
-    code_info = codeContext._T_get_source_code_info(
+    code_info = codeContext._T_source_code_info(
         mock_code_file,
         dis.Positions(lineno=8, end_lineno=8, col_offset=4, end_col_offset=43),
     )
@@ -58,7 +58,7 @@ def test_multiple_style():
 
     store = ComponentStore()
 
-    code_info = codeContext._T_get_source_code_info(
+    code_info = codeContext._T_source_code_info(
         mock_code_file,
         dis.Positions(lineno=8, end_lineno=8, col_offset=4, end_col_offset=43),
     )
@@ -81,7 +81,7 @@ def test_has_no_str_style():
 
     store = ComponentStore()
 
-    code_info = codeContext._T_get_source_code_info(
+    code_info = codeContext._T_source_code_info(
         mock_code_file,
         dis.Positions(lineno=10, end_lineno=10, col_offset=4, end_col_offset=43),
     )

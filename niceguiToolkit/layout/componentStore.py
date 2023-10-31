@@ -11,7 +11,6 @@ from niceguiToolkit.utils import astCore
 
 
 if TYPE_CHECKING:
-    from niceguiToolkit.utils.codeContext import _T_get_source_code_info
     from niceguiToolkit.libs.trackBall import TrackBall
 
 
@@ -19,8 +18,7 @@ if TYPE_CHECKING:
 class ComponentInfo:
     id: _TNiceguiComponentId
     typeName: str
-    sourceCodeInfo: _T_get_source_code_info
-    astInfo: astCore._T_get_ast_infos
+    sourceCodeInfo: astCore._T_source_code_info
     styles: Dict = field(default_factory=dict)
     props: Dict[str, Any] = field(default_factory=dict)
     classes: List[str] = field(default_factory=list)
@@ -29,50 +27,64 @@ class ComponentInfo:
     classesHistory: List[str] = field(default_factory=list)
 
     def create_style_code(self):
-        has_style_call = self.astInfo.style.has
+        has_style_call = self.sourceCodeInfo.style.has
         lineno = (
-            self.astInfo.style.lineno
+            self.sourceCodeInfo.style.lineno
             if has_style_call
-            else self.sourceCodeInfo.positions.lineno
+            else self.sourceCodeInfo.entry_point.positions.lineno
+        ) or 0
+        end_lineno = (
+            self.sourceCodeInfo.style.end_lineno
+            if has_style_call
+            else self.sourceCodeInfo.entry_point.positions.end_lineno
         ) or 0
         col_offset = (
-            self.astInfo.style.col_offset + 1
+            self.sourceCodeInfo.style.col_offset + 1
             if has_style_call
-            else self.sourceCodeInfo.positions.end_col_offset
+            else self.sourceCodeInfo.entry_point.positions.end_col_offset
         ) or 0
         end_col_offset = (
-            (self.astInfo.style.end_col_offset or 0) - 1
+            (self.sourceCodeInfo.style.end_col_offset or 0) - 1
             if has_style_call
-            else self.sourceCodeInfo.positions.end_col_offset
+            else self.sourceCodeInfo.entry_point.positions.end_col_offset
         ) or col_offset
 
         code = ";".join(f"{name}:{value}" for name, value in self.stylesHistory.items())
         if not has_style_call:
             code = f'.style("{code}")'
 
-        return astCore._T_apply_code_record(code, lineno, col_offset, end_col_offset)
+        return astCore._T_apply_code_record(
+            code, lineno, end_lineno, col_offset, end_col_offset
+        )
 
     def create_classes_code(self):
-        has_classes_call = self.astInfo.classes.has
+        has_classes_call = self.sourceCodeInfo.classes.has
         lineno = (
-            self.astInfo.classes.lineno
+            self.sourceCodeInfo.classes.lineno
             if has_classes_call
-            else self.sourceCodeInfo.positions.lineno
+            else self.sourceCodeInfo.entry_point.positions.lineno
+        ) or 0
+        end_lineno = (
+            self.sourceCodeInfo.classes.end_lineno
+            if has_classes_call
+            else self.sourceCodeInfo.entry_point.positions.end_lineno
         ) or 0
         col_offset = (
-            self.astInfo.classes.col_offset
+            self.sourceCodeInfo.classes.col_offset
             if has_classes_call
-            else self.sourceCodeInfo.positions.end_col_offset
+            else self.sourceCodeInfo.entry_point.positions.end_col_offset
         ) or 0
         end_col_offset = (
-            self.astInfo.classes.end_col_offset
+            self.sourceCodeInfo.classes.end_col_offset
             if has_classes_call
-            else self.sourceCodeInfo.positions.end_col_offset
+            else self.sourceCodeInfo.entry_point.positions.end_col_offset
         ) or col_offset
 
         code = " ".join(self.classesHistory)
 
-        return astCore._T_apply_code_record(code, lineno, col_offset, end_col_offset)
+        return astCore._T_apply_code_record(
+            code, lineno, end_lineno, col_offset, end_col_offset
+        )
 
 
 @dataclass
@@ -91,24 +103,23 @@ class ComponentStore:
         self,
         component_type_name: str,
         component_id: _TNiceguiComponentId,
-        code_info: _T_get_source_code_info,
+        code_info: astCore._T_source_code_info,
     ):
-        ast_info = astCore.get_ast_infos(code_info)
-        cp_info = ComponentInfo(component_id, component_type_name, code_info, ast_info)
+        cp_info = ComponentInfo(component_id, component_type_name, code_info)
         self.cpMapper[component_id] = cp_info
 
-        if ast_info.style.has:
-            style_str = astCore.get_call_content(code_info, ast_info.style)
+        if code_info.style.has:
+            style_str = astCore.get_call_content(code_info, code_info.style)
             cp_info.stylesHistory.update(ng_vars.ui.element._parse_style(style_str))
 
-        if ast_info.classes.has:
-            classes_str = astCore.get_call_content(code_info, ast_info.classes)
+        if code_info.classes.has:
+            classes_str = astCore.get_call_content(code_info, code_info.classes)
             cp_info.classesHistory = ng_vars.ui.element._update_classes_list(
                 cp_info.classesHistory, classes_str
             )
 
     def set_componentInfo(
-        self, component: ng_vars.ui.element, code_info: _T_get_source_code_info
+        self, component: ng_vars.ui.element, code_info: astCore._T_source_code_info
     ):
         self._set_componentInfo(type(component).__name__, component.id, code_info)
 
@@ -144,8 +155,8 @@ class ComponentStore:
         need_infos = chain(style_infos, classes_infos)
 
         for file_path, gp in groupby(
-            sorted(need_infos, key=lambda m: m[0].sourceCodeInfo.callerSourceCodeFile),
-            key=lambda m: m[0].sourceCodeInfo.callerSourceCodeFile,
+            sorted(need_infos, key=lambda m: m[0].sourceCodeInfo.entry_point.file),
+            key=lambda m: m[0].sourceCodeInfo.entry_point.file,
         ):
             records = (item[1] for item in gp)
             code_lines = astCore.apply_code(file_path, records)
