@@ -1,9 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Any, Dict, List, TYPE_CHECKING, Optional, Set
+from typing import Any, Dict, List, TYPE_CHECKING, Set
 from itertools import groupby, chain
 import nicegui as ng_vars
-from copy import deepcopy
 from pathlib import Path
 from dataclasses import dataclass, field
 from niceguiToolkit.utils.types import _TNiceguiComponentId

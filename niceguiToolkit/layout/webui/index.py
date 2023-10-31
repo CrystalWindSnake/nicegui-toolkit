@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
-from nicegui import ui, context
+from nicegui import ui
 from niceguiToolkit.libs.trackBall import TrackBall
 
 from .configZone import functional_zone

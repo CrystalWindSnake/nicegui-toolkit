@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Callable, Dict, TYPE_CHECKING
 from nicegui import context
-from functools import cache
+from functools import lru_cache
 
 if TYPE_CHECKING:
     from niceguiToolkit.layout.componentStore import ComponentInfo
@@ -24,7 +24,7 @@ class T_BuilderContext:
         self._info = info
 
     @property
-    @cache
+    @lru_cache
     def element(self):
         return context.get_client().elements[self._info.id]
 
