@@ -230,8 +230,7 @@ class Source(object):
             linecache.cache[filename] = entry  # type: ignore[attr-defined]
             lines = get_lines()
 
-        if not filename in linecache.cache:
-            lines = [replace_chinese_with_x(line) for line in lines]
+        lines = [replace_chinese_with_x(line) for line in lines]
 
         return cls._for_filename_and_lines(filename, tuple(lines))
 

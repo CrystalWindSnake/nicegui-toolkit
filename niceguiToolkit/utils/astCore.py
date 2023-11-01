@@ -265,7 +265,7 @@ def get_frame_info_match_file(targets: List[Path]) -> Optional[_T_entry_point_in
 
     try:
         while cur_frame:
-            exec_info = _get_executing_info(cur_frame)
+            exec_info = executing.Source.executing(cur_frame)
             file_path = Path(exec_info.source.filename)
             if file_path in targets_set:
                 return _try_exce_info2_entry_info(exec_info, file_path)
@@ -318,7 +318,13 @@ def _get_call_name(node: Union[ast.Name, ast.Attribute]):
         return node.attr
 
 
-def _try_exce_info2_entry_info(exec_info: Executing, file_path):
+def _try_exce_info2_entry_info(exec_info: Executing, file_path: Path):
+    if not file_path in _m_executing_for_filename_set:
+        executing.Source.for_filename(str(file_path))
+        _m_executing_for_filename_set.add(str(file_path))
+
+        exec_info = executing.Source.executing(exec_info.frame)
+
     callNode: ast.Call = exec_info.node  # type: ignore
     if callNode is None:
         return
