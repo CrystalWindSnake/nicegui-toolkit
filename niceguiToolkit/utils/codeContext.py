@@ -1,9 +1,15 @@
 from __future__ import annotations
+import dis
 import inspect
-from typing import Callable, List
+from typing import Callable, List, TYPE_CHECKING
 from typing_extensions import get_type_hints
 import nicegui as ng_vars
 from dataclasses import dataclass
+from pathlib import Path
+import executing
+
+if TYPE_CHECKING:
+    from .astCore import _T_entry_point_position
 
 
 def is_classmethod(cls: type, method_name: str):
