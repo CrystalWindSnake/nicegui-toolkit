@@ -4,11 +4,14 @@ from ast import AST
 import inspect
 from pathlib import Path
 
-from typing import Any, List, Optional, Iterable, Union
+from typing import Any, List, Optional, Iterable, Set, Union
 from typing_extensions import Literal
 from dataclasses import dataclass
 from functools import lru_cache
-import executing
+import niceguiToolkit.utils.executing as executing
+from niceguiToolkit.utils.executing import Executing
+from types import FrameType
+from .common import replace_chinese_with_x
 
 
 _T_call_name = Literal["style", "props", "classes"]
@@ -108,9 +111,9 @@ class _T_entry_point_position:
 def get_entry_point_position(file: Path, func_name: str, lineno: int):
     cnv = EntryPointCallerNodeVisitor(func_name, lineno)
 
-    _, ast_node = _get_ast4file(file)
+    ast_flie_info = _get_ast4file(file)
 
-    result = cnv.get_target(ast_node)
+    result = cnv.get_target(ast_flie_info.ast_module)
     return _T_entry_point_position(
         lineno=result.lineno,
         end_lineno=result.end_lineno,
@@ -119,11 +122,19 @@ def get_entry_point_position(file: Path, func_name: str, lineno: int):
     )
 
 
-@lru_cache(5)
+@dataclass
+class _T_get_ast4file_return:
+    org_code: str
+    replacement_code: str
+    ast_module: ast.Module
+
+
+@lru_cache(maxsize=None)
 def _get_ast4file(file: Path):
-    code_source = Path(file).read_text(encoding="utf8")
-    ast_module = ast.parse(code_source)
-    return code_source, ast_module
+    org_code = Path(file).read_text(encoding="utf8")
+    replacement_code = replace_chinese_with_x(org_code)
+    ast_module = ast.parse(replacement_code)
+    return _T_get_ast4file_return(org_code, replacement_code, ast_module)
 
 
 def clear_ast_code_cache():
@@ -140,10 +151,10 @@ class _T_ast_info:
 
 
 def _get_ast_info(entry_point: _T_entry_point_info, call_name: _T_call_name):
-    _, ast_md = _get_ast4file(entry_point.file)
+    ast_flie_info = _get_ast4file(entry_point.file)
 
     nv = CallerStemNodeVisitor(entry_point.positions)
-    link_call_stem_node = nv.get_target(ast_md)
+    link_call_stem_node = nv.get_target(ast_flie_info.ast_module)
 
     if link_call_stem_node is None:
         raise ValueError(f"not found target node")
@@ -166,8 +177,8 @@ def _get_ast_info(entry_point: _T_entry_point_info, call_name: _T_call_name):
 def get_call_content(source_code: _T_source_code_info, ast_info: _T_ast_info):
     if not ast_info.has:
         return ""
-    code, _ = _get_ast4file(source_code.entry_point.file)
-    lines = code.splitlines()
+    ast_flie_info = _get_ast4file(source_code.entry_point.file)
+    lines = ast_flie_info.org_code.splitlines()
     assert ast_info.end_lineno
     assert ast_info.end_col_offset
     return lines[ast_info.end_lineno - 1][
@@ -189,8 +200,8 @@ def _replace_str_by_position(content: str, replace: str, start: int, end: int):
 
 
 def apply_code(source_code_file: Path, records: Iterable[_T_apply_code_record]):
-    code, _ = _get_ast4file(source_code_file)
-    lines = code.splitlines()
+    ast_flie_info = _get_ast4file(source_code_file)
+    lines = ast_flie_info.org_code.splitlines()
 
     for record in sorted(records, key=lambda x: (x.lineno, x.col_offset), reverse=True):
         if record.end_lineno <= 0 or record.col_offset <= 0:
@@ -236,13 +247,25 @@ class _T_source_code_info:
     classes: _T_ast_info
 
 
+_m_executing_for_filename_set: Set[str] = set()
+
+
+def _get_executing_info(frame: FrameType):
+    frame_info = inspect.getframeinfo(frame)
+    if not Path(frame_info.filename) in _m_executing_for_filename_set:
+        executing.Source.for_filename(frame_info.filename)
+        _m_executing_for_filename_set.add(frame_info.filename)
+
+    return executing.Source.executing(frame)
+
+
 def get_frame_info_match_file(targets: List[Path]) -> Optional[_T_entry_point_info]:
     targets_set = set(targets)
     cur_frame = inspect.currentframe()
 
     try:
         while cur_frame:
-            exec_info = executing.Source.executing(cur_frame)
+            exec_info = _get_executing_info(cur_frame)
             file_path = Path(exec_info.source.filename)
             if file_path in targets_set:
                 return _try_exce_info2_entry_info(exec_info, file_path)
@@ -261,7 +284,7 @@ def get_frame_info_exclude_dir(
 
     try:
         while cur_frame:
-            exec_info = executing.Source.executing(cur_frame)
+            exec_info = _get_executing_info(cur_frame)
 
             file_path = Path(exec_info.source.filename)
             if not file_path.exists():
@@ -295,7 +318,7 @@ def _get_call_name(node: Union[ast.Name, ast.Attribute]):
         return node.attr
 
 
-def _try_exce_info2_entry_info(exec_info, file_path):
+def _try_exce_info2_entry_info(exec_info: Executing, file_path):
     callNode: ast.Call = exec_info.node  # type: ignore
     if callNode is None:
         return
