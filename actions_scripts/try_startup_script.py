@@ -5,6 +5,8 @@ from asyncio import sleep
 inject_layout_tool(mode="penetration")
 
 ui.label("xx")
+with ui.element("box"):
+    ui.tooltip("填写内容").style("width:10rem;")
 
 
 @app.on_startup
