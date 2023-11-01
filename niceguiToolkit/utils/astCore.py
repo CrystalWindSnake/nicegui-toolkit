@@ -250,15 +250,6 @@ class _T_source_code_info:
 _m_executing_for_filename_set: Set[str] = set()
 
 
-def _get_executing_info(frame: FrameType):
-    frame_info = inspect.getframeinfo(frame)
-    if not Path(frame_info.filename) in _m_executing_for_filename_set:
-        executing.Source.for_filename(frame_info.filename)
-        _m_executing_for_filename_set.add(frame_info.filename)
-
-    return executing.Source.executing(frame)
-
-
 def get_frame_info_match_file(targets: List[Path]) -> Optional[_T_entry_point_info]:
     targets_set = set(targets)
     cur_frame = inspect.currentframe()
@@ -284,7 +275,7 @@ def get_frame_info_exclude_dir(
 
     try:
         while cur_frame:
-            exec_info = _get_executing_info(cur_frame)
+            exec_info = executing.Source.executing(cur_frame)
 
             file_path = Path(exec_info.source.filename)
             if not file_path.exists():
