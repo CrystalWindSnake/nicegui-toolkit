@@ -28,7 +28,7 @@ def build_height(context: T_BuilderContext):
     with ui.row().classes("flex-center"):
         ui.label("高度")
         ui.radio(
-            {"auto": "auto", "100%": "100%", "屏幕高度": "100vh"},
+            {"auto": "auto", "100%": "100%", "100vh": "屏幕高度"},
             value=inin_value,
             on_change=onchange,
         ).classes("flex")
