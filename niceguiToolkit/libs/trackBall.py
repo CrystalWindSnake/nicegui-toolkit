@@ -28,6 +28,7 @@ class TrackBall(Element, component="trackBall.js"):
                 id=args["id"],
                 parentBoxId=args["parentBoxId"],
                 flexInfo=FlexInfo(**args["flexInfo"]),
+                parentFlexInfo=FlexInfo(**args["parentFlexInfo"]),
             )
             handler(arg)
 

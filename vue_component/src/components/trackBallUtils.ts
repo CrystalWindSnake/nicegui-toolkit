@@ -1,4 +1,4 @@
-import { ComputedRef, Ref, computed, reactive, ref, watchEffect } from 'vue'
+import { ComputedRef, Ref, computed, reactive } from 'vue';
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 
 import {
@@ -189,7 +189,6 @@ export function useHoverVisTarget(config: TSelectorConfig) {
 }
 
 
-
 export function hookPageMouseEvent(hoverElement: ComputedRef<HTMLElement | null>, selectedElement: Ref<HTMLElement | null>) {
 
     useEventListener(
@@ -223,12 +222,12 @@ export function hookPageMouseEvent(hoverElement: ComputedRef<HTMLElement | null>
 }
 
 export function getBoxParentId(target: HTMLElement, config: TSelectorConfig) {
-    let box = target.parentElement!.closest(`${config.selectors}`)
+    let box = target.parentElement!.closest(`${config.selectors}`) as HTMLElement
 
     while (box !== null) {
         const display = window.getComputedStyle(box, null).getPropertyValue('display')
         if (display === 'flex') {
-            return parseInt(box.getAttribute(config.idAttr)!)
+            return { id: parseInt(box.getAttribute(config.idAttr)!), dom: box }
         }
 
         box = box.parentElement!.closest(`${config.selectors}`)
