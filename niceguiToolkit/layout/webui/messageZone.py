@@ -47,9 +47,15 @@ def message_zone(
             ):
                 ui.tooltip("select parent box").style("z-index: 9999999")
 
-    with ui.row():
+    with ui.row().classes("flex-center"):
         ui.label("type:")
-        ui.label(info.typeName)
+
+        with ui.element("q-chip").props('color="teal" text-color="white"'):
+            ui.label(info.typeName)
+
+        if select_event_args.flexInfo.isFlex:
+            with ui.element("q-chip").props('color="primary" text-color="white"'):
+                ui.label("flex box")
 
     # with ui.row():
     #     ui.label("classes:")
