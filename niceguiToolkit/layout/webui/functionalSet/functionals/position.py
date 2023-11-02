@@ -55,4 +55,6 @@ def build_fn(context: T_BuilderContext):
 
 
 def _get_builder():
-    return T_Builder(title="common", is_show_fn=isShow_fn, build_fn=build_fn)
+    return T_Builder(
+        title="position", order=10, is_show_fn=isShow_fn, build_fn=build_fn
+    )

@@ -55,3 +55,4 @@ class T_Builder:
     title: str
     is_show_fn: Callable[[T_BuilderContext], bool]
     build_fn: Callable[[T_BuilderContext], None]
+    order: int = 1
