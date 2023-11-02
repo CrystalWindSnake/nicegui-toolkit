@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { useSvgConfigs } from "./aimingUtils";
 import { computed } from "vue";
+import { TSelectorConfig } from "./types";
 
-const props = defineProps<{ selectedElement: HTMLElement | null }>();
+const props = defineProps<{
+  selectedElement: HTMLElement | null;
+  selectorConfig: TSelectorConfig;
+}>();
 
 const selectedElement = computed(() => props.selectedElement);
 
@@ -17,7 +21,7 @@ const {
   p6,
   p7,
   p8,
-} = useSvgConfigs(selectedElement);
+} = useSvgConfigs(selectedElement, props.selectorConfig);
 </script>
 
 <template>

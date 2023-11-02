@@ -1,21 +1,55 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import TrackBall from "./components/TrackBall.vue";
+import { useMutationObserver } from "@vueuse/core";
 
 const ball = ref(null);
 
 function onclick() {
-  console.log(ball.value.queryHasBoxParent);
+  const item = document.querySelector(
+    '[layout-tool-ele-id="10"]'
+  )! as HTMLElement;
 
-  const target = ball.value.queryHasBoxParent(10);
-  console.log(target);
+  selectTarter.value = item;
+
+  const curValue = item.style.alignSelf;
+  item.style.alignSelf = curValue == "center" ? "start" : "center";
 }
+
+function onclickSelectInput() {
+  const item = document.querySelector(
+    '[layout-tool-ele-id="2"]'
+  )! as HTMLElement;
+
+  selectTarter.value = item;
+
+  const curValue = item.style.alignSelf;
+  item.style.alignSelf = curValue == "center" ? "start" : "center";
+}
+
+const selectTarter = ref(null as HTMLElement | null);
+
+// useMutationObserver(
+//   selectTarter,
+//   (ms) => {
+//     console.log("MutationObserver:", ms);
+//   },
+//   { attributes: true }
+// );
+
+onMounted(() => {
+  const item = document.querySelector(
+    '[layout-tool-ele-id="10"]'
+  )! as HTMLElement;
+
+  selectTarter.value = item;
+});
 </script>
 
 <template>
   <div>
     <div
-      style="display: flex"
+      style="display: flex; width: 100vw; flex-direction: column"
       class="ex4ng-ng_cp"
       layout-tool-mark="true"
       layout-tool-ele-id="1"
@@ -26,6 +60,7 @@ function onclick() {
         layout-tool-mark="true"
         layout-tool-ele-id="10"
         layout-tool-ele-type="Label"
+        style="width: 10rem"
       >
         xxxxx
       </div>
@@ -48,6 +83,7 @@ function onclick() {
       }"
     >
       <button type="button" @click="onclick">test method</button>
+      <button @click="onclickSelectInput">select input</button>
     </TrackBall>
   </div>
 </template>

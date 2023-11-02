@@ -56,15 +56,31 @@ watch(selectedElement, (target) => {
   if (target) {
     const id = parseInt(target.getAttribute(props.selectorConfig.idAttr)!);
 
+    const parentBox = utils.getBoxParentId(target, props.selectorConfig);
+
+    let parentFlexInfo: TSelectedChangeEventArgs["parentFlexInfo"] = {
+      isFlex: false,
+      direction: null,
+    };
+    if (parentBox) {
+      parentFlexInfo = utils.getFlexInfo(parentBox.dom, props.selectorConfig);
+    }
+
     emit("selectedChange", {
       id,
-      parentBoxId: utils.getBoxParentId(target, props.selectorConfig),
+      parentBoxId: parentBox !== null ? parentBox.id : null,
       flexInfo: utils.getFlexInfo(target, props.selectorConfig),
+      parentFlexInfo,
     });
     return;
   }
 
-  emit("selectedChange", { id: null, parentBoxId: null, flexInfo });
+  emit("selectedChange", {
+    id: null,
+    parentBoxId: null,
+    flexInfo,
+    parentFlexInfo: flexInfo,
+  });
 });
 
 defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
@@ -121,6 +137,7 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
 
     <Aiming
       :selected-element="selectedElement"
+      :selectorConfig="props.selectorConfig"
       style="z-index: 9999999"
     ></Aiming>
 

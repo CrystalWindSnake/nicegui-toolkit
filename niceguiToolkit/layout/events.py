@@ -15,3 +15,4 @@ class TrackBallSelectdEventArguments(UiEventArguments):
     id: Optional[int]
     parentBoxId: Optional[int]
     flexInfo: FlexInfo
+    parentFlexInfo: FlexInfo

@@ -16,10 +16,12 @@ class T_BuilderContext:
     def __init__(
         self,
         flex_info: FlexInfo,
+        parent_flex_info: FlexInfo,
         provider: Provider,
         info: ComponentInfo,
     ) -> None:
         self.flex_info = flex_info
+        self.parent_flex_info = parent_flex_info
         self._provider = provider
         self._info = info
 
