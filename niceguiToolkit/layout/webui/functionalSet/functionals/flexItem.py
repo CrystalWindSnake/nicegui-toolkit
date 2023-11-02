@@ -17,7 +17,6 @@ def build_fn(context: T_BuilderContext):
     def on_value_change(e):
         styles = {style_name: e.value}
         context.apply_styles(styles)
-        context._provider.track_ball.select_target(context._info.id)
 
     with ui.row().classes("flex-center"):
         ui.label("水平位置")

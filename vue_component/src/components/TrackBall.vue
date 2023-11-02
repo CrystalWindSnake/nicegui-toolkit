@@ -137,6 +137,7 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
 
     <Aiming
       :selected-element="selectedElement"
+      :selectorConfig="props.selectorConfig"
       style="z-index: 9999999"
     ></Aiming>
 

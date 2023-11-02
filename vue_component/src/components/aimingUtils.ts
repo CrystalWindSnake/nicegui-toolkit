@@ -1,21 +1,33 @@
-import { computed, reactive, MaybeRefOrGetter, toRef, ref } from 'vue';
+import { computed, reactive, MaybeRefOrGetter, toRef, ref, watch, ComputedRef } from 'vue';
 
 import {
     useElementBounding, useEventListener, useMutationObserver
 } from "@vueuse/core";
 
 import * as utils from "./utils";
+import { TSelectorConfig } from './types';
 
 
 // export const useSvgConfigs = utils.useSvgConfigs
 
 
-export function useSvgConfigs(target: MaybeRefOrGetter<HTMLElement | null>) {
-    const targetRef = toRef(target)
+export function useSvgConfigs(target: ComputedRef<HTMLElement | null>, selectorConfig: TSelectorConfig) {
+    const targetRef = computed(() => {
+
+        if (!target.value) {
+            return null
+        }
+
+        if (target.value.getAttribute(selectorConfig.elementTypeAttr) === 'Input') {
+            return target.value.closest('.q-input')
+        }
+
+        return target.value
+
+    })
     const svgConfig = utils.useSvgConfigs()
 
     const bounding = reactive(useElementBounding(target));
-
 
     useMutationObserver(
         targetRef,
