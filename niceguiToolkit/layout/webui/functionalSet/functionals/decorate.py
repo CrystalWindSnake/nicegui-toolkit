@@ -1,5 +1,8 @@
 from nicegui import ui
 from niceguiToolkit.layout.webui.functionalSet.model import T_BuilderContext, T_Builder
+from niceguiToolkit.layout.webui.functionalSet.functionals import (
+    components as common_cps,
+)
 
 
 def isShow_fn(context: T_BuilderContext):
@@ -40,13 +43,13 @@ def build_font_color(context: T_BuilderContext):
         context.apply_styles({style_name: e.value})
 
     with ui.row().classes("flex-center"):
-        ui.color_input("字体颜色", value=inin_value, on_change=onchange)
+        common_cps.color_input("字体颜色", value=inin_value, on_change=onchange)
 
 
 def build_fn(context: T_BuilderContext):
     build_font_size(context)
     ui.separator()
-    # build_font_color(context)
+    build_font_color(context)
 
 
 def _get_builder():

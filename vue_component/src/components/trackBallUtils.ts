@@ -189,6 +189,14 @@ export function useHoverVisTarget(config: TSelectorConfig) {
 }
 
 
+function isColorPicker(target: HTMLElement) {
+    const picker = target.closest('.q-color-picker')
+    if (!picker) {
+        return false
+    }
+    return true
+}
+
 export function hookPageMouseEvent(hoverElement: ComputedRef<HTMLElement | null>, selectedElement: Ref<HTMLElement | null>) {
 
     useEventListener(
@@ -197,7 +205,14 @@ export function hookPageMouseEvent(hoverElement: ComputedRef<HTMLElement | null>
         (e) => {
 
             const target = e.target as HTMLElement
+
+            // click layout tool
             if (target.closest('[layout-tool-panel]')) {
+                return
+            }
+
+            // click color picker
+            if (isColorPicker(target)) {
                 return
             }
 

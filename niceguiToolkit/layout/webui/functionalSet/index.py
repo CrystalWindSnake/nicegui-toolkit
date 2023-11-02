@@ -29,6 +29,8 @@ def _get_all_functional_module(folder: Path):
 def get_all_system_builders():
     folder = Path(__file__).parent / "functionals"
     builders = [
-        md._get_builder() for md in _get_all_functional_module(folder)
+        md._get_builder()
+        for md in _get_all_functional_module(folder)
+        if hasattr(md, "_get_builder")
     ]  # type:list[T_Builder]
     return sorted(builders, key=lambda b: b.order, reverse=True)
