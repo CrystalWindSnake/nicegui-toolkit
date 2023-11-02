@@ -44,5 +44,5 @@ def build_fn(context: T_BuilderContext):
 
 def _get_builder():
     return T_Builder(
-        title="flex item", order=900, is_show_fn=isShow_fn, build_fn=build_fn
+        title="flex item(子元素)", order=900, is_show_fn=isShow_fn, build_fn=build_fn
     )
