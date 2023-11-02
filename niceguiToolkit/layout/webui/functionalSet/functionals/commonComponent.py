@@ -7,28 +7,42 @@ def isShow_fn(context: T_BuilderContext):
 
 
 def build_width(context: T_BuilderContext):
-    inin_value = context.element._style.get("width", None)
+    style_name = "width"
+    inin_value = context.element._style.get(style_name, "none")
 
     def onchange(e):
-        context.apply_styles({"width": e.value})
+        value = e.value
+        if value == "none":
+            context.remove_styles(style_name)
+            return
+
+        context.apply_styles({style_name: e.value})
 
     with ui.row().classes("flex-center"):
         ui.label("宽度")
         ui.radio(
-            {"auto": "auto", "100%": "100%"}, value=inin_value, on_change=onchange
+            {"none": "未设置", "auto": "auto", "100%": "100%"},
+            value=inin_value,
+            on_change=onchange,
         ).classes("flex")
 
 
 def build_height(context: T_BuilderContext):
-    inin_value = context.element._style.get("height", None)
+    style_name = "height"
+    inin_value = context.element._style.get(style_name, "none")
 
     def onchange(e):
-        context.apply_styles({"height": e.value})
+        value = e.value
+        if value == "none":
+            context.remove_styles(style_name)
+            return
+
+        context.apply_styles({style_name: e.value})
 
     with ui.row().classes("flex-center"):
         ui.label("高度")
         ui.radio(
-            {"auto": "auto", "100%": "100%", "100vh": "屏幕高度"},
+            {"none": "未设置", "auto": "auto", "100%": "100%", "100vh": "屏幕高度"},
             value=inin_value,
             on_change=onchange,
         ).classes("flex")

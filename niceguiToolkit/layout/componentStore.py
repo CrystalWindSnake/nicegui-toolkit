@@ -140,6 +140,13 @@ class ComponentStore:
         self.get_info(id).stylesHistory.update(styles)
         self._styles_records.add(id)
 
+    def remove_styles(self, id: _TNiceguiComponentId, style_names: List[str]):
+        stylesHistory = self.get_info(id).stylesHistory
+        for name in style_names:
+            if name in stylesHistory:
+                del stylesHistory[name]
+        self._styles_records.add(id)
+
     def change_classes(self, id: _TNiceguiComponentId, classes: List[str]):
         self.get_info(id).classesHistory.extend(classes)
         self._classes_records.add(id)

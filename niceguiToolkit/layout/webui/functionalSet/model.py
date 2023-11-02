@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Callable, Dict, TYPE_CHECKING
+from typing import Callable, Dict, TYPE_CHECKING, List, Union
 from nicegui import context
 from functools import lru_cache
 
@@ -34,6 +34,18 @@ class T_BuilderContext:
         cp = self.element
         cp._style.update(styles)
         self._provider.store.change_styles(self._info.id, styles)
+        cp.update()
+        self._provider.apply_zone.refresh(enable=True)
+
+    def remove_styles(self, style_names: Union[List[str], str]):
+        style_names = [style_names] if isinstance(style_names, str) else style_names
+        cp = self.element
+
+        for name in style_names:
+            if name in cp._style:
+                del cp._style[name]
+
+        self._provider.store.remove_styles(self._info.id, style_names)
         cp.update()
         self._provider.apply_zone.refresh(enable=True)
 
