@@ -21,12 +21,16 @@ def functional_zone(
 
     assert select_event_args
 
-    for builder in get_all_system_builders():
-        builder_context = T_BuilderContext(
-            select_event_args.flexInfo, select_event_args.parentFlexInfo, provider, info
-        )
+    with ui.expansion(value=True, icon="menu").classes("w-full"):
+        for builder in get_all_system_builders():
+            builder_context = T_BuilderContext(
+                select_event_args.flexInfo,
+                select_event_args.parentFlexInfo,
+                provider,
+                info,
+            )
 
-        if builder.is_show_fn(builder_context):
-            builder.build_fn(builder_context)
+            if builder.is_show_fn(builder_context):
+                builder.build_fn(builder_context)
 
     # try_build_container_box(provider, info, select_event_args)
