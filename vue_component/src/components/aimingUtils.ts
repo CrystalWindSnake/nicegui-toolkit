@@ -1,7 +1,7 @@
-import { computed, reactive, MaybeRefOrGetter, toRef } from 'vue';
+import { computed, reactive, MaybeRefOrGetter, toRef, ref } from 'vue';
 
 import {
-    useElementBounding, useEventListener
+    useElementBounding, useEventListener, useMutationObserver
 } from "@vueuse/core";
 
 import * as utils from "./utils";
@@ -16,9 +16,19 @@ export function useSvgConfigs(target: MaybeRefOrGetter<HTMLElement | null>) {
 
     const bounding = reactive(useElementBounding(target));
 
+
+    useMutationObserver(
+        targetRef,
+        () => {
+            bounding.update()
+        },
+        { attributes: true }
+    );
+
     useEventListener("scroll", bounding.update, true);
 
     const rectStyles = computed(() => {
+
         if (targetRef.value) {
             return {
                 display: "block",
