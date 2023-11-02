@@ -21,7 +21,9 @@ def functional_zone(
 
     assert select_event_args
 
-    with ui.expansion(value=True, icon="menu").classes("w-full"):
+    # with ui.expansion(value=True, icon="menu").classes("w-full"):
+
+    with ui.element("q-list").props("bordered").classes("w-full"):
         for builder in get_all_system_builders():
             builder_context = T_BuilderContext(
                 select_event_args.flexInfo,
@@ -31,6 +33,5 @@ def functional_zone(
             )
 
             if builder.is_show_fn(builder_context):
-                builder.build_fn(builder_context)
-
-    # try_build_container_box(provider, info, select_event_args)
+                with ui.expansion(builder.title).props('group="same"'):
+                    builder.build_fn(builder_context)

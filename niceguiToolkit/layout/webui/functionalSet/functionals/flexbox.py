@@ -26,12 +26,14 @@ def build_gap(context: T_BuilderContext):
 
     def onchange(e):
         value = e.value
-        if value:
+        if value is not None:
             context.apply_styles({style_name: f"{e.value}rem"})
         else:
             context.remove_styles(style_name)
 
     init_value = context.element._style.get(style_name, None)
+    if init_value:
+        init_value = init_value[:-3]
 
     with ui.row().classes("flex-center"):
         ui.number(
@@ -41,8 +43,9 @@ def build_gap(context: T_BuilderContext):
 
 def build_fn(context: T_BuilderContext):
     build_direction(context)
+    ui.separator()
     build_gap(context)
 
 
 def _get_builder():
-    return T_Builder(isShow_fn, build_fn)
+    return T_Builder(title="flex box", is_show_fn=isShow_fn, build_fn=build_fn)

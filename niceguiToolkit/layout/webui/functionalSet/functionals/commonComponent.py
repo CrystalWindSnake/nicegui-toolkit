@@ -50,8 +50,9 @@ def build_height(context: T_BuilderContext):
 
 def build_fn(context: T_BuilderContext):
     build_width(context)
+    ui.separator()
     build_height(context)
 
 
 def _get_builder():
-    return T_Builder(isShow_fn, build_fn)
+    return T_Builder(title="common", is_show_fn=isShow_fn, build_fn=build_fn)
