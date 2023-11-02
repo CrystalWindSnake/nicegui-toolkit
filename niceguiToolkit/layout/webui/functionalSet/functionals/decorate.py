@@ -16,9 +16,10 @@ def build_font_size(context: T_BuilderContext):
         else:
             context.remove_styles(style_name)
 
-    init_value = context.element._style.get(style_name, None)
-    if init_value:
-        init_value = init_value[:-3]
+    init_value = None
+    init_value_str = context.element._style.get(style_name, None)
+    if init_value_str:
+        init_value = float(init_value_str[:-3])
 
     with ui.row().classes("flex-center"):
         ui.number(
