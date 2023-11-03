@@ -39,7 +39,10 @@ def build_horizontal(context: T_BuilderContext):
 
 def build_fn(context: T_BuilderContext):
     build_horizontal(context)
+    ui.separator()
 
 
 def _get_builder():
-    return T_Builder(isShow_fn, build_fn)
+    return T_Builder(
+        title="flex item(子元素)", order=900, is_show_fn=isShow_fn, build_fn=build_fn
+    )

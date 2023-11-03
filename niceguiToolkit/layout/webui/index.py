@@ -25,11 +25,14 @@ def apply_zone(store: Optional[ComponentStore] = None, enable=False):
 def build_TrackBall(store: ComponentStore):
     ui.tooltip.default_style("font-size:1rem")
 
-    with TrackBall() as ball, ui.card():
+    ball = TrackBall()
+
+    # with ball.add_slot("title"):
+    #     ui.label("xx")
+
+    with ball, ui.card().classes("select-none"):
         provider = Provider(ball, store, message_zone, functional_zone, apply_zone)
-
         ui.icon("gps_fixed")
-
         message_zone(provider)
         functional_zone(provider)
         apply_zone(store)
