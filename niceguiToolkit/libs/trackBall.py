@@ -8,9 +8,9 @@ class TrackBall(Element, component="trackBall.js"):
     def __init__(self) -> None:
         super().__init__()
         self._props["selectorConfig"] = {
-            "selectors": "[layout-tool-mark]",
-            "idAttr": "layout-tool-ele-id",
-            "elementTypeAttr": "layout-tool-ele-type",
+            "selectors": ".layout-tool-mark",
+            "idAttr": "layout-tool-id",
+            "elementTypeAttr": "layout-tool-type",
         }
 
     def on_hover(self, handler: Callable[[int], None]):

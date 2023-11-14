@@ -48,16 +48,16 @@ export function useTypeNameTag(config: TSelectorConfig, hoverElement: ComputedRe
 
     })
 
-    const message = computed(() => {
+    const typeName = computed(() => {
         if (hoverElement.value) {
-            return hoverElement.value.getAttribute(config.elementTypeAttr)
+            return utils.getElementType(hoverElement.value, config)
         }
 
         return null
     })
 
     return {
-        message, typeNameTagStyles
+        typeName, typeNameTagStyles
     }
 }
 
@@ -242,7 +242,7 @@ export function getBoxParentId(target: HTMLElement, config: TSelectorConfig) {
     while (box !== null) {
         const display = window.getComputedStyle(box, null).getPropertyValue('display')
         if (display === 'flex') {
-            return { id: parseInt(box.getAttribute(config.idAttr)!), dom: box }
+            return { id: utils.getElementId(box, config), dom: box }
         }
 
         box = box.parentElement!.closest(`${config.selectors}`)
@@ -256,7 +256,7 @@ const FlexCheckTargets = new Set(['Row', 'Column', 'Element'])
 
 export function getFlexInfo(target: HTMLElement, config: TSelectorConfig): TSelectedChangeEventArgs['flexInfo'] {
 
-    if (!FlexCheckTargets.has(target.getAttribute(config.elementTypeAttr)!)) {
+    if (!FlexCheckTargets.has(utils.getElementType(target, config)!)) {
         return {
             isFlex: false,
             direction: null

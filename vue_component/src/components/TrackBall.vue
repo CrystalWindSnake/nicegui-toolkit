@@ -12,7 +12,8 @@ import {
   getComponentExpose,
 } from "./trackBallUtils";
 
-import * as utils from "./trackBallUtils";
+import * as tbUtils from "./trackBallUtils";
+import * as utils from "./utils";
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 import { ref, watch } from "vue";
 
@@ -27,7 +28,7 @@ const { viewBox, styles: svgStyles } = useSvgConfigs();
 const { hoverElement, rectStyles, topLine, rightLine, bottomLine, leftLine } =
   useHoverVisTarget(props.selectorConfig);
 
-const { typeNameTagStyles, message: typeName } = useTypeNameTag(
+const { typeNameTagStyles, typeName } = useTypeNameTag(
   props.selectorConfig,
   hoverElement
 );
@@ -39,7 +40,7 @@ hookPageMouseEvent(hoverElement, selectedElement);
 // events
 watch(hoverElement, (target) => {
   if (target) {
-    const id = parseInt(target.getAttribute(props.selectorConfig.idAttr)!);
+    const id = utils.getElementId(target, props.selectorConfig);
     emit("hoverChange", { id });
     return;
   }
@@ -54,22 +55,22 @@ watch(selectedElement, (target) => {
   } as TSelectedChangeEventArgs["flexInfo"];
 
   if (target) {
-    const id = parseInt(target.getAttribute(props.selectorConfig.idAttr)!);
+    const id = utils.getElementId(target, props.selectorConfig);
 
-    const parentBox = utils.getBoxParentId(target, props.selectorConfig);
+    const parentBox = tbUtils.getBoxParentId(target, props.selectorConfig);
 
     let parentFlexInfo: TSelectedChangeEventArgs["parentFlexInfo"] = {
       isFlex: false,
       direction: null,
     };
     if (parentBox) {
-      parentFlexInfo = utils.getFlexInfo(parentBox.dom, props.selectorConfig);
+      parentFlexInfo = tbUtils.getFlexInfo(parentBox.dom, props.selectorConfig);
     }
 
     emit("selectedChange", {
       id,
       parentBoxId: parentBox !== null ? parentBox.id : null,
-      flexInfo: utils.getFlexInfo(target, props.selectorConfig),
+      flexInfo: tbUtils.getFlexInfo(target, props.selectorConfig),
       parentFlexInfo,
     });
     return;
