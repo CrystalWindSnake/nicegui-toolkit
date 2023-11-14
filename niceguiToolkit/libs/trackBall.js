@@ -528,6 +528,7 @@ const Fe = ["viewBox"], Oe = /* @__PURE__ */ q({
       C("div", {
         ref_key: "el",
         ref: n,
+        class: "cursor-move",
         style: { position: "absolute", width: "100%", top: "0", left: "0", "z-index": "999", height: "2rem" }
       }, [
         N(o.$slots, "title")

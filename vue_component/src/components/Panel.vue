@@ -15,6 +15,7 @@ const { style } = useDraggable(el, {
   <div :style="style" style="position: fixed" layout-tool-panel>
     <div
       ref="el"
+      class="cursor-move"
       style="
         position: absolute;
         width: 100%;
