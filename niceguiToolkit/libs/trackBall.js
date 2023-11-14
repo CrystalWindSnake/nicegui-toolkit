@@ -685,7 +685,7 @@ function G(e, n) {
   };
 }
 function J(e, n) {
-  const o = `[${n.idAttr}="${e}"]`;
+  const o = `.${n.idAttr}-${e}`;
   return document.querySelector(o);
 }
 function De(e, n) {

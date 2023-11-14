@@ -279,7 +279,7 @@ export function getFlexInfo(target: HTMLElement, config: TSelectorConfig): TSele
 }
 
 function queryTarget(id: number, config: TSelectorConfig) {
-    const selector = `[${config.idAttr}="${id}"]`
+    const selector = `.${config.idAttr}-${id}`
     return document.querySelector(selector)!
 }
 
