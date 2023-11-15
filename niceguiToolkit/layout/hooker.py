@@ -11,10 +11,15 @@ if TYPE_CHECKING:
 
 
 def _mark_element(ele: ng_vars.ui.element):
-    # ele.classes("ex4ng-ng_cp")
-    ele._props["layout-tool-mark"] = True
-    ele._props["layout-tool-ele-id"] = ele.id
-    ele._props["layout-tool-ele-type"] = type(ele).__name__
+    ele._classes.extend(
+        [
+            "layout-tool-mark",
+            f"layout-tool-id-{ele.id}",
+            f"layout-tool-type-{type(ele).__name__}",
+        ]
+    )
+
+    # ele.classes("layout-tool-mark")
 
 
 def _create_entry_point_info_finder(

@@ -18,9 +18,9 @@ export function useSvgConfigs(target: ComputedRef<HTMLElement | null>, selectorC
             return null
         }
 
-        if (target.value.getAttribute(selectorConfig.elementTypeAttr) === 'Input') {
-            return target.value.closest('.q-input')
-        }
+        // if (target.value.getAttribute(selectorConfig.elementTypeAttr) === 'Input') {
+        //     return target.value.closest('.q-input')
+        // }
 
         return target.value
 
