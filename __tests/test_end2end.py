@@ -24,7 +24,7 @@ def assert_hover_rect(
 ):
     hover_rect = page.locator("svg.vis-hover > rect").bounding_box()
     assert hover_rect
-    assert hover_rect["width"] > 10 and hover_rect["height"] > 50
+    assert hover_rect["width"] > 10 and hover_rect["height"] > 10
 
 
 class ElementAssert:
@@ -49,8 +49,20 @@ def test_hover(page: ScreenPage, page_path: str):
         ui.row().classes("testid-row w-[10rem] h-[10rem] outline")
         ui.column().classes("testid-column w-[10rem] h-[10rem] outline")
         ui.element("div").classes("testid-element w-[10rem] h-[10rem] outline")
+        ui.date().classes("testid-date")
+        ui.slider(min=0, max=100).classes("testid-slider")
+        ui.button("test").classes("testid-button")
 
-    testids = ["input", "select", "row", "column", "element"]
+    testids = [
+        "input",
+        "select",
+        "row",
+        "column",
+        "element",
+        "date",
+        "slider",
+        "button",
+    ]
 
     page.open(page_path)
 
