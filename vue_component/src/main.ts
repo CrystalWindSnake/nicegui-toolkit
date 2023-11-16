@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
+import Temp from './Temp.vue'
 import 'uno.css'
 
-createApp(App).mount('#app')
+createApp(Temp).mount('#app')
