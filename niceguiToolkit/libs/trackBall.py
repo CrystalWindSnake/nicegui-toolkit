@@ -1,7 +1,12 @@
 from typing import Callable
 from nicegui.element import Element
 from niceguiToolkit.utils.types import _TNiceguiComponentId
-from niceguiToolkit.layout.events import TrackBallSelectdEventArguments, FlexInfo
+from niceguiToolkit.layout.events import (
+    TrackBallSelectdEventArguments,
+    FlexInfo,
+    TrackBallCommandsEventArguments,
+    TrackBallCommandOptions,
+)
 
 
 class TrackBall(Element, component="trackBall.js"):
@@ -33,6 +38,18 @@ class TrackBall(Element, component="trackBall.js"):
             handler(arg)
 
         return self.on("selectedChange", inner_handler)
+
+    def on_command(self, handler: Callable[[TrackBallCommandsEventArguments], None]):
+        def inner_handler(e):
+            args = e.args
+            print(args)
+            options = [TrackBallCommandOptions(**opt) for opt in args["options"]]
+            arg = TrackBallCommandsEventArguments(
+                sender=self, client=self.client, id=args["id"], options=options
+            )
+            handler(arg)
+
+        return self.on("command", inner_handler)
 
     async def query_style(self, id: _TNiceguiComponentId, name: str):
         return await self.run_method("queryStyle", id, name)

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Dict, List, Optional, Literal
 from nicegui.dataclasses import KWONLY_SLOTS
 from nicegui.events import UiEventArguments
 from dataclasses import dataclass
@@ -16,3 +16,16 @@ class TrackBallSelectdEventArguments(UiEventArguments):
     parentBoxId: Optional[int]
     flexInfo: FlexInfo
     parentFlexInfo: FlexInfo
+
+
+@dataclass(**KWONLY_SLOTS)
+class TrackBallCommandOptions:
+    action: Literal["style", "props", "classes"]
+    commandType: Literal["set", "del"]
+    values: Dict
+
+
+@dataclass(**KWONLY_SLOTS)
+class TrackBallCommandsEventArguments(UiEventArguments):
+    id: Optional[int]
+    options: List[TrackBallCommandOptions]

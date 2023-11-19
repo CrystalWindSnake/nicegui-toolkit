@@ -27,4 +27,8 @@ def build_TrackBall(store: ComponentStore):
 
     ball = TrackBall()
 
+    @ball.on_command
+    def _(e):
+        pass
+
     return ball

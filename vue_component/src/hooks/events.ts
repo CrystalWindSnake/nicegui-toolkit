@@ -1,3 +1,9 @@
+export type TCommnadEvent = {
+  action: TAction;
+  commandType: TCommandType;
+  values: Record<string, any>;
+};
+
 export type TAction = "style" | "props" | "classes";
 export type TCommandType = "set" | "del";
 
@@ -9,10 +15,6 @@ export function registerEmit(emit: TCommandEmit) {
   commandEmit = emit;
 }
 
-export function sendCommand(
-  action: TAction,
-  command: TCommandType,
-  values: Record<string, any>
-) {
-  commandEmit!(action, command, values);
+export function sendCommand(opts: TCommnadEvent[]) {
+  commandEmit!(opts);
 }
