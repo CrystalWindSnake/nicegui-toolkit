@@ -27,5 +27,5 @@ class TrackBallCommandOptions:
 
 @dataclass(**KWONLY_SLOTS)
 class TrackBallCommandsEventArguments(UiEventArguments):
-    id: Optional[int]
+    id: int
     options: List[TrackBallCommandOptions]
