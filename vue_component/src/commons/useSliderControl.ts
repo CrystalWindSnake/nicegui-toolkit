@@ -79,7 +79,9 @@ export function useSliderControl(
     };
 
     const onMousemove = (e: MouseEvent) => {
-      result.value = diffHandler(startPositions, e);
+      result.value += diffHandler(startPositions, e);
+      startPositions.x = e.x;
+      startPositions.y = e.y;
     };
 
     target.addEventListener(
