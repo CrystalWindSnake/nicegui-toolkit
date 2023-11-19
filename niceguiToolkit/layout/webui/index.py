@@ -27,26 +27,4 @@ def build_TrackBall(store: ComponentStore):
 
     ball = TrackBall()
 
-    # with ball.add_slot("title"):
-    #     ui.label("xx")
-
-    with ball, ui.card().classes("select-none"):
-        provider = Provider(ball, store, message_zone, functional_zone, apply_zone)
-        ui.icon("gps_fixed")
-        message_zone(provider)
-        functional_zone(provider)
-        apply_zone(store)
-
-    def selectdChange(e: TrackBallSelectdEventArguments):
-        id = e.id
-
-        if id:
-            info = store.get_info(id)
-            message_zone.refresh(info=info, select_event_args=e)
-            functional_zone.refresh(info=info, select_event_args=e)
-        else:
-            message_zone.refresh(info=None)
-            functional_zone.refresh(info=None)
-
-    ball.on_select(selectdChange)
     return ball

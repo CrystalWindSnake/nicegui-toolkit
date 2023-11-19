@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// import { ref } from "vue";
+import MainPanel from "../commons/MainPanel.vue";
 
 import Aiming from "./Aiming.vue";
 import Panel from "./Panel.vue";
@@ -16,12 +16,28 @@ import * as tbUtils from "./trackBallUtils";
 import * as utils from "./utils";
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 import { ref, watch } from "vue";
+import { TAction, TCommandType, registerEmit } from "@/hooks/events";
 
 const props = defineProps<{ selectorConfig: TSelectorConfig }>();
 const emit = defineEmits<{
   (event: "hoverChange", args: { id: number | null }): void;
   (event: "selectedChange", args: TSelectedChangeEventArgs): void;
+  (event: "command", args: {
+    action: TAction,
+    command: TCommandType,
+    values: Record<string, any>
+  }): void;
 }>();
+
+function emitCommnad(action: TAction,
+  command: TCommandType,
+  values: Record<string, any>) {
+  emit('command', { action, command, values })
+  console.log('emitCommnad:', action, command, values);
+
+}
+
+registerEmit(emitCommnad)
 
 const { viewBox, styles: svgStyles } = useSvgConfigs();
 
@@ -89,68 +105,29 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
 
 <template>
   <Teleport to="body">
-    <svg
-      class="vis-hover"
-      :viewBox="viewBox"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      style="
+    <svg class="vis-hover" :viewBox="viewBox" version="1.1" xmlns="http://www.w3.org/2000/svg" style="
         position: fixed;
         top: 0;
         left: 0;
         pointer-events: none;
         z-index: 9999999;
-      "
-      :style="svgStyles"
-    >
-      <rect
-        fill="none"
-        stroke="red"
-        stroke-width="1"
-        :style="rectStyles"
-      ></rect>
+      " :style="svgStyles">
+      <rect fill="none" stroke="red" stroke-width="1" :style="rectStyles"></rect>
 
-      <line
-        class="top"
-        v-bind="topLine"
-        stroke="red"
-        stroke-dasharray="3 2"
-      ></line>
-      <line
-        class="right"
-        v-bind="rightLine"
-        stroke="red"
-        stroke-dasharray="3 2"
-      ></line>
-      <line
-        class="bottom"
-        v-bind="bottomLine"
-        stroke="red"
-        stroke-dasharray="3 2"
-      ></line>
-      <line
-        class="left"
-        v-bind="leftLine"
-        stroke="red"
-        stroke-dasharray="3 2"
-      ></line>
+      <line class="top" v-bind="topLine" stroke="red" stroke-dasharray="3 2"></line>
+      <line class="right" v-bind="rightLine" stroke="red" stroke-dasharray="3 2"></line>
+      <line class="bottom" v-bind="bottomLine" stroke="red" stroke-dasharray="3 2"></line>
+      <line class="left" v-bind="leftLine" stroke="red" stroke-dasharray="3 2"></line>
     </svg>
 
-    <Aiming
-      :selected-element="selectedElement"
-      :selectorConfig="props.selectorConfig"
-      style="z-index: 9999999"
-    ></Aiming>
+    <Aiming :selected-element="selectedElement" :selectorConfig="props.selectorConfig" style="z-index: 9999999"></Aiming>
 
-    <Panel style="z-index: 9999999">
-      <slot></slot>
+    <Panel class="non-selectable" style="z-index: 9999999;width: 300px;">
+      <MainPanel></MainPanel>
     </Panel>
 
-    <div
-      class="vis-type-name fixed top-0 left-0 pointer-events-none shadow rounded p-1 bg-green-400"
-      :style="typeNameTagStyles"
-      style="z-index: 9999999"
-    >
+    <div class="vis-type-name fixed top-0 left-0 pointer-events-none shadow rounded p-1 bg-green-400"
+      :style="typeNameTagStyles" style="z-index: 9999999">
       {{ typeName }}
     </div>
   </Teleport>

@@ -13,18 +13,14 @@ const { style } = useDraggable(el, {
 
 <template>
   <div :style="style" style="position: fixed" layout-tool-panel>
-    <div
-      ref="el"
-      class="cursor-move"
-      style="
-        position: absolute;
+    <div ref="el" class="cursor-move" style="
+        background-color: aqua;
         width: 100%;
         top: 0;
         left: 0;
         z-index: 999;
         height: 2rem;
-      "
-    >
+      ">
       <slot name="title"></slot>
     </div>
     <slot></slot>

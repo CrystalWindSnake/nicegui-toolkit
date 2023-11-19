@@ -9,10 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@quasar/extras": "^1.16.8",
     "@vueuse/core": "^10.5.0",
+    "quasar": "^2.14.0",
     "vue": "^3.3.4"
   },
   "devDependencies": {
+    "@quasar/vite-plugin": "^1.6.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "less": "^4.2.0",
     "typescript": "^5.0.2",
