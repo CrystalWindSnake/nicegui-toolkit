@@ -5,7 +5,27 @@ export function buildGetter(target: HTMLElement) {
     return styles.getPropertyValue(name);
   }
 
+  function getFlexBoxInfo() {
+    const result = {
+      isFlex: false,
+      direction: "",
+      justifyContent: "",
+      alignItem: "",
+    };
+
+    if (!target) {
+      return result;
+    }
+
+    result.isFlex = getStyle("display") === "flex";
+
+    result.direction = getStyle("flex-direction");
+
+    return result;
+  }
+
   return {
     getStyle,
+    getFlexBoxInfo,
   };
 }

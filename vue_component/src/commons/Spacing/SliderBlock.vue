@@ -1,32 +1,57 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { TDirection, useSliderControl } from "../useSliderControl";
-import { sendCommand } from "@/hooks/events";
-import { getInitValue } from "@/hooks/propsMapping";
-
-type TInitValue = {
-  value: number
-  unit: string
-} | null
+import { createStyleRefModel } from "@/commons/utils";
 
 const props = defineProps<{
-  styleName: string
+  styleName: string;
   clipPath: string;
   direction: TDirection;
 }>();
 
+const styleModel = createStyleRefModel(props.styleName);
 
-const initValue = getInitValue(props.styleName) as TInitValue ?? { value: 0, unit: 'px' }
+const initValue = computed(() => {
+  if (!styleModel.value) {
+    return {
+      value: 0,
+      unit: "px",
+    };
+  }
 
-const value = ref(initValue.value);
-const unit = ref(initValue.unit)
+  const regex = /(-?\d+)([a-zA-Z%]+)/;
+  const result = styleModel.value.match(regex)!;
+
+  const value = parseFloat(result[1]);
+  const unit = result[2];
+  return { value, unit };
+});
+
+let tempValue = initValue.value.value
+let tempUnit = initValue.value.unit
+
+const value = computed({
+  get: () => {
+    return initValue.value.value;
+  },
+  set: (value) => {
+    tempValue = value
+    styleModel.value = `${tempValue}${tempUnit}`
+  },
+});
+
+const unit = computed({
+  get: () => {
+    return initValue.value.unit;
+  },
+  set: (value) => {
+    tempUnit = value
+    styleModel.value = `${tempValue}${tempUnit}`
+  },
+});
 const target = ref<HTMLElement | null>(null);
 
-const resultValue = computed(() => `${value.value}${unit.value}`)
 
-watch(resultValue, (v) => {
-  sendCommand([{ action: 'style', commandType: 'set', values: { [props.styleName]: v } }])
-});
 
 useSliderControl(target, props.direction, value);
 
