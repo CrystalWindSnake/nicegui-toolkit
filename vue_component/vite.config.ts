@@ -26,7 +26,7 @@ export default defineConfig({
       formats: ["es"],
       // name: 'TrackBall',
       // the proper extensions will be added
-      fileName: "TrackBall",
+      fileName: "trackBall",
 
       // fileName(format, entryName) {
       //   return  entryName
@@ -37,6 +37,12 @@ export default defineConfig({
       output: {
         globals: {
           vue: "Vue",
+        },
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") {
+            return "trackball.css";
+          }
+          return assetInfo.name;
         },
         // intro: 'import "./style.css";',
       },

@@ -64,7 +64,7 @@ def copy2styls(dist_file, dest_file):
 
 cp_name='trackBall'
 tran_vue_imports(cp_name)
-copy2styls(f'{cp_name}/style.css',f'{cp_name}.css')
+copy2styls(f'{cp_name}.css',f'{cp_name}.css')
 
 # for cp in ['TrackBall','Aiming','ClayBox']:
 #     tran_vue_imports(cp)

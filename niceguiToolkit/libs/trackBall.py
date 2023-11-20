@@ -1,4 +1,6 @@
+from pathlib import Path
 from typing import Callable
+import nicegui as ng_vars
 from nicegui.element import Element
 from niceguiToolkit.utils.types import _TNiceguiComponentId
 from niceguiToolkit.layout.events import (
@@ -7,6 +9,9 @@ from niceguiToolkit.layout.events import (
     TrackBallCommandsEventArguments,
     TrackBallCommandOptions,
 )
+
+_STYLE_FILE = Path(__file__).parent / "trackBall.css"
+_STYLE_URL = "/ng-toolkit/trackball.style.css"
 
 
 class TrackBall(Element, component="trackBall.js"):
@@ -17,6 +22,7 @@ class TrackBall(Element, component="trackBall.js"):
             "idAttr": "layout-tool-id",
             "elementTypeAttr": "layout-tool-type",
         }
+        self._props["styleUrl"] = _STYLE_URL
 
     def on_hover(self, handler: Callable[[int], None]):
         def inner_handler(e):
@@ -56,3 +62,10 @@ class TrackBall(Element, component="trackBall.js"):
 
     def select_target(self, id: _TNiceguiComponentId):
         self.run_method("selectTarget", id)
+
+    @staticmethod
+    def add_style_static_file():
+        ng_vars.app.add_static_file(
+            local_file=_STYLE_FILE,
+            url_path=_STYLE_URL,
+        )
