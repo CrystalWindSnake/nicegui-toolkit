@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { createStyleRefModel } from "@/commons/utils";
-import { computed, watch } from "vue";
+import { computed } from "vue";
 import { getGlobals } from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
 
