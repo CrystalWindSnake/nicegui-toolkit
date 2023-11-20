@@ -1,17 +1,7 @@
 import { Ref, watch, ref } from "vue";
-import { buildGetter } from "@/hooks/targetInfoGetter";
+import { buildRefGetter } from "@/hooks/targetInfoGetter";
 
-const refMapping = new Map<string, Ref<any>>([
-  ["display", ref(null)],
-  ["padding-left", ref(null)],
-  ["padding-top", ref(null)],
-  ["padding-right", ref(null)],
-  ["padding-bottom", ref(null)],
-  ["margin-left", ref(null)],
-  ["margin-top", ref(null)],
-  ["margin-right", ref(null)],
-  ["margin-bottom", ref(null)],
-]);
+const refMapping = new Map<string, Ref<any>>();
 
 export function bindSelectTarget(selectTarget: Ref<HTMLElement | null>) {
   watch(selectTarget, (target) => {
@@ -23,10 +13,10 @@ export function bindSelectTarget(selectTarget: Ref<HTMLElement | null>) {
       return;
     }
 
-    const getter = buildGetter(target);
+    const getter = buildRefGetter(target);
 
     refMapping.forEach((value, key) => {
-      value.value = getter.getStyle(key);
+      value.value = getter.getStyle(key).value;
     });
   });
 }

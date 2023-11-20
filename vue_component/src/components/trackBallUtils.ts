@@ -204,8 +204,6 @@ export function hookPageMouseEvent(
     document.querySelector("body"),
     "click",
     (e) => {
-      console.log("hookPageMouseEvent click", e.target);
-
       const target = e.target as HTMLElement;
 
       // click layout tool
@@ -304,7 +302,10 @@ export function getComponentExpose(
   return { queryStyle, selectTarget };
 }
 
-export function createClientStyleLinkTag(styleUrl: string) {
+export function createClientStyleLinkTag(styleUrl?: string) {
+  if (!styleUrl) {
+    return;
+  }
   var link = document.createElement("link");
   link.setAttribute("rel", "stylesheet");
   link.setAttribute("href", styleUrl);

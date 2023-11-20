@@ -1,55 +1,49 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref } from "vue";
 import Spacing from "./Spacing/Spacing.vue";
 import Layout from "./Layout/Layout.vue";
+import FlexItem from "./FlexItem/FlexItem.vue";
 import { getGlobals } from "@/hooks/globals";
 import { bindSelectTarget } from "@/hooks/propsMapping";
 
-const tab = ref('style')
+const tab = ref("style");
 
-const selectTarget = getGlobals().selectTarget
+const selectTarget = getGlobals().selectTarget;
 
-bindSelectTarget(selectTarget)
+bindSelectTarget(selectTarget);
 
-const showPanels = computed(() => !!selectTarget.value)
-
+const showPanels = computed(() => !!selectTarget.value);
 </script>
 
 <template>
-    <div>
-        <q-tabs class="text-teal" v-model="tab">
-            <q-tab name="style" label="style" />
-            <q-tab name="cusStyle" label="cus style" />
-        </q-tabs>
+  <div>
+    <q-tabs class="bg-secondary-5" v-model="tab" :align="`left`" dense no-caps>
+      <q-tab name="style" label="style" />
+      <q-tab name="cusStyle" label="cus style" />
+    </q-tabs>
 
-        <q-tab-panels v-show="showPanels" v-model="tab" keep-alive animated swipeable vertical transition-prev="jump-up"
-            transition-next="jump-up">
-            <q-tab-panel name="style">
+    <q-tab-panels
+      v-show="showPanels"
+      v-model="tab"
+      keep-alive
+      animated
+      swipeable
+      vertical
+      transition-prev="jump-up"
+      transition-next="jump-up"
+    >
+      <q-tab-panel name="style" style="padding: 0">
+        <q-list bordered>
+          <FlexItem></FlexItem>
 
-                <q-list bordered>
-                    <q-expansion-item expand-separator label="布局" header-class="text-red-1 bg-accent"
-                        expand-icon-class="text-red-1">
-                        <Layout></Layout>
-                    </q-expansion-item>
+          <Layout></Layout>
 
-                    <q-separator />
-                    <q-expansion-item expand-separator label="空间" header-class="text-red-1 bg-accent"
-                        expand-icon-class="text-red-1">
-
-                        <Spacing style="width: 100%;height: 8rem;"></Spacing>
-
-                    </q-expansion-item>
-
-
-                </q-list>
-
-
-
-            </q-tab-panel>
-        </q-tab-panels>
-
-
-    </div>
+          <q-separator />
+          <Spacing></Spacing>
+        </q-list>
+      </q-tab-panel>
+    </q-tab-panels>
+  </div>
 </template>
 
 <style scoped></style>

@@ -31,6 +31,7 @@ def build_TrackBall(store: ComponentStore):
     @ball.on_command
     def _(e: TrackBallCommandsEventArguments):
         id = e.id
+        print("e:", e)
         element = context.get_client().elements[id]
 
         for opt in e.options:
@@ -38,5 +39,15 @@ def build_TrackBall(store: ComponentStore):
             element._style.update(opt.values)
 
         element.update()
+        btn_apply.set_enabled(True)
+
+    with ball.add_slot("footer"):
+
+        def on_click_apply():
+            for record in store.create_changed_records():
+                record.file.write_text(record.code, "utf8")
+
+        btn_apply = ui.button("apply(应用)", on_click=on_click_apply)
+        btn_apply.set_enabled(False)
 
     return ball

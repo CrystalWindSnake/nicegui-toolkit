@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { TDirection, useSliderControl } from "../useSliderControl";
 import { createStyleRefModel } from "@/commons/utils";
 
@@ -27,16 +27,16 @@ const initValue = computed(() => {
   return { value, unit };
 });
 
-let tempValue = initValue.value.value
-let tempUnit = initValue.value.unit
+let tempValue = initValue.value.value;
+let tempUnit = initValue.value.unit;
 
 const value = computed({
   get: () => {
     return initValue.value.value;
   },
   set: (value) => {
-    tempValue = value
-    styleModel.value = `${tempValue}${tempUnit}`
+    tempValue = value;
+    styleModel.value = `${tempValue}${tempUnit}`;
   },
 });
 
@@ -45,13 +45,11 @@ const unit = computed({
     return initValue.value.unit;
   },
   set: (value) => {
-    tempUnit = value
-    styleModel.value = `${tempValue}${tempUnit}`
+    tempUnit = value;
+    styleModel.value = `${tempValue}${tempUnit}`;
   },
 });
 const target = ref<HTMLElement | null>(null);
-
-
 
 useSliderControl(target, props.direction, value);
 
@@ -66,9 +64,18 @@ function onClickNumber() {
 </script>
 
 <template>
-  <div ref="target" class="target" style="display: flex; justify-content: center; align-items: center" :style="dstyle">
+  <div
+    ref="target"
+    class="target"
+    style="display: flex; justify-content: center; align-items: center"
+    :style="dstyle"
+  >
     <div @click="onClickNumber">
-      <div ref="numberElement" class="number" style="user-select: none; color: aliceblue; cursor: pointer">
+      <div
+        ref="numberElement"
+        class="number"
+        style="user-select: none; color: aliceblue; cursor: pointer"
+      >
         {{ value }}
       </div>
     </div>
