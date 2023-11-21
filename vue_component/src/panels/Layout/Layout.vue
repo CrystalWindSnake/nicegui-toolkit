@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createStyleRefModel } from "@/commons/utils";
+import { createStyleRefModel } from "@/panels/utils";
 import { computed } from "vue";
 import { getGlobals } from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";

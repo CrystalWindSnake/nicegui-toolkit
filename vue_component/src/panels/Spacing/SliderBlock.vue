@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { TDirection, useSliderControl } from "../useSliderControl";
-import { createStyleRefModel } from "@/commons/utils";
+import { createStyleRefModel } from "@/panels/utils";
 
 const props = defineProps<{
   styleName: string;
