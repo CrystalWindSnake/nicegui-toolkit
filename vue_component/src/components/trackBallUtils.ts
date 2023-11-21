@@ -10,6 +10,7 @@ import {
 } from "@vueuse/core";
 
 import * as utils from "./utils";
+import { getExecutingFlag } from "@/hooks/globals";
 
 export const useSvgConfigs = utils.useSvgConfigs;
 
@@ -204,6 +205,10 @@ export function hookPageMouseEvent(
     document.querySelector("body"),
     "click",
     (e) => {
+      if (getExecutingFlag()) {
+        return;
+      }
+
       const target = e.target as HTMLElement;
 
       // click layout tool

@@ -85,6 +85,17 @@ export function useSliderControl(
       startPositions.y = e.y;
     };
 
+    const onMouseup = (e: MouseEvent) => {
+      e.stopPropagation();
+    };
+
+    const onClick = (e: MouseEvent) => {
+      e.stopPropagation();
+      document.querySelector("body")!.style.cursor = "default";
+      setExecutingFlag(false);
+      document.removeEventListener("mousemove", onMousemove);
+    };
+
     target.addEventListener(
       "mousedown",
       (e) => {
@@ -96,19 +107,14 @@ export function useSliderControl(
         startPositions.y = e.y;
 
         document.addEventListener("mousemove", onMousemove);
-      },
-      { capture: true }
-    );
-
-    document.addEventListener(
-      "mouseup",
-      (e) => {
-        document.removeEventListener("mousemove", onMousemove);
-        document.querySelector("body")!.style.cursor = "default";
-
-        setExecutingFlag(false);
-
-        e.stopPropagation();
+        document.addEventListener("mouseup", onMouseup, {
+          capture: true,
+          once: true,
+        });
+        document.addEventListener("click", onClick, {
+          capture: true,
+          once: true,
+        });
       },
       { capture: true }
     );
