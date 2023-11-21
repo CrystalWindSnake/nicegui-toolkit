@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import SizeValueInput from "@/commons/SizeValueInput.vue";
-
 const nonValueOption = {
   label: "-",
-  value: "auto",
+  value: "none",
 };
 </script>
 
 <template>
   <q-item dense>
     <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      >Width</q-item-section
+      >Max H</q-item-section
     >
     <q-item-section
       ><SizeValueInput
-        default-option-value="auto"
+        default-option-value="none"
         default-input-value=""
         :non-value-option="nonValueOption"
       ></SizeValueInput
