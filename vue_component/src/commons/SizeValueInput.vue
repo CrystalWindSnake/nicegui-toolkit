@@ -28,15 +28,14 @@ const defaultValueOptionsIndex = options.findIndex(
 
 const nonValueOptions = {
   options: [props.nonValueOption.value],
-  defaultValueOptionsIndex:
-    defaultValueOptionsIndex === -1 ? 0 : defaultValueOptionsIndex,
+  defaultValueOptionsIndex: options.length - 1,
 };
 
 const { inputValue, selectValue, model } = useValueInput(
   options,
   nonValueOptions,
   props.defaultInputValue,
-  options.length - 1
+  defaultValueOptionsIndex === -1 ? 0 : defaultValueOptionsIndex
 );
 
 const result = computed(() => {
