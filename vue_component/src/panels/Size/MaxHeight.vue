@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import SizeValueInput from "@/commons/SizeValueInput.vue";
-const nonValueOption = {
-  label: "-",
-  value: "none",
-};
+import { maxHeightOptions } from "./data";
+
+const options = maxHeightOptions;
+
+const nonValueOption = ["none"];
 </script>
 
 <template>
@@ -13,9 +14,11 @@ const nonValueOption = {
     >
     <q-item-section
       ><SizeValueInput
-        default-option-value="none"
-        default-input-value=""
-        :non-value-option="nonValueOption"
+        :options="options"
+        init-input-value=""
+        init-select-value="none"
+        :non-value-options="nonValueOption"
+        default-value-option="px"
       ></SizeValueInput
     ></q-item-section>
   </q-item>

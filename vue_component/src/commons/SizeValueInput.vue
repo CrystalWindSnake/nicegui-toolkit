@@ -4,43 +4,28 @@ import { useValueInput } from "@/commons/valueInput";
 import { computed, watch } from "vue";
 
 const props = defineProps<{
-  defaultInputValue: string;
-  defaultOptionValue: string;
-  nonValueOption: { label: string; value: string };
+  options: {
+    value: string;
+    label?: string;
+  }[];
+  initInputValue: string;
+  initSelectValue: string;
+  nonValueOptions: string[];
+  defaultValueOption: string;
 }>();
 
-const options = [
-  {
-    value: "px",
-  },
-  {
-    value: "rem",
-  },
-  {
-    value: "em",
-  },
-  props.nonValueOption,
-];
-
-const defaultValueOptionsIndex = options.findIndex(
-  (v) => v.value === props.defaultOptionValue
-);
-
-const nonValueOptions = {
-  options: [props.nonValueOption.value],
-  defaultValueOptionsIndex: options.length - 1,
-};
-
 const { inputValue, selectValue, model } = useValueInput(
-  options,
-  nonValueOptions,
-  props.defaultInputValue,
-  defaultValueOptionsIndex === -1 ? 0 : defaultValueOptionsIndex
+  props.options,
+  { input: props.initInputValue, select: props.initSelectValue },
+  props.nonValueOptions,
+  props.defaultValueOption
 );
 
 const result = computed(() => {
-  if (selectValue.value === props.nonValueOption.value) {
-    return props.nonValueOption.value;
+  const nonValue = props.nonValueOptions.find((v) => v === selectValue.value);
+
+  if (nonValue) {
+    return props.options.find((v) => v.value === nonValue)!.value;
   }
 
   return `${inputValue.value}${selectValue.value}`;
