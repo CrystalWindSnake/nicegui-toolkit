@@ -7,6 +7,7 @@ const props = defineProps<{
   styleName: string;
   clipPath: string;
   direction: TDirection;
+  valueFilter?: (value: number) => boolean;
 }>();
 
 const styleModel = createStyleRefModel(props.styleName);
@@ -51,7 +52,7 @@ const unit = computed({
 });
 const target = ref<HTMLElement | null>(null);
 
-useSliderControl(target, props.direction, value);
+useSliderControl(target, props.direction, value, props.valueFilter);
 
 const dstyle = {
   "clip-path": props.clipPath,

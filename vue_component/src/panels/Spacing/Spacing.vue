@@ -65,6 +65,8 @@ const paddingConfigs = {
     }% 100%)`,
   },
 };
+
+const paddingFilter = (value: number) => value >= 0;
 </script>
 
 <template>
@@ -135,6 +137,7 @@ const paddingConfigs = {
         class="absolute h-full bg-blue-grey-8"
         direction="left"
         style-name="padding-left"
+        :value-filter="paddingFilter"
         :clip-path="paddingConfigs.left.clipPath"
         :style="{
           left: `${config.horizontalWidthPercent}%`,
@@ -146,6 +149,7 @@ const paddingConfigs = {
         class="absolute w-full bg-blue-grey-8"
         direction="up"
         style-name="padding-top"
+        :value-filter="paddingFilter"
         :clip-path="paddingConfigs.up.clipPath"
         :style="{
           top: `${config.verticalHeightPercent}%`,
@@ -158,6 +162,7 @@ const paddingConfigs = {
         class="absolute h-full bg-blue-grey-8"
         direction="right"
         style-name="padding-right"
+        :value-filter="paddingFilter"
         :clip-path="paddingConfigs.right.clipPath"
         :style="{
           right: `${config.horizontalWidthPercent}%`,
@@ -169,6 +174,7 @@ const paddingConfigs = {
         class="absolute w-full bg-blue-grey-8"
         direction="bottom"
         style-name="padding-bottom"
+        :value-filter="paddingFilter"
         :clip-path="paddingConfigs.bottom.clipPath"
         :style="{
           bottom: `${config.verticalHeightPercent}%`,
