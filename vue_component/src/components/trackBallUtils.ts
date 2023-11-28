@@ -221,6 +221,10 @@ export function hookPageMouseEvent(
         return;
       }
 
+      if (hoverElement.value === null) {
+        return;
+      }
+
       selectedElement.value = hoverElement.value;
 
       e.stopPropagation();
