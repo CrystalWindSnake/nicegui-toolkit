@@ -1,10 +1,28 @@
 <script setup lang="ts">
 import DataEditor from "@/panels/Spacing/DataEditor.vue";
+import { ref } from "vue";
+
+const text = ref("");
+
+const oninput = (event) => {
+  console.log("oninput run");
+
+  text.value = event.target.value;
+};
+
+function onclickbtn() {
+  text.value = "on btn";
+}
 </script>
 
 <template>
   <div class="box">
-    <DataEditor></DataEditor>
+    <!-- <DataEditor></DataEditor> -->
+
+    <input :value="text" @change="oninput" />
+    <span>{{ text }}</span>
+
+    <button @click="onclickbtn">change</button>
   </div>
 </template>
 
