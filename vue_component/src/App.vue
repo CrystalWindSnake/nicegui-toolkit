@@ -1,96 +1,16 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
-
-const inputRef = ref<HTMLElement | null>(null);
-const inputModel = ref<string | null>(null);
-
-const selectModel = ref("auto");
-
-const options = [
-  {
-    label: "rem",
-    value: "rem",
-  },
-  {
-    label: "em",
-    value: "em",
-  },
-  {
-    label: "-",
-    value: "auto",
-  },
-];
-
-function onInputUpdate(e: Event) {
-  inputModel.value = (e.target as HTMLInputElement).value;
-  inputRef.value?.blur();
-
-  if (inputModel.value.length > 0 && selectModel.value === "auto") {
-    selectModel.value = options[0].value;
-  }
-}
+import DataEditor from "@/panels/Spacing/DataEditor.vue";
 </script>
 
 <template>
-  <div class="cus-input">
-    <q-input
-      ref="inputRef"
-      class="q-input"
-      :model-value="inputModel"
-      placeholder="Auto"
-      square
-      outlined
-      dense
-      mask="#"
-      reverse-fill-mask
-      @blur="onInputUpdate"
-      @keyup.enter="onInputUpdate"
-    >
-      <template v-slot:append>
-        <q-select
-          hide-dropdown-icon
-          class="q-select"
-          dense
-          v-model="selectModel"
-          :options="options"
-          color="teal"
-          options-selected-class="text-deep-orange"
-        >
-          <template v-slot:option="scope">
-            <q-item v-bind="scope.itemProps">
-              <q-item-section avatar>
-                <q-icon
-                  name="check"
-                  v-if="selectModel.value === scope.opt.value"
-                />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ scope.opt.value }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-      </template>
-    </q-input>
+  <div class="box">
+    <DataEditor></DataEditor>
   </div>
 </template>
 
 <style scoped lang="less">
-.cus-input :deep(.q-field__control) {
-  padding-right: 0;
-}
-
-.cus-input {
-  .q-input {
-    width: 8em;
-  }
-
-  .q-select {
-    width: 2.5em;
-
-    :deep(.q-field__native) {
-      justify-content: center;
-    }
-  }
+.box {
+  border: 1px solid #000;
+  width: 20rem;
 }
 </style>
