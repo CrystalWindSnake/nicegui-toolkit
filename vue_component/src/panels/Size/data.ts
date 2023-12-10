@@ -1,25 +1,11 @@
 export const widthOptions = [
-  {
-    value: "px",
-  },
-  {
-    value: "%",
-  },
-  {
-    value: "rem",
-  },
-  {
-    value: "em",
-  },
-  {
-    value: "ch",
-  },
-  {
-    value: "vw",
-  },
-  {
-    value: "vh",
-  },
+  "px",
+  "%",
+  "rem",
+  "em",
+  "ch",
+  "vw",
+  "vh",
   {
     label: "-",
     value: "auto",
@@ -27,27 +13,13 @@ export const widthOptions = [
 ];
 
 export const heightOptions = [
-  {
-    value: "px",
-  },
-  {
-    value: "rem",
-  },
-  {
-    value: "em",
-  },
-  {
-    value: "ch",
-  },
-  {
-    value: "vw",
-  },
-  {
-    value: "vh",
-  },
-  {
-    value: "%",
-  },
+  "px",
+  "rem",
+  "em",
+  "ch",
+  "vw",
+  "vh",
+  "%",
   {
     label: "-",
     value: "auto",
@@ -55,27 +27,13 @@ export const heightOptions = [
 ];
 
 export const minWidthOptions = [
-  {
-    value: "px",
-  },
-  {
-    value: "%",
-  },
-  {
-    value: "rem",
-  },
-  {
-    value: "em",
-  },
-  {
-    value: "ch",
-  },
-  {
-    value: "vw",
-  },
-  {
-    value: "vh",
-  },
+  "px",
+  "%",
+  "rem",
+  "em",
+  "ch",
+  "vw",
+  "vh",
   {
     label: "-",
     value: "auto",
@@ -83,27 +41,13 @@ export const minWidthOptions = [
 ];
 
 export const maxWidthOptions = [
-  {
-    value: "px",
-  },
-  {
-    value: "%",
-  },
-  {
-    value: "rem",
-  },
-  {
-    value: "em",
-  },
-  {
-    value: "ch",
-  },
-  {
-    value: "vw",
-  },
-  {
-    value: "vh",
-  },
+  "px",
+  "%",
+  "rem",
+  "em",
+  "ch",
+  "vw",
+  "vh",
   {
     label: "-",
     value: "none",
@@ -111,27 +55,13 @@ export const maxWidthOptions = [
 ];
 
 export const minHeightOptions = [
-  {
-    value: "px",
-  },
-  {
-    value: "%",
-  },
-  {
-    value: "rem",
-  },
-  {
-    value: "em",
-  },
-  {
-    value: "ch",
-  },
-  {
-    value: "vw",
-  },
-  {
-    value: "vh",
-  },
+  "px",
+  "%",
+  "rem",
+  "em",
+  "ch",
+  "vw",
+  "vh",
   {
     label: "-",
     value: "auto",
@@ -139,27 +69,13 @@ export const minHeightOptions = [
 ];
 
 export const maxHeightOptions = [
-  {
-    value: "px",
-  },
-  {
-    value: "%",
-  },
-  {
-    value: "rem",
-  },
-  {
-    value: "em",
-  },
-  {
-    value: "ch",
-  },
-  {
-    value: "vw",
-  },
-  {
-    value: "vh",
-  },
+  "px",
+  "%",
+  "rem",
+  "em",
+  "ch",
+  "vw",
+  "vh",
   {
     label: "-",
     value: "none",

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { setExecutingFlag } from "@/hooks/globals";
-import { computed, ref, watch } from "vue";
-import { type TValueInputReturn } from "./valueInput";
+import { ref } from "vue";
+import { type TModel } from "./valueInput";
 
 // props
 const props = defineProps<{
-  model: TValueInputReturn["model"];
+  model: TModel;
 }>();
 
 const model = props.model;
@@ -13,66 +13,21 @@ const model = props.model;
 const inputRef = ref<HTMLElement | null>(null);
 const selectRef = ref<HTMLElement | null>(null);
 
-let lastInvaildInputValue: string | null = null;
-
-const initSelectValueItem = model.options.find(
-  (item) => item.value === model.unitNumber.unit.value
-)!;
-
-const { inputValue, selectValue } = model.modelValueRefs;
-
-const selectDisplay = computed(
-  () => selectValue.value.label ?? selectValue.value.value
-);
-
-watch(inputValue, (value) => {
-  if (model.nonValueOptions) {
-    // input : 10 ,select: auto -> select:rem
-    if (
-      value.length > 0 &&
-      model.nonValueOptions.includes(selectValue.value.value)
-    ) {
-      selectValue.value = model.options.find(
-        (item) => item.value === model.defaultValueOption
-      )!;
-    }
-  }
-
-  // current: 10rem -> input value clear -> select value change to auto
-  if (
-    !value &&
-    model.nonValueOptions &&
-    !model.nonValueOptions.includes(selectValue.value.value)
-  ) {
-    selectValue.value = initSelectValueItem;
-  }
-
-  if (!!value) {
-    lastInvaildInputValue = value;
-  }
-
-  model.updateValue(value, selectValue.value.value);
-});
-
-watch(selectValue, (value) => {
-  // input: 10,select:auto -> input : ''
-  if (model.nonValueOptions && model.nonValueOptions.includes(value.value)) {
-    inputValue.value = "";
-
-    // input:'',select: auto to rem -> input: '10'
-  } else if (!inputValue.value && lastInvaildInputValue !== null) {
-    inputValue.value = lastInvaildInputValue;
-  }
-
-  model.updateValue(inputValue.value, value.value);
-});
+const {
+  inputValue,
+  selectValue,
+  selectDisplay,
+  inputPlaceholder,
+  itemOptions,
+  updateInput,
+} = model;
 
 // input events
 function onInputUpdate(e: Event) {
   if (e.currentTarget !== e.target) {
     return;
   }
-  inputValue.value = (e.currentTarget as HTMLInputElement).value;
+  updateInput((e.currentTarget as HTMLInputElement).value);
 
   inputRef.value?.blur();
 }
@@ -84,7 +39,7 @@ function onInputUpdate(e: Event) {
       ref="inputRef"
       class="q-input"
       :model-value="inputValue"
-      :placeholder="selectValue.value"
+      :placeholder="inputPlaceholder"
       square
       outlined
       dense
@@ -102,7 +57,7 @@ function onInputUpdate(e: Event) {
           dense
           options-cover
           v-model="selectValue"
-          :options="model.options"
+          :options="itemOptions"
           color="teal"
           options-selected-class="text-deep-orange"
           @popup-show="setExecutingFlag(true)"

@@ -1,10 +1,20 @@
 <script setup lang="ts">
-import SizeValueInput from "@/commons/SizeValueInput.vue";
+import ValueInput from "@/commons/ValueInput.vue";
+import { useValueInput } from "@/commons/valueInput";
+
 import { heightOptions } from "./data";
 
 const options = heightOptions;
 
-const nonValueOption = ["auto"];
+const valueInputModel = useValueInput(
+  options,
+  { selectValue: "auto" },
+  {
+    nonValueOptions: ["auto"],
+    optionValueIfnonValue: "px",
+    defaultOptionValue: "auto",
+  }
+);
 </script>
 
 <template>
@@ -13,13 +23,7 @@ const nonValueOption = ["auto"];
       >Height</q-item-section
     >
     <q-item-section
-      ><SizeValueInput
-        :options="options"
-        init-input-value=""
-        init-select-value="auto"
-        :non-value-options="nonValueOption"
-        default-value-option="px"
-      ></SizeValueInput
+      ><ValueInput :model="valueInputModel"></ValueInput
     ></q-item-section>
   </q-item>
 </template>
