@@ -49,4 +49,30 @@ describe("useCommon", () => {
     await nextTick();
     expect(model.selectValue.value).toBe("rem");
   });
+
+  it("input has value and vaild unit,then change unit", async () => {
+    const widthOptions = [
+      "px",
+      "%",
+      "rem",
+      {
+        label: "-",
+        value: "auto",
+      },
+    ];
+    const model = useValueInput(
+      widthOptions,
+      { selectValue: "px", inputValue: "100" },
+      { nonValueOptions: ["auto"], optionValueIfnonValue: "rem" }
+    );
+
+    expect(model.selectValue.value).toBe("px");
+    expect(model.inputValue.value).toBe("100");
+
+    model.selectValue.value = "em";
+
+    await nextTick();
+    expect(model.inputValue.value).toBe("100");
+    expect(model.selectValue.value).toBe("em");
+  });
 });
