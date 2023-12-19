@@ -13,8 +13,6 @@ import { getExecutingFlag } from "@/hooks/globals";
 import { updateHoverTarget } from "./VisHover";
 import { updateAimingTarget } from "./Aiming";
 
-export const useSvgConfigs = utils.useSvgConfigs;
-
 export function useTypeNameTag(
   config: TSelectorConfig,
   hoverElement: ComputedRef<HTMLElement | null>

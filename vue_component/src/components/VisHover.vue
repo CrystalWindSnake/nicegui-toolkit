@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useVisHover } from "./VisHover";
-import { useSvgConfigs } from "./trackBallUtils";
+import { useSvgConfigs } from "./utils";
 
 // const props = defineProps<{ model: TModel }>();
 
