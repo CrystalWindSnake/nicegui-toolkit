@@ -63,7 +63,7 @@ export function useTypeNameTag(
   };
 }
 
-export function useHoverVisTarget(config: TSelectorConfig) {
+export function useHoverElement(config: TSelectorConfig) {
   const { x, y } = useMouse({ type: "client" });
   const { element } = useElementByPoint({ x, y });
 
