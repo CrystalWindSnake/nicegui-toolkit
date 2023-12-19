@@ -11,7 +11,9 @@ class FlexInfo:
 
 
 @dataclass(**KWONLY_SLOTS)
-class TrackBallSelectdEventArguments(UiEventArguments):
+class TrackBallSelectdEventArguments(
+    UiEventArguments
+):
     id: Optional[int]
     parentBoxId: Optional[int]
     flexInfo: FlexInfo
@@ -26,6 +28,8 @@ class TrackBallCommandOptions:
 
 
 @dataclass(**KWONLY_SLOTS)
-class TrackBallCommandsEventArguments(UiEventArguments):
+class TrackBallCommandsEventArguments(
+    UiEventArguments
+):
     id: int
-    options: List[TrackBallCommandOptions]
+    commands: List[TrackBallCommandOptions]

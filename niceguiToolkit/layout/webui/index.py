@@ -1,26 +1,44 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
 from nicegui import ui, context, app
-from niceguiToolkit.libs.trackBall import TrackBall
+from niceguiToolkit.libs.trackBall import (
+    TrackBall,
+)
 
 from .configZone import functional_zone
 from .messageZone import message_zone
 from .injection import Provider
-from niceguiToolkit.layout.events import TrackBallCommandsEventArguments
+from niceguiToolkit.layout.events import (
+    TrackBallCommandsEventArguments,
+)
 
 if TYPE_CHECKING:
-    from niceguiToolkit.layout.componentStore import ComponentStore, ComponentInfo
-    from niceguiToolkit.layout.events import TrackBallSelectdEventArguments
+    from niceguiToolkit.layout.componentStore import (
+        ComponentStore,
+        ComponentInfo,
+    )
+    from niceguiToolkit.layout.events import (
+        TrackBallSelectdEventArguments,
+    )
 
 
 @ui.refreshable
-def apply_zone(store: Optional[ComponentStore] = None, enable=False):
+def apply_zone(
+    store: Optional[ComponentStore] = None,
+    enable=False,
+):
     def onclick():
         assert store
-        for record in store.create_changed_records():
-            record.file.write_text(record.code, "utf8")
+        for (
+            record
+        ) in store.create_changed_records():
+            record.file.write_text(
+                record.code, "utf8"
+            )
 
-    ui.button("apply", on_click=onclick)._handle_enabled_change(enable)
+    ui.button(
+        "apply", on_click=onclick
+    )._handle_enabled_change(enable)
 
 
 def build_TrackBall(store: ComponentStore):
@@ -32,11 +50,28 @@ def build_TrackBall(store: ComponentStore):
     def _(e: TrackBallCommandsEventArguments):
         id = e.id
         print("e:", e)
-        element = context.get_client().elements[id]
+        element = context.get_client().elements[
+            id
+        ]
 
-        for opt in e.options:
-            store.change_styles(id, opt.values)
-            element._style.update(opt.values)
+        for cmd in e.commands:
+            if cmd.action == "style":
+                if cmd.commandType == "set":
+                    store.change_styles(
+                        id, cmd.values
+                    )
+                    element._style.update(
+                        cmd.values
+                    )
+                if cmd.commandType == "del":
+                    removed_styles = list(
+                        cmd.values.keys()
+                    )
+                    store.remove_styles(
+                        id, removed_styles
+                    )
+                    for name in removed_styles:
+                        del element._style[name]
 
         element.update()
         btn_apply.set_enabled(True)
@@ -44,10 +79,16 @@ def build_TrackBall(store: ComponentStore):
     with ball.add_slot("footer"):
 
         def on_click_apply():
-            for record in store.create_changed_records():
-                record.file.write_text(record.code, "utf8")
+            for (
+                record
+            ) in store.create_changed_records():
+                record.file.write_text(
+                    record.code, "utf8"
+                )
 
-        btn_apply = ui.button("apply(应用)", on_click=on_click_apply)
+        btn_apply = ui.button(
+            "apply(应用)", on_click=on_click_apply
+        )
         btn_apply.set_enabled(False)
 
     return ball
