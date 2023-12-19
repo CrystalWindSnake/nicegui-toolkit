@@ -2,6 +2,7 @@
 import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
 import { maxWidthOptions } from "./data";
+import { valueToStyleModel } from "./utils";
 
 const options = maxWidthOptions;
 
@@ -14,6 +15,8 @@ const valueInputModel = useValueInput(
     defaultOptionValue: "none",
   }
 );
+
+valueToStyleModel(valueInputModel, "max-width", ["none"]);
 </script>
 
 <template>

@@ -39,11 +39,11 @@ const showPanels = computed(() => !!selectTarget.value);
 
           <Layout></Layout>
 
-          <!-- <q-separator />
+          <q-separator />
           <Spacing></Spacing>
 
           <q-separator />
-          <Size></Size> -->
+          <Size></Size>
         </q-list>
       </q-tab-panel>
     </q-tab-panels>

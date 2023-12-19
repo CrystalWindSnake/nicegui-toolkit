@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
-
 import { heightOptions } from "./data";
+import { valueToStyleModel } from "./utils";
 
 const options = heightOptions;
 
@@ -15,6 +15,8 @@ const valueInputModel = useValueInput(
     defaultOptionValue: "auto",
   }
 );
+
+valueToStyleModel(valueInputModel, "height", ["auto"]);
 </script>
 
 <template>
