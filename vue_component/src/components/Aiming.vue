@@ -1,27 +1,13 @@
 <script setup lang="ts">
-import { useSvgConfigs } from "./aimingUtils";
-import { computed } from "vue";
-import { TSelectorConfig } from "./types";
+import { TModel } from "./Aiming";
+import { useSvgConfigs } from "./trackBallUtils";
 
 const props = defineProps<{
-  selectedElement: HTMLElement | null;
-  selectorConfig: TSelectorConfig;
+  model: TModel;
 }>();
 
-const selectedElement = computed(() => props.selectedElement);
-
-const {
-  svgConfig: { viewBox, styles },
-  rectStyles,
-  p1,
-  p2,
-  p3,
-  p4,
-  p5,
-  p6,
-  p7,
-  p8,
-} = useSvgConfigs(selectedElement, props.selectorConfig);
+const { viewBox, styles: svgStyles } = useSvgConfigs();
+const { rectStyles, p1, p2, p3, p4, p5, p6, p7, p8 } = props.model;
 </script>
 
 <template>
@@ -30,7 +16,7 @@ const {
     :viewBox="viewBox"
     version="1.1"
     style="position: fixed; top: 0; left: 0; pointer-events: none"
-    :style="styles"
+    :style="svgStyles"
     xmlns="http://www.w3.org/2000/svg"
   >
     <rect
