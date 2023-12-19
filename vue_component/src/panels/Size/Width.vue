@@ -5,7 +5,19 @@ import { useValueInput } from "@/commons/valueInput";
 import { widthOptions } from "./data";
 import { valueToStyleModel } from "./utils";
 
+import { getSelectTarget } from "@/components/Aiming";
+import { buildRefGetter } from "@/hooks/targetInfoGetter";
+import { watch } from "vue";
+
 const options = widthOptions;
+
+const selectTarget = getSelectTarget();
+const getter = buildRefGetter(selectTarget);
+
+const width = getter.getComputedStyle("width");
+watch(width, (value) => {
+  console.log("width:", value);
+});
 
 const valueInputModel = useValueInput(
   options,
