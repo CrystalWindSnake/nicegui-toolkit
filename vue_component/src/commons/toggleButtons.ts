@@ -1,5 +1,5 @@
 import { makeRef } from "@/hooks/utils";
-import { MaybeRef, ref, computed, Ref, watch } from "vue";
+import { MaybeRef, ref, computed, Ref, toValue } from "vue";
 
 type TOption = {
   label?: string;
@@ -11,20 +11,21 @@ type TOption = {
 export type TModel = ReturnType<typeof useToggleButtons>;
 
 export function useToggleButtons(
-  options: TOption[],
+  options: MaybeRef<TOption[]>,
   value?: MaybeRef<string | null>
 ) {
   const resultValue = makeRef(value);
 
-  const resultOptions = options.map((v) => {
-    const label = v.label ?? v.value;
-
-    return {
-      value: v.value,
-      label,
-      icon: v.icon ?? null,
-      tooltip: v.tooltip ?? label,
-    };
+  const resultOptions = computed(() => {
+    return toValue(options).map((v) => {
+      const label = v.label ?? v.value;
+      return {
+        value: v.value,
+        label,
+        icon: v.icon ?? null,
+        tooltip: v.tooltip ?? label,
+      };
+    });
   });
 
   return {
