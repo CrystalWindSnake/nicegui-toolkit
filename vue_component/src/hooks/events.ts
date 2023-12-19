@@ -1,20 +1,18 @@
-export type TCommnadEvent = {
+export type TAction = "style" | "props" | "classes";
+export type TCommandType = "set" | "del";
+
+export type TCommandEvent = {
   action: TAction;
   commandType: TCommandType;
   values: Record<string, any>;
 };
 
-export type TAction = "style" | "props" | "classes";
-export type TCommandType = "set" | "del";
+export type TSendCommand = ReturnType<typeof registerEmit>["sendCommand"];
 
-export type TCommandEmit = typeof sendCommand;
+export function registerEmit(callback: (cmds: TCommandEvent[]) => void) {
+  function sendCommand(cmds: TCommandEvent[]) {
+    callback(cmds);
+  }
 
-let commandEmit: TCommandEmit | null = null;
-
-export function registerEmit(emit: TCommandEmit) {
-  commandEmit = emit;
-}
-
-export function sendCommand(opts: TCommnadEvent[]) {
-  commandEmit!(opts);
+  return { sendCommand };
 }

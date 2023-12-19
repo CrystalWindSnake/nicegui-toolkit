@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { provide } from "vue";
+
 import MainPanel from "@/panels/MainPanel.vue";
 
 import Aiming from "./Aiming.vue";
@@ -14,15 +16,22 @@ import {
 
 import * as tbUtils from "./trackBallUtils";
 import * as utils from "./utils";
-import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
+import { type TSelectorConfig, TSelectedChangeEventArgs } from "./types";
 import { onMounted, ref, watch } from "vue";
-import { TCommnadEvent, registerEmit } from "@/hooks/events";
-import { getExecutingFlag, setGlobals } from "@/hooks/globals";
+import { TCommandEvent, registerEmit } from "@/hooks/events";
+import { setGlobals } from "@/hooks/globals";
 
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
   styleUrl?: string;
 }>();
+
+const { sendCommand } = registerEmit((cmds) => {
+  console.log("send cmd:", cmds);
+});
+
+// provide
+provide("propsEvents", sendCommand);
 
 // emits
 const emit = defineEmits<{
@@ -32,12 +41,12 @@ const emit = defineEmits<{
     event: "command",
     args: {
       id: number;
-      options: TCommnadEvent[];
+      options: TCommandEvent[];
     }
   ): void;
 }>();
 
-function emitCommnad(options: TCommnadEvent[]) {
+function emitCommnad(options: TCommandEvent[]) {
   const target = selectedElement.value;
   if (!target) {
     // throw new Error("No components are selected");

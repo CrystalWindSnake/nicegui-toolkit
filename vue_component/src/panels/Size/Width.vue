@@ -3,7 +3,8 @@ import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
 
 import { widthOptions } from "./data";
-import { computed, watch } from "vue";
+import { computed, watch, inject } from "vue";
+import { TSendCommand } from "@/hooks/events";
 
 const options = widthOptions;
 
@@ -18,23 +19,29 @@ const valueInputModel = useValueInput(
 );
 
 const widthValue = computed(() => {
+  const inputValue = valueInputModel.inputValue;
+  const selectValue = valueInputModel.selectValue;
 
-  const inputValue = valueInputModel.inputValue
-  const selectValue = valueInputModel.selectValue
-
-  if (selectValue.value==='auto') {
-    return 'auto'
+  if (selectValue.value === "auto") {
+    return "auto";
   }
 
-  return `${inputValue.value}${selectValue.value}`
-  
-})
+  return `${inputValue.value}${selectValue.value}`;
+});
 
-watch(widthValue, value => {
-  console.log(value);
-  
-})
+const sendCommand = inject("propsEvents") as TSendCommand;
 
+watch(widthValue, (value) => {
+  sendCommand([
+    {
+      action: "style",
+      commandType: "set",
+      values: {
+        width: value,
+      },
+    },
+  ]);
+});
 </script>
 
 <template>
