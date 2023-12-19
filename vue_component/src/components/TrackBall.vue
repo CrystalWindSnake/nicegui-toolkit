@@ -31,12 +31,12 @@ const emit = defineEmits<{
     event: "command",
     args: {
       id: number;
-      options: TCommandEvent[];
+      commands: TCommandEvent[];
     }
   ): void;
 }>();
 
-function emitCommnad(options: TCommandEvent[]) {
+function emitCommnad(commands: TCommandEvent[]) {
   const target = selectedElement.value;
   if (!target) {
     // throw new Error("No components are selected");
@@ -46,12 +46,11 @@ function emitCommnad(options: TCommandEvent[]) {
   if (!id) {
     throw new Error("not found selected element");
   }
-  emit("command", { id: id, options });
+  emit("command", { id: id, commands });
+  console.log("send cmd:", commands);
 }
 
-registerCommand((cmds) => {
-  console.log("send cmd:", cmds);
-});
+registerCommand(emitCommnad);
 
 // onMounted
 onMounted(() => {
