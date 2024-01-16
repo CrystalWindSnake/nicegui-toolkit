@@ -24,6 +24,20 @@ export function buildRefGetter(
     return result;
   }
 
+  function getStyle(name: MaybeRefOrGetter<string>) {
+    const result = computed(() => {
+      const target = toValue(targetRef);
+      if (target) {
+        const styleName = toValue(name) as any;
+        return target.style[styleName];
+      }
+
+      return "";
+    });
+
+    return result;
+  }
+
   function getFlexBoxInfo(displayStyle?: Ref<string> | ComputedRef<string>) {
     const displayModel = displayStyle ?? getComputedStyle("display");
 
@@ -73,6 +87,7 @@ export function buildRefGetter(
   }
 
   return {
+    getStyle,
     getComputedStyle,
     getFlexBoxInfo,
     getParentFlexBoxInfo,
