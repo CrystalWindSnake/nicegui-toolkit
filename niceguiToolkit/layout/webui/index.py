@@ -1,11 +1,12 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING
-from nicegui import ui
+from nicegui import ui, context
 from niceguiToolkit.libs.trackBall import TrackBall
 
 from .configZone import functional_zone
 from .messageZone import message_zone
 from .injection import Provider
+from niceguiToolkit.layout.events import TrackBallCommandsEventArguments
 
 if TYPE_CHECKING:
     from niceguiToolkit.layout.componentStore import ComponentStore, ComponentInfo
@@ -28,7 +29,14 @@ def build_TrackBall(store: ComponentStore):
     ball = TrackBall()
 
     @ball.on_command
-    def _(e):
-        pass
+    def _(e: TrackBallCommandsEventArguments):
+        id = e.id
+        element = context.get_client().elements[id]
+
+        for opt in e.options:
+            store.change_styles(id, opt.values)
+            element._style.update(opt.values)
+
+        element.update()
 
     return ball

@@ -28,7 +28,16 @@ const emit = defineEmits<{
 }>();
 
 function emitCommnad(options: TCommnadEvent[]) {
-  emit('command', { id: 1, options })
+  const target = selectedElement.value
+  if (!target) {
+    throw new Error("No components are selected");
+  }
+  const id = utils.getElementId(target, props.selectorConfig);
+  if (!id) {
+    throw new Error("not found selected element");
+  }
+
+  emit('command', { id: id, options })
   console.log('emitCommnad:', options);
 
 }
