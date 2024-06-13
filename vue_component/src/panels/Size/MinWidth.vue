@@ -2,6 +2,7 @@
 import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
 import { minWidthOptions } from "./data";
+import { valueToStyleModel } from "./utils";
 
 const options = minWidthOptions;
 
@@ -13,6 +14,8 @@ const valueInputModel = useValueInput(
     nonValueOptions: ["auto"],
   }
 );
+
+valueToStyleModel(valueInputModel, "min-width", ["auto"]);
 </script>
 
 <template>
