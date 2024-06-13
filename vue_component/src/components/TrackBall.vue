@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { provide } from "vue";
-
 import MainPanel from "@/panels/MainPanel.vue";
-
 import Aiming from "./Aiming.vue";
 import Panel from "./Panel.vue";
 
@@ -18,20 +15,13 @@ import * as tbUtils from "./trackBallUtils";
 import * as utils from "./utils";
 import { type TSelectorConfig, TSelectedChangeEventArgs } from "./types";
 import { onMounted, ref, watch } from "vue";
-import { TCommandEvent, registerEmit } from "@/hooks/events";
+import { TCommandEvent, register as registerCommand } from "@/hooks/command";
 import { setGlobals } from "@/hooks/globals";
 
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
   styleUrl?: string;
 }>();
-
-const { sendCommand } = registerEmit((cmds) => {
-  console.log("send cmd:", cmds);
-});
-
-// provide
-provide("propsEvents", sendCommand);
 
 // emits
 const emit = defineEmits<{
@@ -59,7 +49,9 @@ function emitCommnad(options: TCommandEvent[]) {
   emit("command", { id: id, options });
 }
 
-registerEmit(emitCommnad);
+registerCommand((cmds) => {
+  console.log("send cmd:", cmds);
+});
 
 // onMounted
 onMounted(() => {

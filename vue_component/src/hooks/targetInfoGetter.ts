@@ -24,9 +24,7 @@ export function buildRefGetter(
     return result;
   }
 
-  function getFlexBoxInfo(
-    displayStyle?: WritableComputedRef<string> | ComputedRef<string>
-  ) {
+  function getFlexBoxInfo(displayStyle?: Ref<string> | ComputedRef<string>) {
     const displayModel = displayStyle ?? getStyle("display");
 
     const result = computed(() => {

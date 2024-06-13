@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { createStyleRefModel } from "@/panels/utils";
-import { computed, watch } from "vue";
+import { computed, Ref } from "vue";
 import { getGlobals } from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
 
@@ -9,108 +9,35 @@ import ToggleButtons from "@/commons/ToggleButtons.vue";
 
 const displayModel = createStyleRefModel("display");
 
-// const directionModel = createStyleRefModel("flex-direction");
-// const alignModel = createStyleRefModel("align-items");
-
-// const alignConfigs = computed(() => {
-//   if (directionModel.value === "row") {
-//     return {
-//       title: "vertical align",
-//       start: {
-//         icon: "vertical_align_top",
-//         tooltipLabel: "top",
-//       },
-
-//       center: {
-//         icon: "align_vertical_center",
-//         tooltipLabel: "center",
-//       },
-
-//       end: {
-//         icon: "vertical_align_bottom",
-//         tooltipLabel: "bottom",
-//       },
-//     };
-//   }
-
-//   return {
-//     title: "horizontal align",
-//     start: {
-//       icon: "align_horizontal_left",
-//       tooltipLabel: "left",
-//     },
-
-//     center: {
-//       icon: "align_horizontal_center",
-//       tooltipLabel: "center",
-//     },
-
-//     end: {
-//       icon: "align_horizontal_right",
-//       tooltipLabel: "right",
-//     },
-//   };
-// });
-
-// const justifyModel = createStyleRefModel("justify-content");
-
-// const justifyConfigs = computed(() => {
-//   if (directionModel.value === "row") {
-//     return {
-//       title: "horizontal justify",
-//       start: {
-//         icon: "align_horizontal_left",
-//         tooltipLabel: "left",
-//       },
-
-//       center: {
-//         icon: "align_horizontal_center",
-//         tooltipLabel: "center",
-//       },
-
-//       end: {
-//         icon: "align_horizontal_right",
-//         tooltipLabel: "right",
-//       },
-//     };
-//   }
-
-//   return {
-//     title: "vertical justify",
-//     start: {
-//       icon: "vertical_align_top",
-//       tooltipLabel: "top",
-//     },
-
-//     center: {
-//       icon: "align_vertical_center",
-//       tooltipLabel: "center",
-//     },
-
-//     end: {
-//       icon: "vertical_align_bottom",
-//       tooltipLabel: "bottom",
-//     },
-//   };
-// });
-
 const selectTarget = getGlobals().selectTarget;
 
 const getter = buildRefGetter(selectTarget);
 
-const flexInfo = getter.getFlexBoxInfo(displayModel);
+const displayToggleButtonsModel = useToggleButtons(
+  [
+    { value: "block", icon: "inbox" },
+    { value: "flex", icon: "inventory_2" },
+  ],
+  displayModel
+);
 
-const displayToggleButtonsModel = useToggleButtons([
-  { value: "block", icon: "inbox" },
-  { value: "flex", icon: "inventory_2" },
-]);
+const flexInfo = getter.getFlexBoxInfo(
+  displayToggleButtonsModel.value as Ref<string>
+);
 
-const directionToggleButtonsModel = useToggleButtons([
-  { value: "row", label: "Horizontal" },
-  { value: "column", label: "Vertical" },
-]);
+// direction
+const directionModel = createStyleRefModel("flex-direction");
+
+const directionToggleButtonsModel = useToggleButtons(
+  [
+    { value: "row", label: "Horizontal" },
+    { value: "column", label: "Vertical" },
+  ],
+  directionModel
+);
 
 // align config
+const alignModel = createStyleRefModel("align-items");
 
 const alignTitle = computed(() =>
   directionToggleButtonsModel.value.value === "row"
@@ -138,9 +65,11 @@ const alignOpts = computed(() => {
   ];
 });
 
-const alignToggleButtonsModel = useToggleButtons(alignOpts);
+const alignToggleButtonsModel = useToggleButtons(alignOpts, alignModel);
 
 // justify config
+
+const justifyModel = createStyleRefModel("justify-content");
 
 const justifyTitle = computed(() =>
   directionToggleButtonsModel.value.value === "row"
@@ -168,7 +97,7 @@ const justifyOpts = computed(() => {
   ];
 });
 
-const justifyToggleButtonsModel = useToggleButtons(justifyOpts);
+const justifyToggleButtonsModel = useToggleButtons(justifyOpts, justifyModel);
 </script>
 
 <template>
