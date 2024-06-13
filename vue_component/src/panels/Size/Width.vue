@@ -14,7 +14,7 @@ const nonValueOption = {
     >
     <q-item-section
       ><SizeValueInput
-        default-option-value="auto"
+        default-option-value="px"
         default-input-value=""
         :non-value-option="nonValueOption"
       ></SizeValueInput
