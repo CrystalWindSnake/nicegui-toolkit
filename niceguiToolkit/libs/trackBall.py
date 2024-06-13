@@ -48,6 +48,7 @@ class TrackBall(Element, component="trackBall.js"):
     def on_command(self, handler: Callable[[TrackBallCommandsEventArguments], None]):
         def inner_handler(e):
             args = e.args
+            print(e)
             options = [TrackBallCommandOptions(**opt) for opt in args["options"]]
             arg = TrackBallCommandsEventArguments(
                 sender=self, client=self.client, id=args["id"], options=options

@@ -47,6 +47,7 @@ function emitCommnad(options: TCommnadEvent[]) {
   if (!id) {
     throw new Error("not found selected element");
   }
+  console.log('emit("command"');
 
   emit("command", { id: id, options });
 }
@@ -185,6 +186,9 @@ const executing = getExecutingFlag();
 
     <Panel class="non-selectable" style="z-index: 9999999; width: 300px">
       <MainPanel></MainPanel>
+      <template v-slot:footer>
+        <slot name="footer"></slot>
+      </template>
     </Panel>
 
     <div
