@@ -25,18 +25,8 @@ def apply_zone(store: Optional[ComponentStore] = None, enable=False):
 
 def build_TrackBall(store: ComponentStore):
     ui.tooltip.default_style("font-size:1rem")
-    print("ball = TrackBall()")
     ball = TrackBall()
-    app.add_static_file(
-        local_file=r"E:\working\github\nicegui-toolkit\niceguiToolkit\libs\style.css",
-        url_path="/tk/style.css",
-    )
-
-    # ui.add_head_html(
-    #     """
-    # <link rel="stylesheet" href="/tk/style.css">
-    # """
-    # )
+    TrackBall.add_style_static_file()
 
     @ball.on_command
     def _(e: TrackBallCommandsEventArguments):

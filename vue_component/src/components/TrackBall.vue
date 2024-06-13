@@ -15,10 +15,10 @@ import {
 import * as tbUtils from "./trackBallUtils";
 import * as utils from "./utils";
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { TCommnadEvent, registerEmit } from "@/hooks/events";
 
-const props = defineProps<{ selectorConfig: TSelectorConfig }>();
+const props = defineProps<{ selectorConfig: TSelectorConfig, styleUrl: string }>();
 const emit = defineEmits<{
   (event: "hoverChange", args: { id: number | null }): void;
   (event: "selectedChange", args: TSelectedChangeEventArgs): void;
@@ -106,6 +106,14 @@ watch(selectedElement, (target) => {
 });
 
 defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
+
+onMounted(() => {
+  var link = document.createElement('link');
+  link.setAttribute('rel', 'stylesheet');
+  link.setAttribute('href', props.styleUrl);
+  document.head.appendChild(link);
+})
+
 </script>
 
 <template>
