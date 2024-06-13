@@ -16,24 +16,20 @@ import * as tbUtils from "./trackBallUtils";
 import * as utils from "./utils";
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 import { ref, watch } from "vue";
-import { TAction, TCommandType, registerEmit } from "@/hooks/events";
+import { TCommnadEvent, registerEmit } from "@/hooks/events";
 
 const props = defineProps<{ selectorConfig: TSelectorConfig }>();
 const emit = defineEmits<{
   (event: "hoverChange", args: { id: number | null }): void;
   (event: "selectedChange", args: TSelectedChangeEventArgs): void;
   (event: "command", args: {
-    action: TAction,
-    command: TCommandType,
-    values: Record<string, any>
+    id: number, options: TCommnadEvent[]
   }): void;
 }>();
 
-function emitCommnad(action: TAction,
-  command: TCommandType,
-  values: Record<string, any>) {
-  emit('command', { action, command, values })
-  console.log('emitCommnad:', action, command, values);
+function emitCommnad(options: TCommnadEvent[]) {
+  emit('command', { id: 1, options })
+  console.log('emitCommnad:', options);
 
 }
 

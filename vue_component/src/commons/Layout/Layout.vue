@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { sendCommand } from "@/hooks/events";
+import { getInitValue } from "@/hooks/propsMapping";
 
-const layoutModel = ref('block')
+
+const initValue = getInitValue('display') as string
+
+const layoutModel = ref(initValue ?? 'block')
 
 watch(layoutModel, value => {
-    sendCommand('style', 'set', { 'display': value })
+    sendCommand([{ action: 'style', commandType: 'set', values: { 'display': value } }])
 })
 
 </script>

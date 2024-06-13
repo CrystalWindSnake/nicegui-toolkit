@@ -25,7 +25,7 @@ const target = ref<HTMLElement | null>(null);
 const resultValue = computed(() => `${value.value}${unit.value}`)
 
 watch(resultValue, (v) => {
-  sendCommand('style', 'set', { [props.styleName]: v })
+  sendCommand([{ action: 'style', commandType: 'set', values: { [props.styleName]: v } }])
 });
 
 useSliderControl(target, props.direction, value);
@@ -36,7 +36,7 @@ const dstyle = {
 
 // events
 function onClickNumber() {
-  alert("onClickNumber");
+  // alert("onClickNumber");
 }
 </script>
 
