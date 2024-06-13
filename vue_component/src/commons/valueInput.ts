@@ -7,26 +7,21 @@ type TOptions = {
   label?: string;
 }[];
 
-type TNonValueOptions = {
-  options: string[];
-  defaultValueOptionsIndex: number;
+type TNonValueOptions = string[];
+
+type TInit = {
+  input: string;
+  select: string;
 };
 
 export function useValueInput(
   options: TOptions,
+  initValue: TInit,
   nonValueOptions?: TNonValueOptions,
-  initInputValue?: string,
-  initSelectValueOptionsIndex?: number
+  defaultValueOption?: string
 ) {
-  const initItem = options[initSelectValueOptionsIndex ?? 0];
-  const initSelectValue = initItem.label ?? initItem.value;
-  const initValues = {
-    initInputValue: initInputValue ?? "",
-    initSelectItem: initItem,
-  };
-
-  const inputValue = ref(initValues.initInputValue);
-  const selectValue = ref(initSelectValue);
+  const inputValue = ref(initValue.input);
+  const selectValue = ref(initValue.select);
 
   function updateValue(input: string, select: string) {
     inputValue.value = input;
@@ -38,9 +33,10 @@ export function useValueInput(
     selectValue: readonly(selectValue),
     model: {
       updateValue,
-      initValues,
+      initValue,
       options,
       nonValueOptions,
+      defaultValueOption,
     },
   };
 }

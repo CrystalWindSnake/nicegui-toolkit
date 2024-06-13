@@ -14,8 +14,14 @@ const inputRef = ref<HTMLElement | null>(null);
 const selectRef = ref<HTMLElement | null>(null);
 
 let lastInvaildInputValue: string | null = null;
-const inputValue = ref(model.initValues.initInputValue);
-const selectValue = ref(model.initValues.initSelectItem);
+
+const initSelectValueItem = model.options.find(
+  (item) => item.value === model.initValue.select
+)!;
+
+const inputValue = ref(model.initValue.input);
+const selectValue = ref(initSelectValueItem);
+
 const selectDisplay = computed(
   () => selectValue.value.label ?? selectValue.value.value
 );
@@ -25,10 +31,11 @@ watch(inputValue, (value) => {
     // input : 10 ,select: auto -> select:rem
     if (
       value.length > 0 &&
-      model.nonValueOptions.options.includes(selectValue.value.value)
+      model.nonValueOptions.includes(selectValue.value.value)
     ) {
-      selectValue.value =
-        model.options[model.nonValueOptions.defaultValueOptionsIndex];
+      selectValue.value = model.options.find(
+        (item) => item.value === model.defaultValueOption
+      )!;
     }
   }
 
@@ -36,9 +43,9 @@ watch(inputValue, (value) => {
   if (
     !value &&
     model.nonValueOptions &&
-    !model.nonValueOptions.options.includes(selectValue.value.value)
+    !model.nonValueOptions.includes(selectValue.value.value)
   ) {
-    selectValue.value = model.initValues.initSelectItem;
+    selectValue.value = initSelectValueItem;
   }
 
   if (!!value) {
@@ -50,10 +57,7 @@ watch(inputValue, (value) => {
 
 watch(selectValue, (value) => {
   // input: 10,select:auto -> input : ''
-  if (
-    model.nonValueOptions &&
-    model.nonValueOptions.options.includes(value.value)
-  ) {
+  if (model.nonValueOptions && model.nonValueOptions.includes(value.value)) {
     inputValue.value = "";
 
     // input:'',select: auto to rem -> input: '10'
@@ -81,7 +85,7 @@ function onInputUpdate(e: Event) {
       ref="inputRef"
       class="q-input"
       :model-value="inputValue"
-      :placeholder="model.initValues.initSelectItem.value"
+      :placeholder="selectValue.value"
       square
       outlined
       dense
@@ -97,12 +101,14 @@ function onInputUpdate(e: Event) {
           hide-dropdown-icon
           class="q-select"
           dense
+          options-cover
           v-model="selectValue"
           :options="model.options"
           color="teal"
           options-selected-class="text-deep-orange"
           @popup-show="setExecutingFlag(true)"
           @popup-hide="setExecutingFlag(false)"
+          popup-content-style="z-index:9999999"
         >
           <template v-slot:option="scope">
             <q-item v-bind="scope.itemProps">
