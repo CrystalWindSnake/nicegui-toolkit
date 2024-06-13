@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { createStyleRefModel } from "@/panels/utils";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { getGlobals } from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
+
+import { useToggleButtons } from "@/commons/toggleButtons";
+import ToggleButtons from "@/commons/ToggleButtons.vue";
 
 const displayModel = createStyleRefModel("display");
 
@@ -96,6 +99,16 @@ const selectTarget = getGlobals().selectTarget;
 const getter = buildRefGetter(selectTarget);
 
 const flexInfo = getter.getFlexBoxInfo(displayModel);
+
+const displayToggleButtonsModel = useToggleButtons([
+  { value: "block", icon: "inbox" },
+  { value: "flex", icon: "inventory_2" },
+]);
+
+const directionToggleButtonsModel = useToggleButtons([
+  { value: "row", label: "Horizontal" },
+  { value: "column", label: "Vertical" },
+]);
 </script>
 
 <template>
@@ -110,28 +123,11 @@ const flexInfo = getter.getFlexBoxInfo(displayModel);
         <!-- display -->
         <q-item class="items-center gap-2 px-3 py-2">
           <span class="item-title text-capitalize">display </span>
-          <q-btn-toggle
-            size="sm"
-            padding="4px"
-            v-model="displayModel"
-            toggle-color="primary"
-            :options="[
-              { value: 'block', slot: 'block' },
-              { value: 'flex', slot: 'flex' },
-            ]"
-          >
-            <template v-slot:block>
-              <q-icon name="inbox">
-                <q-tooltip style="z-index: 99999999"> block </q-tooltip>
-              </q-icon>
-            </template>
 
-            <template v-slot:flex>
-              <q-icon name="inventory_2">
-                <q-tooltip style="z-index: 99999999"> flex box </q-tooltip>
-              </q-icon>
-            </template>
-          </q-btn-toggle>
+          <toggle-buttons
+            padding="4px"
+            :model="displayToggleButtonsModel"
+          ></toggle-buttons>
         </q-item>
 
         <q-separator />
@@ -143,17 +139,10 @@ const flexInfo = getter.getFlexBoxInfo(displayModel);
             <span class="item-title text-caption text-capitalize"
               >direction</span
             >
-            <q-btn-toggle
-              v-model="directionModel"
-              padding="8px"
-              size="sm"
-              toggle-color="primary"
-              :options="[
-                { value: 'row', label: 'Horizontal' },
-                { value: 'column', label: 'Vertical' },
-              ]"
-            >
-            </q-btn-toggle>
+
+            <toggle-buttons
+              :model="directionToggleButtonsModel"
+            ></toggle-buttons>
           </q-item>
 
           <!-- align -->

@@ -1,13 +1,5 @@
-import {
-  MaybeRef,
-  ref,
-  MaybeRefOrGetter,
-  isRef,
-  toValue,
-  computed,
-  Ref,
-  watch,
-} from "vue";
+import { makeRef } from "@/hooks/utils";
+import { MaybeRef, ref, computed, Ref, watch } from "vue";
 
 type TItemOption = { label: string; value: string };
 type TOption = string | TItemOption;
@@ -91,14 +83,6 @@ export function useValueInput(
     updateInput,
     updateSelect,
   };
-}
-
-function makeRef<T>(value: MaybeRefOrGetter<T>) {
-  if (isRef(value)) {
-    return value;
-  }
-
-  return ref(toValue(value));
 }
 
 function whenInputValueChanged(
