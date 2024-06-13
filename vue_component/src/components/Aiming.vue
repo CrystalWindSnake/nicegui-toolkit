@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TModel } from "./Aiming";
-import { useSvgConfigs } from "./trackBallUtils";
+import { useSvgConfigs } from "./utils";
 
 const props = defineProps<{
   model: TModel;
