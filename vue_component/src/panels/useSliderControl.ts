@@ -60,7 +60,8 @@ type TStartPositions = {
 export function useSliderControl(
   target: Ref<HTMLElement | null>,
   direction: TDirection,
-  value?: Ref<number>
+  value?: Ref<number>,
+  filter?: (value: number) => boolean
 ) {
   const result = value ?? ref(0);
 
@@ -80,7 +81,10 @@ export function useSliderControl(
     };
 
     const onMousemove = (e: MouseEvent) => {
-      result.value += diffHandler(startPositions, e);
+      const diff = diffHandler(startPositions, e);
+      if (!filter || filter(result.value + diff)) {
+        result.value += diffHandler(startPositions, e);
+      }
       startPositions.x = e.x;
       startPositions.y = e.y;
     };
