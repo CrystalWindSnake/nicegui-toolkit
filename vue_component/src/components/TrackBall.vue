@@ -17,8 +17,9 @@ import * as utils from "./utils";
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 import { onMounted, ref, watch } from "vue";
 import { TCommnadEvent, registerEmit } from "@/hooks/events";
+import { setGlobals } from "@/hooks/globals";
 
-const props = defineProps<{ selectorConfig: TSelectorConfig, styleUrl: string }>();
+const props = defineProps<{ selectorConfig: TSelectorConfig, styleUrl?: string }>();
 
 // emits
 const emit = defineEmits<{
@@ -40,8 +41,6 @@ function emitCommnad(options: TCommnadEvent[]) {
   }
 
   emit('command', { id: id, options })
-  console.log('emitCommnad:', options);
-
 }
 
 registerEmit(emitCommnad)
@@ -115,6 +114,10 @@ watch(selectedElement, (target) => {
 
 // Expose
 defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
+
+// setGlobals
+setGlobals(selectedElement)
+
 </script>
 
 <template>

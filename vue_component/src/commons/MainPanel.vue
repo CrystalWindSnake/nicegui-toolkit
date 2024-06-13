@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import Spacing from "./Spacing/Spacing.vue";
 import Layout from "./Layout/Layout.vue";
-// const props = defineProps<{ component: TComponent }>()
+import { getGlobals } from "@/hooks/globals";
+import { bindSelectTarget } from "@/hooks/propsMapping";
 
 const tab = ref('style')
 
+const selectTarget = getGlobals().selectTarget
+
+bindSelectTarget(selectTarget)
+
+const showPanels = computed(() => !!selectTarget.value)
 
 </script>
 
@@ -16,7 +22,7 @@ const tab = ref('style')
             <q-tab name="cusStyle" label="cus style" />
         </q-tabs>
 
-        <q-tab-panels v-model="tab" keep-alive animated swipeable vertical transition-prev="jump-up"
+        <q-tab-panels v-show="showPanels" v-model="tab" keep-alive animated swipeable vertical transition-prev="jump-up"
             transition-next="jump-up">
             <q-tab-panel name="style">
 
