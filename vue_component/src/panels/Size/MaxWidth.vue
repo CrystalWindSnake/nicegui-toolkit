@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import SizeValueInput from "@/commons/SizeValueInput.vue";
+import ValueInput from "@/commons/ValueInput.vue";
+import { useValueInput } from "@/commons/valueInput";
 import { maxWidthOptions } from "./data";
 
 const options = maxWidthOptions;
 
-const nonValueOption = ["none"];
+const valueInputModel = useValueInput(
+  options,
+  { selectValue: "none" },
+  {
+    optionValueIfnonValue: "px",
+    nonValueOptions: ["none"],
+    defaultOptionValue: "none",
+  }
+);
 </script>
 
 <template>
@@ -13,13 +22,7 @@ const nonValueOption = ["none"];
       >Max W</q-item-section
     >
     <q-item-section
-      ><SizeValueInput
-        :options="options"
-        init-input-value=""
-        init-select-value="none"
-        :non-value-options="nonValueOption"
-        default-value-option="px"
-      ></SizeValueInput
+      ><ValueInput :model="valueInputModel"></ValueInput
     ></q-item-section>
   </q-item>
 </template>

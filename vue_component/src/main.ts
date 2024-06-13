@@ -8,7 +8,7 @@ import quasarLang from "quasar/lang/zh-CN";
 import "quasar/dist/quasar.css";
 import "@quasar/extras/material-icons/material-icons.css";
 
-const app = createApp(App);
+const app = createApp(Temp);
 app.use(Quasar, {
   plugins: {}, // import Quasar plugins and add here
   lang: quasarLang,
