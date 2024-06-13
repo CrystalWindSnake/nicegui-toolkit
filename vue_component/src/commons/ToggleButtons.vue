@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { type TModel } from "./toggleButtons";
 
 const props = defineProps<{
@@ -7,7 +8,9 @@ const props = defineProps<{
 
 const { value, options } = props.model;
 
-const toggleOpts = options.map((v) => ({ value: v.value, slot: v.value }));
+const toggleOpts = computed(() =>
+  options.value.map((v) => ({ value: v.value, slot: v.value }))
+);
 </script>
 
 <template>

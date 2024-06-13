@@ -9,90 +9,90 @@ import ToggleButtons from "@/commons/ToggleButtons.vue";
 
 const displayModel = createStyleRefModel("display");
 
-const directionModel = createStyleRefModel("flex-direction");
-const alignModel = createStyleRefModel("align-items");
+// const directionModel = createStyleRefModel("flex-direction");
+// const alignModel = createStyleRefModel("align-items");
 
-const alignConfigs = computed(() => {
-  if (directionModel.value === "row") {
-    return {
-      title: "vertical align",
-      start: {
-        icon: "vertical_align_top",
-        tooltipLabel: "top",
-      },
+// const alignConfigs = computed(() => {
+//   if (directionModel.value === "row") {
+//     return {
+//       title: "vertical align",
+//       start: {
+//         icon: "vertical_align_top",
+//         tooltipLabel: "top",
+//       },
 
-      center: {
-        icon: "align_vertical_center",
-        tooltipLabel: "center",
-      },
+//       center: {
+//         icon: "align_vertical_center",
+//         tooltipLabel: "center",
+//       },
 
-      end: {
-        icon: "vertical_align_bottom",
-        tooltipLabel: "bottom",
-      },
-    };
-  }
+//       end: {
+//         icon: "vertical_align_bottom",
+//         tooltipLabel: "bottom",
+//       },
+//     };
+//   }
 
-  return {
-    title: "horizontal align",
-    start: {
-      icon: "align_horizontal_left",
-      tooltipLabel: "left",
-    },
+//   return {
+//     title: "horizontal align",
+//     start: {
+//       icon: "align_horizontal_left",
+//       tooltipLabel: "left",
+//     },
 
-    center: {
-      icon: "align_horizontal_center",
-      tooltipLabel: "center",
-    },
+//     center: {
+//       icon: "align_horizontal_center",
+//       tooltipLabel: "center",
+//     },
 
-    end: {
-      icon: "align_horizontal_right",
-      tooltipLabel: "right",
-    },
-  };
-});
+//     end: {
+//       icon: "align_horizontal_right",
+//       tooltipLabel: "right",
+//     },
+//   };
+// });
 
-const justifyModel = createStyleRefModel("justify-content");
+// const justifyModel = createStyleRefModel("justify-content");
 
-const justifyConfigs = computed(() => {
-  if (directionModel.value === "row") {
-    return {
-      title: "horizontal justify",
-      start: {
-        icon: "align_horizontal_left",
-        tooltipLabel: "left",
-      },
+// const justifyConfigs = computed(() => {
+//   if (directionModel.value === "row") {
+//     return {
+//       title: "horizontal justify",
+//       start: {
+//         icon: "align_horizontal_left",
+//         tooltipLabel: "left",
+//       },
 
-      center: {
-        icon: "align_horizontal_center",
-        tooltipLabel: "center",
-      },
+//       center: {
+//         icon: "align_horizontal_center",
+//         tooltipLabel: "center",
+//       },
 
-      end: {
-        icon: "align_horizontal_right",
-        tooltipLabel: "right",
-      },
-    };
-  }
+//       end: {
+//         icon: "align_horizontal_right",
+//         tooltipLabel: "right",
+//       },
+//     };
+//   }
 
-  return {
-    title: "vertical justify",
-    start: {
-      icon: "vertical_align_top",
-      tooltipLabel: "top",
-    },
+//   return {
+//     title: "vertical justify",
+//     start: {
+//       icon: "vertical_align_top",
+//       tooltipLabel: "top",
+//     },
 
-    center: {
-      icon: "align_vertical_center",
-      tooltipLabel: "center",
-    },
+//     center: {
+//       icon: "align_vertical_center",
+//       tooltipLabel: "center",
+//     },
 
-    end: {
-      icon: "vertical_align_bottom",
-      tooltipLabel: "bottom",
-    },
-  };
-});
+//     end: {
+//       icon: "vertical_align_bottom",
+//       tooltipLabel: "bottom",
+//     },
+//   };
+// });
 
 const selectTarget = getGlobals().selectTarget;
 
@@ -109,6 +109,66 @@ const directionToggleButtonsModel = useToggleButtons([
   { value: "row", label: "Horizontal" },
   { value: "column", label: "Vertical" },
 ]);
+
+// align config
+
+const alignTitle = computed(() =>
+  directionToggleButtonsModel.value.value === "row"
+    ? "vertical align"
+    : "horizontal align"
+);
+
+const alignOpts = computed(() => {
+  if (directionToggleButtonsModel.value.value === "row") {
+    return [
+      { value: "start", icon: "vertical_align_top", tooltip: "top" },
+
+      { value: "center", icon: "align_vertical_center", tooltip: "center" },
+
+      { value: "end", icon: "vertical_align_bottom", tooltip: "bottom" },
+    ];
+  }
+
+  return [
+    { value: "start", icon: "align_horizontal_left", tooltip: "left" },
+
+    { value: "center", icon: "align_horizontal_center", tooltip: "center" },
+
+    { value: "end", icon: "align_horizontal_right", tooltip: "right" },
+  ];
+});
+
+const alignToggleButtonsModel = useToggleButtons(alignOpts);
+
+// justify config
+
+const justifyTitle = computed(() =>
+  directionToggleButtonsModel.value.value === "row"
+    ? "vertical justify"
+    : "horizontal justify"
+);
+
+const justifyOpts = computed(() => {
+  if (directionToggleButtonsModel.value.value === "row") {
+    return [
+      { value: "start", icon: "align_horizontal_left", tooltip: "left" },
+
+      { value: "center", icon: "align_horizontal_center", tooltip: "center" },
+
+      { value: "end", icon: "align_horizontal_right", tooltip: "right" },
+    ];
+  }
+
+  return [
+    { value: "start", icon: "vertical_align_top", tooltip: "top" },
+
+    { value: "center", icon: "align_vertical_center", tooltip: "center" },
+
+    { value: "end", icon: "vertical_align_bottom", tooltip: "bottom" },
+  ];
+});
+
+const justifyToggleButtonsModel = useToggleButtons(justifyOpts);
 </script>
 
 <template>
@@ -148,85 +208,18 @@ const directionToggleButtonsModel = useToggleButtons([
           <!-- align -->
           <q-item class="items-center gap-2 px-3 py-2">
             <span class="item-title text-left text-caption text-capitalize">{{
-              alignConfigs.title
+              alignTitle
             }}</span>
-            <q-btn-toggle
-              v-model="alignModel"
-              padding="8px"
-              size="sm"
-              toggle-color="primary"
-              :options="[
-                { value: 'start', slot: 'start' },
-                { value: 'center', slot: 'center' },
-                { value: 'end', slot: 'end' },
-              ]"
-            >
-              <template v-slot:start>
-                <q-icon :name="alignConfigs.start.icon">
-                  <q-tooltip style="z-index: 99999999">
-                    {{ alignConfigs.start.tooltipLabel }}
-                  </q-tooltip>
-                </q-icon>
-              </template>
 
-              <template v-slot:center>
-                <q-icon :name="alignConfigs.center.icon">
-                  <q-tooltip style="z-index: 99999999">
-                    {{ alignConfigs.center.tooltipLabel }}
-                  </q-tooltip>
-                </q-icon>
-              </template>
-
-              <template v-slot:end>
-                <q-icon :name="alignConfigs.end.icon">
-                  <q-tooltip style="z-index: 99999999">
-                    {{ alignConfigs.end.tooltipLabel }}
-                  </q-tooltip>
-                </q-icon>
-              </template>
-            </q-btn-toggle>
+            <toggle-buttons :model="alignToggleButtonsModel"></toggle-buttons>
           </q-item>
 
           <!-- justify -->
           <q-item class="items-center gap-2 px-3 py-2">
             <span class="item-title text-left text-caption text-capitalize">{{
-              justifyConfigs.title
+              justifyTitle
             }}</span>
-            <q-btn-toggle
-              v-model="justifyModel"
-              padding="8px"
-              size="sm"
-              toggle-color="primary"
-              :options="[
-                { value: 'start', slot: 'start' },
-                { value: 'center', slot: 'center' },
-                { value: 'end', slot: 'end' },
-              ]"
-            >
-              <template v-slot:start>
-                <q-icon :name="justifyConfigs.start.icon">
-                  <q-tooltip style="z-index: 99999999">
-                    {{ justifyConfigs.start.tooltipLabel }}
-                  </q-tooltip>
-                </q-icon>
-              </template>
-
-              <template v-slot:center>
-                <q-icon :name="justifyConfigs.center.icon">
-                  <q-tooltip style="z-index: 99999999">
-                    {{ justifyConfigs.center.tooltipLabel }}
-                  </q-tooltip>
-                </q-icon>
-              </template>
-
-              <template v-slot:end>
-                <q-icon :name="justifyConfigs.end.icon">
-                  <q-tooltip style="z-index: 99999999">
-                    {{ justifyConfigs.end.tooltipLabel }}
-                  </q-tooltip>
-                </q-icon>
-              </template>
-            </q-btn-toggle>
+            <toggle-buttons :model="justifyToggleButtonsModel"></toggle-buttons>
           </q-item>
         </div>
       </q-list>
