@@ -1,57 +1,250 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { TCommnadEvent, sendCommand } from "@/hooks/events";
-import { getInitValue } from "@/hooks/propsMapping";
+import { createStyleRefModel } from "@/commons/utils";
+import { computed, watch } from "vue";
+import { getGlobals } from "@/hooks/globals";
+import { buildGetter } from "@/hooks/targetInfoGetter";
 
-function createStyleRefModel(
-    styleName: string,
-    extraCommandsFunc?: (value: any) => TCommnadEvent[]
-) {
-    const initValue = getInitValue<string>(styleName);
+const displayModel = createStyleRefModel("display");
 
-    const model = computed({
-        get: () => {
-            return initValue.value;
-        },
-        set: (value) => {
-            const defaultSetCommand: TCommnadEvent = {
-                action: "style",
-                commandType: "set",
-                values: { [styleName]: value },
-            };
-            const extraCommandss = extraCommandsFunc ? extraCommandsFunc(value) : [];
+const directionModel = createStyleRefModel("flex-direction");
+const alignModel = createStyleRefModel("align-items");
 
-            sendCommand([defaultSetCommand, ...extraCommandss]);
-            initValue.value = value;
-        },
-    });
+const alignConfigs = computed(() => {
+  if (directionModel.value === "row") {
+    return {
+      title: "vertical align",
+      start: {
+        icon: "vertical_align_top",
+        tooltipLabel: "top",
+      },
 
-    return model;
-}
+      center: {
+        icon: "align_vertical_center",
+        tooltipLabel: "center",
+      },
 
-const layoutModel = createStyleRefModel("display");
+      end: {
+        icon: "vertical_align_bottom",
+        tooltipLabel: "bottom",
+      },
+    };
+  }
+
+  return {
+    title: "horizontal align",
+    start: {
+      icon: "align_horizontal_left",
+      tooltipLabel: "left",
+    },
+
+    center: {
+      icon: "align_horizontal_center",
+      tooltipLabel: "center",
+    },
+
+    end: {
+      icon: "align_horizontal_right",
+      tooltipLabel: "right",
+    },
+  };
+});
+
+const justifyModel = createStyleRefModel("justify-content");
+
+const justifyConfigs = computed(() => {
+  if (directionModel.value === "row") {
+    return {
+      title: "horizontal justify",
+      start: {
+        icon: "align_horizontal_left",
+        tooltipLabel: "left",
+      },
+
+      center: {
+        icon: "align_horizontal_center",
+        tooltipLabel: "center",
+      },
+
+      end: {
+        icon: "align_horizontal_right",
+        tooltipLabel: "right",
+      },
+    };
+  }
+
+  return {
+    title: "vertical justify",
+    start: {
+      icon: "vertical_align_top",
+      tooltipLabel: "top",
+    },
+
+    center: {
+      icon: "align_vertical_center",
+      tooltipLabel: "center",
+    },
+
+    end: {
+      icon: "vertical_align_bottom",
+      tooltipLabel: "bottom",
+    },
+  };
+});
+
+const selectTarget = getGlobals().selectTarget;
+
+const flexInfo = computed(() => {
+  const getter = buildGetter(selectTarget.value!);
+  return getter.getFlexBoxInfo();
+});
+
+watch(flexInfo, (info) => {
+  directionModel.value = info.direction;
+});
 </script>
 
 <template>
-    <div class="row no-wrap items-center gap-2 px-3 py-2">
-        <span>display </span>
-        <q-btn-toggle size="sm" padding="4px" v-model="layoutModel" toggle-color="primary" :options="[
+  <div class="col no-wrap">
+    <q-list bordered>
+      <!-- display -->
+      <q-item class="items-center gap-2 px-3 py-2">
+        <span class="item-title text-capitalize">display </span>
+        <q-btn-toggle
+          size="sm"
+          padding="4px"
+          v-model="displayModel"
+          toggle-color="primary"
+          :options="[
             { value: 'block', slot: 'block' },
             { value: 'flex', slot: 'flex' },
-        ]">
-            <template v-slot:block>
-                <q-icon name="inbox">
-                    <q-tooltip style="z-index: 99999999"> block </q-tooltip>
-                </q-icon>
+          ]"
+        >
+          <template v-slot:block>
+            <q-icon name="inbox">
+              <q-tooltip style="z-index: 99999999"> block </q-tooltip>
+            </q-icon>
+          </template>
+
+          <template v-slot:flex>
+            <q-icon name="inventory_2">
+              <q-tooltip style="z-index: 99999999"> flex box </q-tooltip>
+            </q-icon>
+          </template>
+        </q-btn-toggle>
+      </q-item>
+
+      <q-separator />
+
+      <!-- flexbox setting -->
+      <div v-if="flexInfo.isFlex">
+        <!-- Direction -->
+        <q-item class="items-center gap-2 px-3 py-2">
+          <span class="item-title text-caption text-capitalize">direction</span>
+          <q-btn-toggle
+            v-model="directionModel"
+            padding="8px"
+            size="sm"
+            toggle-color="primary"
+            :options="[
+              { value: 'row', label: 'Horizontal' },
+              { value: 'column', label: 'Vertical' },
+            ]"
+          >
+          </q-btn-toggle>
+
+          <q-btn icon="home" square size="sm" dense></q-btn>
+        </q-item>
+
+        <!-- align -->
+        <q-item class="items-center gap-2 px-3 py-2">
+          <span class="item-title text-left text-caption text-capitalize">{{
+            alignConfigs.title
+          }}</span>
+          <q-btn-toggle
+            v-model="alignModel"
+            padding="8px"
+            size="sm"
+            toggle-color="primary"
+            :options="[
+              { value: 'start', slot: 'start' },
+              { value: 'center', slot: 'center' },
+              { value: 'end', slot: 'end' },
+            ]"
+          >
+            <template v-slot:start>
+              <q-icon :name="alignConfigs.start.icon">
+                <q-tooltip style="z-index: 99999999">
+                  {{ alignConfigs.start.tooltipLabel }}
+                </q-tooltip>
+              </q-icon>
             </template>
 
-            <template v-slot:flex>
-                <q-icon name="inventory_2">
-                    <q-tooltip style="z-index: 99999999"> flex box </q-tooltip>
-                </q-icon>
+            <template v-slot:center>
+              <q-icon :name="alignConfigs.center.icon">
+                <q-tooltip style="z-index: 99999999">
+                  {{ alignConfigs.center.tooltipLabel }}
+                </q-tooltip>
+              </q-icon>
             </template>
-        </q-btn-toggle>
-    </div>
+
+            <template v-slot:end>
+              <q-icon :name="alignConfigs.end.icon">
+                <q-tooltip style="z-index: 99999999">
+                  {{ alignConfigs.end.tooltipLabel }}
+                </q-tooltip>
+              </q-icon>
+            </template>
+          </q-btn-toggle>
+        </q-item>
+
+        <!-- justify -->
+        <q-item class="items-center gap-2 px-3 py-2">
+          <span class="item-title text-left text-caption text-capitalize">{{
+            justifyConfigs.title
+          }}</span>
+          <q-btn-toggle
+            v-model="justifyModel"
+            padding="8px"
+            size="sm"
+            toggle-color="primary"
+            :options="[
+              { value: 'start', slot: 'start' },
+              { value: 'center', slot: 'center' },
+              { value: 'end', slot: 'end' },
+            ]"
+          >
+            <template v-slot:start>
+              <q-icon :name="justifyConfigs.start.icon">
+                <q-tooltip style="z-index: 99999999">
+                  {{ justifyConfigs.start.tooltipLabel }}
+                </q-tooltip>
+              </q-icon>
+            </template>
+
+            <template v-slot:center>
+              <q-icon :name="justifyConfigs.center.icon">
+                <q-tooltip style="z-index: 99999999">
+                  {{ justifyConfigs.center.tooltipLabel }}
+                </q-tooltip>
+              </q-icon>
+            </template>
+
+            <template v-slot:end>
+              <q-icon :name="justifyConfigs.end.icon">
+                <q-tooltip style="z-index: 99999999">
+                  {{ justifyConfigs.end.tooltipLabel }}
+                </q-tooltip>
+              </q-icon>
+            </template>
+          </q-btn-toggle>
+        </q-item>
+      </div>
+    </q-list>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="less">
+.item-title {
+  max-width: 5rem;
+}
+</style>
