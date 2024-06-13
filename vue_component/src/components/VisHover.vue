@@ -4,8 +4,9 @@ import { useSvgConfigs } from "./trackBallUtils";
 
 // const props = defineProps<{ model: TModel }>();
 
-const { viewBox, styles: svgStyles } = useSvgConfigs();
+const strokeColor = "red";
 
+const { viewBox, styles: svgStyles } = useSvgConfigs();
 const { rectStyles, topLine, rightLine, bottomLine, leftLine } = useVisHover();
 </script>
 
@@ -24,30 +25,35 @@ const { rectStyles, topLine, rightLine, bottomLine, leftLine } = useVisHover();
     "
     :style="svgStyles"
   >
-    <rect fill="none" stroke="red" stroke-width="1" :style="rectStyles"></rect>
+    <rect
+      fill="none"
+      :stroke="strokeColor"
+      stroke-width="1"
+      :style="rectStyles"
+    ></rect>
 
     <line
       class="top"
       v-bind="topLine"
-      stroke="red"
+      :stroke="strokeColor"
       stroke-dasharray="3 2"
     ></line>
     <line
       class="right"
       v-bind="rightLine"
-      stroke="red"
+      :stroke="strokeColor"
       stroke-dasharray="3 2"
     ></line>
     <line
       class="bottom"
       v-bind="bottomLine"
-      stroke="red"
+      :stroke="strokeColor"
       stroke-dasharray="3 2"
     ></line>
     <line
       class="left"
       v-bind="leftLine"
-      stroke="red"
+      :stroke="strokeColor"
       stroke-dasharray="3 2"
     ></line>
   </svg>

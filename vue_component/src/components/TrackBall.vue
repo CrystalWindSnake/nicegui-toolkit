@@ -5,7 +5,7 @@ import Panel from "./Panel.vue";
 import VisHover from "./VisHover.vue";
 
 import {
-  useHoverVisTarget,
+  useHoverElement,
   hookPageMouseEvent,
   useTypeNameTag,
   getComponentExpose,
@@ -17,6 +17,7 @@ import { type TSelectorConfig, TSelectedChangeEventArgs } from "./types";
 import { onMounted, ref, watch } from "vue";
 import { TCommandEvent, register as registerCommand } from "@/hooks/command";
 import { setGlobals } from "@/hooks/globals";
+import { updateHoverTarget } from "./VisHover";
 
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
@@ -57,7 +58,7 @@ onMounted(() => {
   tbUtils.createClientStyleLinkTag(props.styleUrl);
 });
 
-const { hoverElement } = useHoverVisTarget(props.selectorConfig);
+const { hoverElement } = useHoverElement(props.selectorConfig);
 
 const { typeNameTagStyles, typeName } = useTypeNameTag(
   props.selectorConfig,
@@ -120,10 +121,23 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
 
 // setGlobals
 setGlobals(selectedElement);
+
+function test_mouseenter() {
+  const target = document.querySelector(".layout-tool-id-1")! as HTMLElement;
+  updateHoverTarget(target);
+}
+
+function test_mouseout() {
+  updateHoverTarget(null);
+}
 </script>
 
 <template>
   <Teleport to="body">
+    <button @mouseenter="test_mouseenter" @mouseout="test_mouseout">
+      test
+    </button>
+
     <VisHover></VisHover>
 
     <Aiming
