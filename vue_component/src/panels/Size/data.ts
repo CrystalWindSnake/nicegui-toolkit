@@ -3,13 +3,22 @@ export const widthOptions = [
     value: "px",
   },
   {
+    value: "%",
+  },
+  {
     value: "rem",
   },
   {
     value: "em",
   },
   {
-    value: "%",
+    value: "ch",
+  },
+  {
+    value: "vw",
+  },
+  {
+    value: "vh",
   },
   {
     label: "-",
@@ -28,6 +37,15 @@ export const heightOptions = [
     value: "em",
   },
   {
+    value: "ch",
+  },
+  {
+    value: "vw",
+  },
+  {
+    value: "vh",
+  },
+  {
     value: "%",
   },
   {
@@ -41,13 +59,26 @@ export const minWidthOptions = [
     value: "px",
   },
   {
+    value: "%",
+  },
+  {
     value: "rem",
   },
   {
     value: "em",
   },
   {
-    value: "%",
+    value: "ch",
+  },
+  {
+    value: "vw",
+  },
+  {
+    value: "vh",
+  },
+  {
+    label: "-",
+    value: "auto",
   },
 ];
 
@@ -56,13 +87,22 @@ export const maxWidthOptions = [
     value: "px",
   },
   {
+    value: "%",
+  },
+  {
     value: "rem",
   },
   {
     value: "em",
   },
   {
-    value: "%",
+    value: "ch",
+  },
+  {
+    value: "vw",
+  },
+  {
+    value: "vh",
   },
   {
     label: "-",
@@ -75,13 +115,26 @@ export const minHeightOptions = [
     value: "px",
   },
   {
+    value: "%",
+  },
+  {
     value: "rem",
   },
   {
     value: "em",
   },
   {
-    value: "%",
+    value: "ch",
+  },
+  {
+    value: "vw",
+  },
+  {
+    value: "vh",
+  },
+  {
+    label: "-",
+    value: "auto",
   },
 ];
 
@@ -90,13 +143,22 @@ export const maxHeightOptions = [
     value: "px",
   },
   {
+    value: "%",
+  },
+  {
     value: "rem",
   },
   {
     value: "em",
   },
   {
-    value: "%",
+    value: "ch",
+  },
+  {
+    value: "vw",
+  },
+  {
+    value: "vh",
   },
   {
     label: "-",
