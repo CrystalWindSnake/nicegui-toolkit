@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MainPanel from "../commons/MainPanel.vue";
+import MainPanel from "@/panels/MainPanel.vue";
 
 import Aiming from "./Aiming.vue";
 import Panel from "./Panel.vue";

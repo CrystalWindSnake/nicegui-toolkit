@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createStyleRefModel } from "@/commons/utils";
+import { createStyleRefModel } from "@/panels/utils";
 import { computed } from "vue";
 import { getGlobals } from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
@@ -28,6 +28,11 @@ const alignConfigs = computed(() => {
         icon: "vertical_align_bottom",
         tooltipLabel: "bottom",
       },
+
+      stretch: {
+        icon: "settings_overscan",
+        tooltipLabel: "stretch",
+      },
     };
   }
 
@@ -46,6 +51,11 @@ const alignConfigs = computed(() => {
     end: {
       icon: "align_horizontal_right",
       tooltipLabel: "right",
+    },
+
+    stretch: {
+      icon: "settings_overscan",
+      tooltipLabel: "stretch",
     },
   };
 });
@@ -75,6 +85,7 @@ const alignConfigs = computed(() => {
               { value: 'flex-start', slot: 'start' },
               { value: 'center', slot: 'center' },
               { value: 'flex-end', slot: 'end' },
+              { value: 'stretch', slot: 'stretch' },
             ]"
           >
             <template v-slot:start>
@@ -97,6 +108,14 @@ const alignConfigs = computed(() => {
               <q-icon :name="alignConfigs.end.icon">
                 <q-tooltip style="z-index: 99999999">
                   {{ alignConfigs.end.tooltipLabel }}
+                </q-tooltip>
+              </q-icon>
+            </template>
+
+            <template v-slot:stretch>
+              <q-icon :name="alignConfigs.stretch.icon">
+                <q-tooltip style="z-index: 99999999">
+                  {{ alignConfigs.stretch.tooltipLabel }}
                 </q-tooltip>
               </q-icon>
             </template>

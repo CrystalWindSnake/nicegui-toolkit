@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import "./style.css";
 import Temp from "./Temp.vue";
+import App from "./App.vue";
 import "uno.css";
 import { Quasar } from "quasar";
 import quasarLang from "quasar/lang/zh-CN";

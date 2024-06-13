@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import Spacing from "./Spacing/Spacing.vue";
 import Layout from "./Layout/Layout.vue";
 import FlexItem from "./FlexItem/FlexItem.vue";
+import Size from "./Size/Size.vue";
 import { getGlobals } from "@/hooks/globals";
 import { bindSelectTarget } from "@/hooks/propsMapping";
 
@@ -40,6 +41,9 @@ const showPanels = computed(() => !!selectTarget.value);
 
           <q-separator />
           <Spacing></Spacing>
+
+          <q-separator />
+          <Size></Size>
         </q-list>
       </q-tab-panel>
     </q-tab-panels>

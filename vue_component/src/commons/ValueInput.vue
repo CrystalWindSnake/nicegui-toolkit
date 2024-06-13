@@ -1,43 +1,54 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { setExecutingFlag } from "@/hooks/globals";
+import { ref } from "vue";
+
+type TOptions = { label: string; value: string }[];
+type TNonValueOptions = {
+  options: string[];
+  defaultValue: string;
+};
+
+const props = defineProps<{
+  defaultValue: string;
+  options: TOptions;
+  nonValueOptions?: TNonValueOptions;
+}>();
 
 const inputRef = ref<HTMLElement | null>(null);
 const inputModel = ref<string | null>(null);
 
-const selectModel = ref("auto");
+const selectRef = ref<HTMLElement | null>(null);
+const selectModel = ref(props.defaultValue);
 
-const options = [
-  {
-    label: "rem",
-    value: "rem",
-  },
-  {
-    label: "em",
-    value: "em",
-  },
-  {
-    label: "-",
-    value: "auto",
-  },
-];
-
+// input events
 function onInputUpdate(e: Event) {
   inputModel.value = (e.target as HTMLInputElement).value;
   inputRef.value?.blur();
 
-  if (inputModel.value.length > 0 && selectModel.value === "auto") {
-    selectModel.value = options[0].value;
+  if (props.nonValueOptions) {
+    if (
+      inputModel.value.length > 0 &&
+      props.nonValueOptions.options.includes(selectModel.value)
+    ) {
+      selectModel.value = props.nonValueOptions.defaultValue;
+    }
   }
+}
+
+// select events
+function onPopupShow() {
+  selectRef.value.showPopup();
 }
 </script>
 
 <template>
+  <button @click="onPopupShow">open</button>
   <div class="cus-input">
     <q-input
       ref="inputRef"
       class="q-input"
       :model-value="inputModel"
-      placeholder="Auto"
+      :placeholder="props.defaultValue"
       square
       outlined
       dense
@@ -48,13 +59,16 @@ function onInputUpdate(e: Event) {
     >
       <template v-slot:append>
         <q-select
+          ref="selectRef"
           hide-dropdown-icon
           class="q-select"
           dense
           v-model="selectModel"
-          :options="options"
+          :options="props.options"
           color="teal"
           options-selected-class="text-deep-orange"
+          @popup-show="setExecutingFlag(true)"
+          @popup-hide="setExecutingFlag(false)"
         >
           <template v-slot:option="scope">
             <q-item v-bind="scope.itemProps">
@@ -82,7 +96,7 @@ function onInputUpdate(e: Event) {
 
 .cus-input {
   .q-input {
-    width: 8em;
+    width: 6em;
   }
 
   .q-select {
