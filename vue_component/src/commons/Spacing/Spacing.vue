@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import SliderBlock from './SliderBlock.vue';
+import { sendCommand } from "@/hooks/events";
 
 const config = {
   horizontalWidthPercent: 22,
@@ -56,94 +57,69 @@ const paddingRight = ref(0);
 const paddingUp = ref(0);
 const paddingBottom = ref(0);
 
+watch(marginLeft, v => {
+  sendCommand('style', 'set', { 'margin-left': v })
+})
+
 </script>
 
 <template>
-  <div class="box" style="
-        position: relative;
-        width: 100%;
-        height: 100%;
-      ">
+  <div class="relative w-full h-full">
 
     <!-- labels -->
-    <p class="label" :style="{ top: `${config.verticalHeightPercent}%`, left: `${config.horizontalWidthPercent}%` }"
-      style="margin: 0;padding: 0;">padding</p>
-
-    <p class="label" style="margin: 0;padding: 0;top: 0;left: 0;">
+    <p class="m-0 p-0 absolute pointer-events-none"
+      :style="{ top: `${config.verticalHeightPercent}%`, left: `${config.horizontalWidthPercent}%` }"
+      style="font-size: 0.6rem; color: whitesmoke;  z-index: 999;">
+      padding</p>
+    <p class="m-0 p-0 absolute" style="font-size: 0.6rem;color: whitesmoke;z-index: 999;">
       margin</p>
 
-
     <!-- margin -->
-    <SliderBlock class="box margin-left" direction="left" v-model="marginLeft" :clip-path="marginConfigs.left.clipPath"
-      :style="{ width: `${config.horizontalWidthPercent}%` }" style="
-          position: absolute;
-          height: 100%;
+    <SliderBlock class="absolute h-full" direction="left" style-name="margin-left"
+      :clip-path="marginConfigs.left.clipPath" :style="{ width: `${config.horizontalWidthPercent}%` }" style="
           background-color: #393939;
         "></SliderBlock>
 
-    <SliderBlock class="box margin-up" direction="up" v-model="marginUp" :clip-path="marginConfigs.up.clipPath"
-      :style="{ height: `${config.verticalHeightPercent}%` }" style="
-          position: absolute;
-          width: 100%;
+    <SliderBlock class="absolute w-full" direction="up" style-name="margin-top" v-model="marginUp"
+      :clip-path="marginConfigs.up.clipPath" :style="{ height: `${config.verticalHeightPercent}%` }" style="
           background-color: #424242;
         "></SliderBlock>
 
-    <SliderBlock class="box margin-right" direction="right" v-model="marginRight"
+    <SliderBlock class=" absolute h-full right-0" direction="right" style-name="margin-right" v-model="marginRight"
       :clip-path="marginConfigs.right.clipPath" :style="{ width: `${config.horizontalWidthPercent}%` }" style="
-          position: absolute;
-          right: 0;
-          height: 100%;
           background-color: #393939;
         "></SliderBlock>
 
-    <SliderBlock class="box margin-bottom" direction="bottom" v-model="marginBottom"
+    <SliderBlock class="absolute bottom-0 w-full" direction="bottom" style-name="margin-bottom" v-model="marginBottom"
       :clip-path="marginConfigs.bottom.clipPath" :style="{ height: `${config.verticalHeightPercent}%` }" style="
-          position: absolute;
-          bottom: 0;
-          width: 100%;
           background-color: #424242;
         "></SliderBlock>
 
     <!-- padding -->
-    <SliderBlock class="box padding-left" direction="left" v-model="paddingLeft" :clip-path="paddingConfigs.left.clipPath"
+    <SliderBlock class="absolute h-full" direction="left" style-name="padding-left" v-model="paddingLeft"
+      :clip-path="paddingConfigs.left.clipPath"
       :style="{ left: `${config.horizontalWidthPercent}%`, width: `${config.horizontalWidthPercent}%` }" style="
-          position: absolute;
-          height: 100%;
           background-color: #c84848;
         "></SliderBlock>
 
-    <SliderBlock class="box padding-up" direction="up" v-model="paddingUp" :clip-path="paddingConfigs.up.clipPath"
+    <SliderBlock class="absolute w-full" direction="up" style-name="padding-top" v-model="paddingUp"
+      :clip-path="paddingConfigs.up.clipPath"
       :style="{ top: `${config.verticalHeightPercent}%`, height: `${config.verticalHeightPercent}%` }" style="
-          position: absolute;
-          width: 100%;
           background-color: #c84848;
         "></SliderBlock>
 
-    <SliderBlock class="box padding-right" direction="right" v-model="paddingRight"
+    <SliderBlock class=" absolute h-full" direction="right" style-name="padding-right" v-model="paddingRight"
       :clip-path="paddingConfigs.right.clipPath"
       :style="{ right: `${config.horizontalWidthPercent}%`, width: `${config.horizontalWidthPercent}%` }" style="
-          position: absolute;
-          height: 100%;
           background-color: #c84848;
         "></SliderBlock>
 
-    <SliderBlock class="box padding-bottom" direction="bottom" v-model="paddingBottom"
+    <SliderBlock class=" absolute w-full" direction="bottom" style-name="padding-bottom" v-model="paddingBottom"
       :clip-path="paddingConfigs.bottom.clipPath"
       :style="{ bottom: `${config.verticalHeightPercent}%`, height: `${config.verticalHeightPercent}%` }" style="
-          position: absolute;
-          width: 100%;
           background-color: #c84848;
         "></SliderBlock>
   </div>
 </template>
 
-<style scoped lang="less">
-.label {
-  font-size: 0.6rem;
-  user-select: none;
-  color: whitesmoke;
-  z-index: 999;
-  position: absolute;
-  pointer-events: none;
-}
-</style>
+<style scoped lang="less"></style>
