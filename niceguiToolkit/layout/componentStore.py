@@ -188,7 +188,7 @@ class StoreManager:
     def build_store_from_shadow(self, client_id: str):
         if client_id in self.map:
             return self.map[client_id]
-        store = self.shadow_store_map[client_id]
+        store = self.try_get_shadow_store(client_id)
         self.map[client_id] = store
         del self.shadow_store_map[client_id]
         return store
