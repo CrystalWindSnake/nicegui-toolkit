@@ -1,10 +1,10 @@
-import { TCommnadEvent, sendCommand } from "@/hooks/events";
+import { TCommandEvent } from "@/hooks/events";
 import { getInitValue } from "@/hooks/propsMapping";
 import { computed } from "vue";
 
 export function createStyleRefModel(
   styleName: string,
-  extraCommandsFunc?: (value: any) => TCommnadEvent[]
+  extraCommandsFunc?: (value: any) => TCommandEvent[]
 ) {
   const initValue = getInitValue<string>(styleName);
 
@@ -13,14 +13,14 @@ export function createStyleRefModel(
       return initValue.value;
     },
     set: (value) => {
-      const defaultSetCommand: TCommnadEvent = {
+      const defaultSetCommand: TCommandEvent = {
         action: "style",
         commandType: "set",
         values: { [styleName]: value },
       };
       const extraCommandss = extraCommandsFunc ? extraCommandsFunc(value) : [];
 
-      sendCommand([defaultSetCommand, ...extraCommandss]);
+      // sendCommand([defaultSetCommand, ...extraCommandss]);
       initValue.value = value;
     },
   });
