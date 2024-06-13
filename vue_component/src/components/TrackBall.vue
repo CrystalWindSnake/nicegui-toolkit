@@ -47,8 +47,6 @@ function emitCommnad(options: TCommnadEvent[]) {
   if (!id) {
     throw new Error("not found selected element");
   }
-  console.log('emit("command"');
-
   emit("command", { id: id, options });
 }
 
