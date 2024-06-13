@@ -123,8 +123,6 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
 
 // setGlobals
 setGlobals(selectedElement);
-
-const executing = getExecutingFlag();
 </script>
 
 <template>
@@ -182,7 +180,7 @@ const executing = getExecutingFlag();
       style="z-index: 9999999"
     ></Aiming>
 
-    <Panel class="non-selectable" style="z-index: 9999999; width: 300px">
+    <Panel class="non-selectable" style="z-index: 9999999; width: 350px">
       <MainPanel></MainPanel>
       <template v-slot:footer>
         <slot name="footer"></slot>
@@ -196,22 +194,6 @@ const executing = getExecutingFlag();
     >
       {{ typeName }}
     </div>
-  </Teleport>
-
-  <Teleport to="#app">
-    <div
-      v-if="false"
-      class="vis-executing-mask"
-      style="
-        z-index: 9999900;
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background: #5d4141;
-      "
-    ></div>
   </Teleport>
 </template>
 

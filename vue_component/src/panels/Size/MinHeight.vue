@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SizeValueInput from "@/commons/SizeValueInput.vue";
-
 const nonValueOption = {
   label: "-",
   value: "auto",
@@ -10,12 +9,12 @@ const nonValueOption = {
 <template>
   <q-item dense>
     <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      >Width</q-item-section
+      >Min H</q-item-section
     >
     <q-item-section
       ><SizeValueInput
-        default-option-value="auto"
-        default-input-value=""
+        default-option-value="px"
+        default-input-value="0"
         :non-value-option="nonValueOption"
       ></SizeValueInput
     ></q-item-section>
