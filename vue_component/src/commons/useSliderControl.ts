@@ -1,3 +1,4 @@
+import { setExecutingFlag } from "@/hooks/globals";
 import { Ref, ref, watch } from "vue";
 
 export type TDirection = "up" | "right" | "bottom" | "left";
@@ -88,6 +89,7 @@ export function useSliderControl(
       "mousedown",
       (e) => {
         e.stopPropagation();
+        setExecutingFlag();
         document.querySelector("body")!.style.cursor = target.style.cursor;
 
         startPositions.x = e.x;
@@ -98,10 +100,18 @@ export function useSliderControl(
       { capture: true }
     );
 
-    document.addEventListener("mouseup", () => {
-      document.removeEventListener("mousemove", onMousemove);
-      document.querySelector("body")!.style.cursor = "default";
-    });
+    document.addEventListener(
+      "mouseup",
+      (e) => {
+        document.removeEventListener("mousemove", onMousemove);
+        document.querySelector("body")!.style.cursor = "default";
+
+        setExecutingFlag(false);
+
+        e.stopPropagation();
+      },
+      { capture: true }
+    );
   });
 
   return result;

@@ -1,4 +1,4 @@
-import { Ref } from "vue";
+import { Ref, ref } from "vue";
 
 const globalsObject = {
   selectTarget: null as Ref<HTMLElement | null> | null,
@@ -16,4 +16,15 @@ export function setGlobals(selectTarget: Ref<HTMLElement | null>) {
 
 export function getGlobals() {
   return globalsObject as TNotNull;
+}
+
+// target select mouse events
+let EXECUTING_FLAG = ref(false);
+
+export function setExecutingFlag(executing?: boolean) {
+  EXECUTING_FLAG.value = executing ?? true;
+}
+
+export function getExecutingFlag() {
+  return EXECUTING_FLAG;
 }
