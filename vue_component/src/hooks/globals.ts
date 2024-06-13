@@ -19,10 +19,10 @@ export function getGlobals() {
 }
 
 // target select mouse events
-let EXECUTING_FLAG = ref(false);
+let EXECUTING_FLAG = false;
 
 export function setExecutingFlag(executing?: boolean) {
-  EXECUTING_FLAG.value = executing ?? true;
+  EXECUTING_FLAG = executing ?? true;
 }
 
 export function getExecutingFlag() {

@@ -190,7 +190,17 @@ const executing = getExecutingFlag();
     </Panel>
 
     <div
-      v-if="executing"
+      class="vis-type-name fixed top-0 left-0 pointer-events-none shadow rounded p-1 bg-green-400"
+      :style="typeNameTagStyles"
+      style="z-index: 9999999"
+    >
+      {{ typeName }}
+    </div>
+  </Teleport>
+
+  <Teleport to="#app">
+    <div
+      v-if="false"
       class="vis-executing-mask"
       style="
         z-index: 9999900;
@@ -199,16 +209,9 @@ const executing = getExecutingFlag();
         position: fixed;
         top: 0;
         left: 0;
+        background: #5d4141;
       "
     ></div>
-
-    <div
-      class="vis-type-name fixed top-0 left-0 pointer-events-none shadow rounded p-1 bg-green-400"
-      :style="typeNameTagStyles"
-      style="z-index: 9999999"
-    >
-      {{ typeName }}
-    </div>
   </Teleport>
 </template>
 

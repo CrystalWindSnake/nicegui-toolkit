@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { setExecutingFlag } from "@/hooks/globals";
+import { getExecutingFlag, setExecutingFlag } from "@/hooks/globals";
 import { ref } from "vue";
 
 type TOptions = { label: string; value: string }[];
@@ -34,15 +34,9 @@ function onInputUpdate(e: Event) {
     }
   }
 }
-
-// select events
-function onPopupShow() {
-  selectRef.value.showPopup();
-}
 </script>
 
 <template>
-  <button @click="onPopupShow">open</button>
   <div class="cus-input">
     <q-input
       ref="inputRef"
