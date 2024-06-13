@@ -7,7 +7,15 @@ import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue({ template: { transformAssetUrls } }), Unocss({})],
+  plugins: [
+    vue({
+      script: {
+        defineModel: true,
+      },
+      template: { transformAssetUrls },
+    }),
+    Unocss({}),
+  ],
   define: {
     "process.env": {},
   },

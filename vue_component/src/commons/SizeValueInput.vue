@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ValueInput from "@/commons/ValueInput.vue";
-
-const defaultValue = "auto";
+import { useValueInput } from "@/commons/valueInput";
+import { computed, watch } from "vue";
 
 const options = [
   {
@@ -20,16 +20,31 @@ const options = [
 
 const nonValueOptions = {
   options: ["auto"],
-  defaultValue: "rem",
+  defaultValueOptionsIndex: 0,
 };
+
+const { inputValue, selectValue, model } = useValueInput(
+  options,
+  nonValueOptions,
+  "",
+  options.length - 1
+);
+
+const result = computed(() => {
+  if (selectValue.value === "auto") {
+    return "auto";
+  }
+
+  return `${inputValue.value}${selectValue.value}`;
+});
+
+watch(result, (result) => {
+  console.log(result);
+});
 </script>
 
 <template>
-  <ValueInput
-    :options="options"
-    :default-value="defaultValue"
-    :non-value-options="nonValueOptions"
-  ></ValueInput>
+  <ValueInput :model="model"></ValueInput>
 </template>
 
 <style scoped lang="less"></style>
