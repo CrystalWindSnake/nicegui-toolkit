@@ -16,7 +16,7 @@ export function bindSelectTarget(selectTarget: Ref<HTMLElement | null>) {
     const getter = buildRefGetter(target);
 
     refMapping.forEach((value, key) => {
-      value.value = getter.getStyle(key).value;
+      value.value = getter.getComputedStyle(key).value;
     });
   });
 }

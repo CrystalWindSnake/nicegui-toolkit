@@ -14,6 +14,10 @@ export function updateAimingTarget(target: HTMLElement | null) {
   selectTarget.value = target;
 }
 
+export function getSelectTarget() {
+  return readonly(selectTarget) as Readonly<Ref<HTMLElement | null>>;
+}
+
 export function useAiming() {
   const bounding = reactive(useElementBounding(selectTarget));
 

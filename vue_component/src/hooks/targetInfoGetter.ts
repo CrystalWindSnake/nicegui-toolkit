@@ -10,7 +10,7 @@ import {
 export function buildRefGetter(
   targetRef: MaybeRefOrGetter<HTMLElement | null>
 ) {
-  function getStyle(name: MaybeRefOrGetter<string>) {
+  function getComputedStyle(name: MaybeRefOrGetter<string>) {
     const result = computed(() => {
       const target = toValue(targetRef);
       if (target) {
@@ -25,7 +25,7 @@ export function buildRefGetter(
   }
 
   function getFlexBoxInfo(displayStyle?: Ref<string> | ComputedRef<string>) {
-    const displayModel = displayStyle ?? getStyle("display");
+    const displayModel = displayStyle ?? getComputedStyle("display");
 
     const result = computed(() => {
       const target = toValue(targetRef);
@@ -40,9 +40,9 @@ export function buildRefGetter(
 
       return {
         isFlex: displayModel.value === "flex",
-        direction: getStyle("flex-direction").value,
-        justifyContent: getStyle("justify-content").value,
-        alignItem: getStyle("align-items").value,
+        direction: getComputedStyle("flex-direction").value,
+        justifyContent: getComputedStyle("justify-content").value,
+        alignItem: getComputedStyle("align-items").value,
       };
     });
 
@@ -73,7 +73,7 @@ export function buildRefGetter(
   }
 
   return {
-    getStyle,
+    getComputedStyle,
     getFlexBoxInfo,
     getParentFlexBoxInfo,
   };
