@@ -16,11 +16,10 @@ const selectRef = ref<HTMLElement | null>(null);
 let lastInvaildInputValue: string | null = null;
 
 const initSelectValueItem = model.options.find(
-  (item) => item.value === model.initValue.select
+  (item) => item.value === model.unitNumber.unit.value
 )!;
 
-const inputValue = ref(model.initValue.input);
-const selectValue = ref(initSelectValueItem);
+const { inputValue, selectValue } = model.modelValueRefs;
 
 const selectDisplay = computed(
   () => selectValue.value.label ?? selectValue.value.value

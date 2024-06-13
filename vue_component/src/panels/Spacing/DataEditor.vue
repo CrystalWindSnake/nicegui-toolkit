@@ -31,10 +31,7 @@ const options = [
   },
 ];
 
-const valueInputModel = useValueInput(options, {
-  input: unitNumber.number.value.toString(),
-  select: "px",
-});
+const valueInputModel = useValueInput(options, unitNumber);
 
 watch(valueInputModel.inputValue, (value) => {
   if (value) {
@@ -45,7 +42,7 @@ watch(valueInputModel.inputValue, (value) => {
 });
 
 watch(valueInputModel.selectValue, (value) => {
-  unitNumber.unit.value = value;
+  unitNumber.unit.value = value.value;
 });
 
 const { number: sliderValue } = unitNumber;
@@ -55,7 +52,6 @@ const { number: sliderValue } = unitNumber;
   <div>
     <div class="row gap-2 items-center no-wrap">
       <q-icon name="home"></q-icon>
-      {{ unitNumber.result }}
       <q-slider :min="0" :max="200" v-model="sliderValue"></q-slider>
       <ValueInput :model="valueInputModel.model"></ValueInput>
     </div>

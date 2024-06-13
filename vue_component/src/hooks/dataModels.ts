@@ -12,6 +12,10 @@ export function useUnitNumber(
   const number = ref<number | null>(null);
   const unit = ref<string>("");
 
+  function number2string() {
+    return number.value?.toString() ?? "";
+  }
+
   if (nonValueUnits.includes(init)) {
     unit.value = init;
   } else {
@@ -26,10 +30,31 @@ export function useUnitNumber(
     number,
     unit,
     result,
+    number2string,
   };
 }
 
 export function useUnitNumberDataEditor(init: string) {
+  function resultDisplay(number: number | null, unit: string) {
+    if (number === null) {
+      return "0" + unit;
+    }
+
+    return `${number}${unit}`;
+  }
+
+  return useUnitNumber(init, [], resultDisplay);
+}
+
+type TValueInputOptions = {
+  value: string;
+  label?: string;
+}[];
+
+export function useUnitNumberValueInput(
+  init: string,
+  options: TValueInputOptions
+) {
   function resultDisplay(number: number | null, unit: string) {
     if (number === null) {
       return "0" + unit;

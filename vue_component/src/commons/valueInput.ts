@@ -1,11 +1,12 @@
-import { ref, readonly } from "vue";
+import { ref, readonly, watch, effect } from "vue";
+import { type TUnitNumber } from "@/hooks/dataModels";
 
 export type TValueInputReturn = ReturnType<typeof useValueInput>;
 
-type TOptions = {
+type TOption = {
   value: string;
   label?: string;
-}[];
+};
 
 type TNonValueOptions = string[];
 
@@ -15,17 +16,39 @@ type TInit = {
 };
 
 export function useValueInput(
-  options: TOptions,
-  initValue: TInit,
+  options: TOption[],
+  unitNumber: TUnitNumber,
   nonValueOptions?: TNonValueOptions,
   defaultValueOption?: string
 ) {
-  const inputValue = ref(initValue.input);
-  const selectValue = ref(initValue.select);
+  const initSelectValueItem = options.find(
+    (item) => item.value === unitNumber.unit.value
+  )!;
+
+  const inputValue = ref("");
+  const selectValue = ref(initSelectValueItem);
+
+  const modelValueRefs = {
+    inputValue,
+    selectValue,
+  };
+
+  effect(() => {
+    inputValue.value = unitNumber.number2string();
+    selectValue.value = { value: unitNumber.unit.value };
+  });
 
   function updateValue(input: string, select: string) {
     inputValue.value = input;
-    selectValue.value = select;
+    selectValue.value = { value: select };
+
+    if (input) {
+      unitNumber.number.value = Number.parseFloat(input);
+    } else {
+      unitNumber.number.value = null;
+    }
+
+    unitNumber.unit.value = select;
   }
 
   return {
@@ -33,7 +56,8 @@ export function useValueInput(
     selectValue: readonly(selectValue),
     model: {
       updateValue,
-      initValue,
+      unitNumber,
+      modelValueRefs,
       options,
       nonValueOptions,
       defaultValueOption,
