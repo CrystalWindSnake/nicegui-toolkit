@@ -2,7 +2,7 @@ const h = Vue.ref
 const H = Vue.watch
 const F = Vue.defineComponent
 const m = Vue.computed
-const V = Vue.openBlock
+const L = Vue.openBlock
 const O = Vue.createElementBlock
 const $ = Vue.normalizeStyle
 const b = Vue.createElementVNode
@@ -11,7 +11,7 @@ const v = Vue.createVNode
 const A = Vue.resolveComponent
 const S = Vue.withCtx
 const Z = Vue.createTextVNode
-const w = Vue.unref
+const _ = Vue.unref
 const oe = Vue.isRef
 const he = Vue.toRefs
 const ve = Vue.customRef
@@ -107,7 +107,7 @@ const Ee = /* @__PURE__ */ F({
     };
     function c() {
     }
-    return (a, u) => (V(), O("div", {
+    return (a, u) => (L(), O("div", {
       ref_key: "target",
       ref: r,
       class: "target",
@@ -164,7 +164,7 @@ const Se = (t, e) => {
         clipPath: `polygon(${e.horizontalWidthPercent * 2}% 0 ,${100 - e.horizontalWidthPercent * 2}% 0 ,${100 - e.horizontalWidthPercent}% 100%,${e.horizontalWidthPercent}% 100%)`
       }
     };
-    return (n, r) => (V(), O("div", ze, [
+    return (n, r) => (L(), O("div", ze, [
       b("p", {
         class: "m-0 p-0 absolute pointer-events-none",
         style: $([{ top: `${e.verticalHeightPercent}%`, left: `${e.horizontalWidthPercent}%` }, { "font-size": "0.6rem", color: "whitesmoke", "z-index": "999" }])
@@ -236,7 +236,7 @@ const Se = (t, e) => {
       se([{ action: "style", commandType: "set", values: { display: l } }]);
     }), (l, o) => {
       const n = A("q-tooltip"), r = A("q-icon"), s = A("q-btn-toggle");
-      return V(), O("div", qe, [
+      return L(), O("div", qe, [
         Ae,
         v(s, {
           size: "sm",
@@ -286,7 +286,7 @@ const Se = (t, e) => {
     const e = h("style");
     return (l, o) => {
       const n = A("q-tab"), r = A("q-tabs"), s = A("q-expansion-item"), i = A("q-separator"), c = A("q-list"), a = A("q-tab-panel"), u = A("q-tab-panels");
-      return V(), O("div", null, [
+      return L(), O("div", null, [
         v(r, {
           class: "text-teal",
           modelValue: e.value,
@@ -359,9 +359,9 @@ function B(t) {
   return me() ? (ye(t), !0) : !1;
 }
 function P(t) {
-  return typeof t == "function" ? t() : w(t);
+  return typeof t == "function" ? t() : _(t);
 }
-const Y = typeof window < "u" && typeof document < "u", Ve = Object.prototype.toString, Le = (t) => Ve.call(t) === "[object Object]", Me = () => {
+const Y = typeof window < "u" && typeof document < "u", Le = Object.prototype.toString, Ve = (t) => Le.call(t) === "[object Object]", Me = () => {
 };
 function Be(t, e = {}) {
   if (!oe(t))
@@ -425,10 +425,10 @@ function N(t) {
   const l = P(t);
   return (e = l == null ? void 0 : l.$el) != null ? e : l;
 }
-const L = Y ? window : void 0, Oe = Y ? window.document : void 0;
+const V = Y ? window : void 0, Oe = Y ? window.document : void 0;
 function E(...t) {
   let e, l, o, n;
-  if (typeof t[0] == "string" || Array.isArray(t[0]) ? ([l, o, n] = t, e = L) : [e, l, o, n] = t, !e)
+  if (typeof t[0] == "string" || Array.isArray(t[0]) ? ([l, o, n] = t, e = V) : [e, l, o, n] = t, !e)
     return Me;
   Array.isArray(l) || (l = [l]), Array.isArray(o) || (o = [o]);
   const r = [], s = () => {
@@ -438,7 +438,7 @@ function E(...t) {
     ([u, p]) => {
       if (s(), !u)
         return;
-      const d = Le(p) ? { ...p } : p;
+      const d = Ve(p) ? { ...p } : p;
       r.push(
         ...l.flatMap((f) => o.map((k) => i(u, f, k, d)))
       );
@@ -463,7 +463,7 @@ function De(t, e = {}) {
   const {
     immediate: l = !0,
     fpsLimit: o = void 0,
-    window: n = L
+    window: n = V
   } = e, r = h(!1), s = o ? 1e3 / o : null;
   let i = 0, c = null;
   function a(d) {
@@ -489,7 +489,7 @@ function De(t, e = {}) {
   };
 }
 function Ye(t, e = {}) {
-  const { window: l = L } = e, o = U(() => l && "matchMedia" in l && typeof l.matchMedia == "function");
+  const { window: l = V } = e, o = U(() => l && "matchMedia" in l && typeof l.matchMedia == "function");
   let n;
   const r = h(!1), s = (a) => {
     r.value = a.matches;
@@ -503,7 +503,7 @@ function Ye(t, e = {}) {
   }), r;
 }
 function Xe(t, e, l = {}) {
-  const { window: o = L, ...n } = l;
+  const { window: o = V, ...n } = l;
   let r;
   const s = U(() => o && "MutationObserver" in o), i = () => {
     r && (r.disconnect(), r = void 0);
@@ -533,48 +533,48 @@ function Ue(t, e = {}) {
     onStart: u,
     initialValue: p,
     axis: d = "both",
-    draggingElement: f = L,
+    draggingElement: f = V,
     containerElement: k,
     handle: z = t
   } = e, y = h(
     (l = P(p)) != null ? l : { x: 0, y: 0 }
-  ), x = h(), C = (_) => n ? n.includes(_.pointerType) : !0, q = (_) => {
-    P(r) && _.preventDefault(), P(s) && _.stopPropagation();
-  }, I = (_) => {
+  ), w = h(), C = (x) => n ? n.includes(x.pointerType) : !0, q = (x) => {
+    P(r) && x.preventDefault(), P(s) && x.stopPropagation();
+  }, I = (x) => {
     var D;
-    if (!C(_) || P(i) && _.target !== P(t))
+    if (!C(x) || P(i) && x.target !== P(t))
       return;
     const J = ((D = P(k)) != null ? D : P(t)).getBoundingClientRect(), K = {
-      x: _.clientX - J.left,
-      y: _.clientY - J.top
+      x: x.clientX - J.left,
+      y: x.clientY - J.top
     };
-    (u == null ? void 0 : u(K, _)) !== !1 && (x.value = K, q(_));
-  }, g = (_) => {
-    if (!C(_) || !x.value)
+    (u == null ? void 0 : u(K, x)) !== !1 && (w.value = K, q(x));
+  }, g = (x) => {
+    if (!C(x) || !w.value)
       return;
     let { x: D, y: R } = y.value;
-    (d === "x" || d === "both") && (D = _.clientX - x.value.x), (d === "y" || d === "both") && (R = _.clientY - x.value.y), y.value = {
+    (d === "x" || d === "both") && (D = x.clientX - w.value.x), (d === "y" || d === "both") && (R = x.clientY - w.value.y), y.value = {
       x: D,
       y: R
-    }, c == null || c(y.value, _), q(_);
-  }, M = (_) => {
-    C(_) && x.value && (x.value = void 0, a == null || a(y.value, _), q(_));
+    }, c == null || c(y.value, x), q(x);
+  }, M = (x) => {
+    C(x) && w.value && (w.value = void 0, a == null || a(y.value, x), q(x));
   };
   if (Y) {
-    const _ = { capture: (o = e.capture) != null ? o : !0 };
-    E(z, "pointerdown", I, _), E(f, "pointermove", g, _), E(f, "pointerup", M, _);
+    const x = { capture: (o = e.capture) != null ? o : !0 };
+    E(z, "pointerdown", I, x), E(f, "pointermove", g, x), E(f, "pointerup", M, x);
   }
   return {
     ...Be(y),
     position: y,
-    isDragging: m(() => !!x.value),
+    isDragging: m(() => !!w.value),
     style: m(
       () => `left:${y.value.x}px;top:${y.value.y}px;`
     )
   };
 }
 function Re(t, e, l = {}) {
-  const { window: o = L, ...n } = l;
+  const { window: o = V, ...n } = l;
   let r;
   const s = U(() => o && "ResizeObserver" in o), i = () => {
     r && (r.disconnect(), r = void 0);
@@ -656,7 +656,7 @@ function ue(t = {}) {
     touch: l = !0,
     resetOnTouchEnds: o = !1,
     initialValue: n = { x: 0, y: 0 },
-    window: r = L,
+    window: r = V,
     target: s = r,
     scroll: i = !0,
     eventFilter: c
@@ -675,12 +675,12 @@ function ue(t = {}) {
       return;
     const g = f(a);
     a instanceof MouseEvent && g && (u.value = g[0] + r.scrollX, p.value = g[1] + r.scrollY);
-  }, x = () => {
+  }, w = () => {
     u.value = n.x, p.value = n.y;
   }, C = c ? (g) => c(() => k(g), {}) : (g) => k(g), q = c ? (g) => c(() => z(g), {}) : (g) => z(g), I = c ? () => c(() => y(), {}) : () => y();
   if (s) {
     const g = { passive: !0 };
-    E(s, ["mousemove", "dragover"], C, g), l && e !== "movement" && (E(s, ["touchstart", "touchmove"], q, g), o && E(s, "touchend", x, g)), i && e === "page" && E(r, "scroll", I, { passive: !0 });
+    E(s, ["mousemove", "dragover"], C, g), l && e !== "movement" && (E(s, ["touchstart", "touchmove"], q, g), o && E(s, "touchend", w, g)), i && e === "page" && E(r, "scroll", I, { passive: !0 });
   }
   return {
     x: u,
@@ -690,7 +690,7 @@ function ue(t = {}) {
 }
 function G(t = {}) {
   const {
-    window: e = L,
+    window: e = V,
     initialWidth: l = Number.POSITIVE_INFINITY,
     initialHeight: o = Number.POSITIVE_INFINITY,
     listenOrientation: n = !0,
@@ -827,11 +827,11 @@ const Ke = ["viewBox"], Ze = /* @__PURE__ */ F({
       p7: d,
       p8: f
     } = Je(l, e.selectorConfig);
-    return (k, z) => (V(), O("svg", {
+    return (k, z) => (L(), O("svg", {
       class: "vis-aiming",
-      viewBox: w(o),
+      viewBox: _(o),
       version: "1.1",
-      style: $([{ position: "fixed", top: "0", left: "0", "pointer-events": "none" }, w(n)]),
+      style: $([{ position: "fixed", top: "0", left: "0", "pointer-events": "none" }, _(n)]),
       xmlns: "http://www.w3.org/2000/svg"
     }, [
       b("rect", {
@@ -839,28 +839,28 @@ const Ke = ["viewBox"], Ze = /* @__PURE__ */ F({
         fill: "none",
         width: "100%",
         height: "100%",
-        style: $(w(r))
+        style: $(_(r))
       }, null, 4),
       b("circle", W({
         stroke: "hotpink",
         fill: "white"
-      }, w(s), { r: "2" }), null, 16),
-      b("circle", W({ fill: "hotpink" }, w(i), { r: "2" }), null, 16),
+      }, _(s), { r: "2" }), null, 16),
+      b("circle", W({ fill: "hotpink" }, _(i), { r: "2" }), null, 16),
       b("circle", W({
         stroke: "hotpink",
         fill: "white"
-      }, w(c), { r: "2" }), null, 16),
-      b("circle", W({ fill: "hotpink" }, w(a), { r: "2" }), null, 16),
+      }, _(c), { r: "2" }), null, 16),
+      b("circle", W({ fill: "hotpink" }, _(a), { r: "2" }), null, 16),
       b("circle", W({
         stroke: "hotpink",
         fill: "white"
-      }, w(u), { r: "2" }), null, 16),
-      b("circle", W({ fill: "hotpink" }, w(p), { r: "2" }), null, 16),
+      }, _(u), { r: "2" }), null, 16),
+      b("circle", W({ fill: "hotpink" }, _(p), { r: "2" }), null, 16),
       b("circle", W({
         stroke: "hotpink",
         fill: "white"
-      }, w(d), { r: "2" }), null, 16),
-      b("circle", W({ fill: "hotpink" }, w(f), { r: "2" }), null, 16)
+      }, _(d), { r: "2" }), null, 16),
+      b("circle", W({ fill: "hotpink" }, _(f), { r: "2" }), null, 16)
     ], 12, Ke));
   }
 }), je = /* @__PURE__ */ F({
@@ -870,8 +870,8 @@ const Ke = ["viewBox"], Ze = /* @__PURE__ */ F({
       initialValue: { x: 40, y: 40 },
       preventDefault: !0
     });
-    return (o, n) => (V(), O("div", {
-      style: $([w(l), { position: "fixed" }]),
+    return (o, n) => (L(), O("div", {
+      style: $([_(l), { position: "fixed" }]),
       "layout-tool-panel": ""
     }, [
       b("div", {
@@ -1028,7 +1028,11 @@ function st(t, e) {
   }
   return { queryStyle: l, selectTarget: o };
 }
-const ct = ["viewBox"], ut = /* @__PURE__ */ F({
+function ct(t) {
+  var e = document.createElement("link");
+  e.setAttribute("rel", "stylesheet"), e.setAttribute("href", t), e.setAttribute("type", "text/css"), document.head.appendChild(e);
+}
+const at = ["viewBox"], pt = /* @__PURE__ */ F({
   __name: "TrackBall",
   props: {
     selectorConfig: {},
@@ -1037,34 +1041,36 @@ const ct = ["viewBox"], ut = /* @__PURE__ */ F({
   emits: ["hoverChange", "selectedChange", "command"],
   setup(t, { expose: e, emit: l }) {
     const o = t, n = l;
-    function r(x) {
+    function r(w) {
       const C = y.value;
       if (!C)
         throw new Error("No components are selected");
       const q = X(C, o.selectorConfig);
       if (!q)
         throw new Error("not found selected element");
-      n("command", { id: q, options: x }), console.log("emitCommnad:", x);
+      n("command", { id: q, options: w }), console.log("emitCommnad:", w);
     }
-    $e(r);
+    $e(r), Q(() => {
+      ct(o.styleUrl);
+    });
     const { viewBox: s, styles: i } = et(), { hoverElement: c, rectStyles: a, topLine: u, rightLine: p, bottomLine: d, leftLine: f } = nt(o.selectorConfig), { typeNameTagStyles: k, typeName: z } = tt(
       o.selectorConfig,
       c
     ), y = h(null);
-    return lt(c, y), H(c, (x) => {
-      if (x) {
-        const C = X(x, o.selectorConfig);
+    return lt(c, y), H(c, (w) => {
+      if (w) {
+        const C = X(w, o.selectorConfig);
         n("hoverChange", { id: C });
         return;
       }
       n("hoverChange", { id: null });
-    }), H(y, (x) => {
+    }), H(y, (w) => {
       const C = {
         isFlex: !1,
         direction: null
       };
-      if (x) {
-        const q = X(x, o.selectorConfig), I = rt(x, o.selectorConfig);
+      if (w) {
+        const q = X(w, o.selectorConfig), I = rt(w, o.selectorConfig);
         let g = {
           isFlex: !1,
           direction: null
@@ -1072,7 +1078,7 @@ const ct = ["viewBox"], ut = /* @__PURE__ */ F({
         I && (g = ee(I.dom, o.selectorConfig)), n("selectedChange", {
           id: q,
           parentBoxId: I !== null ? I.id : null,
-          flexInfo: ee(x, o.selectorConfig),
+          flexInfo: ee(w, o.selectorConfig),
           parentFlexInfo: g
         });
         return;
@@ -1083,40 +1089,37 @@ const ct = ["viewBox"], ut = /* @__PURE__ */ F({
         flexInfo: C,
         parentFlexInfo: C
       });
-    }), e(st(o.selectorConfig, y)), Q(() => {
-      var x = document.createElement("link");
-      x.setAttribute("rel", "stylesheet"), x.setAttribute("href", o.styleUrl), document.head.appendChild(x);
-    }), (x, C) => (V(), we(be, { to: "body" }, [
-      (V(), O("svg", {
+    }), e(st(o.selectorConfig, y)), (w, C) => (L(), we(be, { to: "body" }, [
+      (L(), O("svg", {
         class: "vis-hover",
-        viewBox: w(s),
+        viewBox: _(s),
         version: "1.1",
         xmlns: "http://www.w3.org/2000/svg",
-        style: $([{ position: "fixed", top: "0", left: "0", "pointer-events": "none", "z-index": "9999999" }, w(i)])
+        style: $([{ position: "fixed", top: "0", left: "0", "pointer-events": "none", "z-index": "9999999" }, _(i)])
       }, [
         b("rect", {
           fill: "none",
           stroke: "red",
           "stroke-width": "1",
-          style: $(w(a))
+          style: $(_(a))
         }, null, 4),
-        b("line", W({ class: "top" }, w(u), {
+        b("line", W({ class: "top" }, _(u), {
           stroke: "red",
           "stroke-dasharray": "3 2"
         }), null, 16),
-        b("line", W({ class: "right" }, w(p), {
+        b("line", W({ class: "right" }, _(p), {
           stroke: "red",
           "stroke-dasharray": "3 2"
         }), null, 16),
-        b("line", W({ class: "bottom" }, w(d), {
+        b("line", W({ class: "bottom" }, _(d), {
           stroke: "red",
           "stroke-dasharray": "3 2"
         }), null, 16),
-        b("line", W({ class: "left" }, w(f), {
+        b("line", W({ class: "left" }, _(f), {
           stroke: "red",
           "stroke-dasharray": "3 2"
         }), null, 16)
-      ], 12, ct)),
+      ], 12, at)),
       v(Ze, {
         "selected-element": y.value,
         selectorConfig: o.selectorConfig,
@@ -1133,11 +1136,11 @@ const ct = ["viewBox"], ut = /* @__PURE__ */ F({
       }),
       b("div", {
         class: "vis-type-name fixed top-0 left-0 pointer-events-none shadow rounded p-1 bg-green-400",
-        style: $([w(k), { "z-index": "9999999" }])
-      }, ne(w(z)), 5)
+        style: $([_(k), { "z-index": "9999999" }])
+      }, ne(_(z)), 5)
     ]));
   }
 });
 export {
-  ut as default
+  pt as default
 };

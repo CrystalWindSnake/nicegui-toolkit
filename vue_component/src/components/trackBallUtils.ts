@@ -1,4 +1,4 @@
-import { ComputedRef, Ref, computed, reactive } from 'vue';
+import { ComputedRef, Ref, computed, onMounted, reactive } from 'vue';
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 
 import {
@@ -297,4 +297,14 @@ export function getComponentExpose(config: TSelectorConfig, selectedElement: Ref
 
 
     return { queryStyle, selectTarget }
+}
+
+
+
+export function createClientStyleLinkTag(styleUrl:string) {
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('href',styleUrl);
+    link.setAttribute('type', 'text/css');
+    document.head.appendChild(link);
 }

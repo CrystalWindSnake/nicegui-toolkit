@@ -19,6 +19,8 @@ import { onMounted, ref, watch } from "vue";
 import { TCommnadEvent, registerEmit } from "@/hooks/events";
 
 const props = defineProps<{ selectorConfig: TSelectorConfig, styleUrl: string }>();
+
+// emits
 const emit = defineEmits<{
   (event: "hoverChange", args: { id: number | null }): void;
   (event: "selectedChange", args: TSelectedChangeEventArgs): void;
@@ -43,6 +45,12 @@ function emitCommnad(options: TCommnadEvent[]) {
 }
 
 registerEmit(emitCommnad)
+
+
+// onMounted
+onMounted(() => {
+  tbUtils.createClientStyleLinkTag(props.styleUrl)
+})
 
 const { viewBox, styles: svgStyles } = useSvgConfigs();
 
@@ -105,15 +113,8 @@ watch(selectedElement, (target) => {
   });
 });
 
+// Expose
 defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
-
-onMounted(() => {
-  var link = document.createElement('link');
-  link.setAttribute('rel', 'stylesheet');
-  link.setAttribute('href', props.styleUrl);
-  document.head.appendChild(link);
-})
-
 </script>
 
 <template>
