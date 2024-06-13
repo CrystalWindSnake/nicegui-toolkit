@@ -11,6 +11,7 @@ import {
 import * as utils from "./utils";
 import { getExecutingFlag } from "@/hooks/globals";
 import { updateHoverTarget } from "./VisHover";
+import { updateAimingTarget } from "./Aiming";
 
 export const useSvgConfigs = utils.useSvgConfigs;
 
@@ -101,8 +102,7 @@ function isColorPicker(target: HTMLElement) {
 }
 
 export function hookPageMouseEvent(
-  hoverElement: ComputedRef<HTMLElement | null>,
-  selectedElement: Ref<HTMLElement | null>
+  hoverElement: ComputedRef<HTMLElement | null>
 ) {
   useEventListener(
     document.querySelector("body"),
@@ -128,7 +128,7 @@ export function hookPageMouseEvent(
         return;
       }
 
-      selectedElement.value = hoverElement.value;
+      updateAimingTarget(hoverElement.value);
 
       e.stopPropagation();
     },

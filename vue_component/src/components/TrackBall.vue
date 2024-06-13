@@ -18,6 +18,7 @@ import { onMounted, ref, watch } from "vue";
 import { TCommandEvent, register as registerCommand } from "@/hooks/command";
 import { setGlobals } from "@/hooks/globals";
 import { updateHoverTarget } from "./VisHover";
+import { updateAimingTarget, useAiming } from "./Aiming";
 
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
@@ -65,9 +66,12 @@ const { typeNameTagStyles, typeName } = useTypeNameTag(
   hoverElement
 );
 
-const selectedElement = ref<HTMLElement | null>(null);
+// aiming
+const aimingModel = useAiming();
 
-hookPageMouseEvent(hoverElement, selectedElement);
+const selectedElement = aimingModel.selectTarget;
+
+hookPageMouseEvent(hoverElement);
 
 // events
 watch(hoverElement, (target) => {
@@ -130,21 +134,26 @@ function test_mouseenter() {
 function test_mouseout() {
   updateHoverTarget(null);
 }
+
+function test_click() {
+  const target = document.querySelector(".layout-tool-id-1")! as HTMLElement;
+  updateAimingTarget(target);
+}
 </script>
 
 <template>
   <Teleport to="body">
-    <button @mouseenter="test_mouseenter" @mouseout="test_mouseout">
+    <button
+      @mouseenter="test_mouseenter"
+      @mouseout="test_mouseout"
+      @click="test_click"
+    >
       test
     </button>
 
     <VisHover></VisHover>
 
-    <Aiming
-      :selected-element="selectedElement"
-      :selectorConfig="props.selectorConfig"
-      style="z-index: 9999999"
-    ></Aiming>
+    <Aiming :model="aimingModel" style="z-index: 9999999"></Aiming>
 
     <Panel class="non-selectable" style="z-index: 9999999; width: 350px">
       <MainPanel></MainPanel>
