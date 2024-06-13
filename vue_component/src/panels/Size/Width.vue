@@ -14,9 +14,15 @@ const options = widthOptions;
 const selectTarget = getSelectTarget();
 const getter = buildRefGetter(selectTarget);
 
-const width = getter.getComputedStyle("width");
+const width = getter.getStyle("width");
 watch(width, (value) => {
-  console.log("width:", value);
+  console.log("width:", value === null);
+
+  const dto = buildInputValueDto(value);
+
+  const { number, unit } = dto.splitTo();
+
+  
 });
 
 const valueInputModel = useValueInput(
