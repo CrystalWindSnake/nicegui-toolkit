@@ -3,6 +3,7 @@ import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
 
 import { widthOptions } from "./data";
+import { computed, watch } from "vue";
 
 const options = widthOptions;
 
@@ -15,6 +16,25 @@ const valueInputModel = useValueInput(
     defaultOptionValue: "auto",
   }
 );
+
+const widthValue = computed(() => {
+
+  const inputValue = valueInputModel.inputValue
+  const selectValue = valueInputModel.selectValue
+
+  if (selectValue.value==='auto') {
+    return 'auto'
+  }
+
+  return `${inputValue.value}${selectValue.value}`
+  
+})
+
+watch(widthValue, value => {
+  console.log(value);
+  
+})
+
 </script>
 
 <template>

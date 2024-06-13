@@ -59,6 +59,7 @@ function onInputUpdate(e: Event) {
           v-model="selectValue"
           :options="itemOptions"
           color="teal"
+          emit-value
           options-selected-class="text-deep-orange"
           @popup-show="setExecutingFlag(true)"
           @popup-hide="setExecutingFlag(false)"
