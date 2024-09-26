@@ -32,7 +32,9 @@ class Hooker:
             frame = inspect.currentframe()  # type: ignore
             assert frame is not None
             frame = _Helper.get_frame_with_file_name(frame.f_back, context)
-            assert frame is not None
+            # assert frame is not None
+            if frame is None:
+                return
             info = get_caller_info(frame)
 
             Hooker._mark_element(self, info)
@@ -65,6 +67,8 @@ class _Helper:
     def get_frame_with_file_name(frame, context: HookerContext):
         while frame is not None:
             file_path = Path(frame.f_code.co_filename)
+            if str(file_path).endswith("\\nicegui\\client.py"):
+                return None
 
             for folder in context.include_folders:
                 if _Helper.is_descendant_of(file_path, folder):
