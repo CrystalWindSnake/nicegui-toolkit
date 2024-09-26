@@ -6,7 +6,7 @@ from pathlib import Path
 from dataclasses import dataclass, field
 
 
-EXCLUDE_INJECT_NG_CLASSES = ["Query"]
+EXCLUDE_INJECT_NG_CLASSES = ["Query", "TrackBall"]
 
 
 @dataclass

@@ -192,7 +192,7 @@ export function getFlexInfo(
 }
 
 function queryTarget(id: number, config: TSelectorConfig) {
-  const selector = `.${config.idAttr}-${id}`;
+  const selector = `.${config.idPrefix}-${id}`;
   return document.querySelector(selector)!;
 }
 

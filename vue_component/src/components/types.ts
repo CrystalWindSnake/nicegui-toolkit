@@ -1,17 +1,17 @@
 export type TSelectorConfig = {
-    selectors: string
-    idAttr: string
-    elementTypeAttr: string
-}
+  selectors: string;
+  idPrefix: string;
+  elementTypePrefix: string;
+};
 
 type TFlexInfo = {
-    isFlex: boolean
-    direction: string | null
-}
+  isFlex: boolean;
+  direction: string | null;
+};
 
 export type TSelectedChangeEventArgs = {
-    id: number | null
-    parentBoxId: number | null
-    flexInfo: TFlexInfo
-    parentFlexInfo: TFlexInfo
-}
+  id: number | null;
+  parentBoxId: number | null;
+  flexInfo: TFlexInfo;
+  parentFlexInfo: TFlexInfo;
+};

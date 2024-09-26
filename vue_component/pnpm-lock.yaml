@@ -22,11 +22,11 @@ importers:
         version: 3.5.8(typescript@5.2.2)
     devDependencies:
       '@quasar/vite-plugin':
-        specifier: ^1.6.0
-        version: 1.6.0(@vitejs/plugin-vue@4.4.0(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2)))(quasar@2.17.0)(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))
+        specifier: ^1.7.0
+        version: 1.7.0(@vitejs/plugin-vue@4.6.2(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2)))(quasar@2.17.0)(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))
       '@vitejs/plugin-vue':
-        specifier: ^4.2.3
-        version: 4.4.0(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))
+        specifier: ^4.6.2
+        version: 4.6.2(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))
       less:
         specifier: ^4.2.0
         version: 4.2.0
@@ -385,13 +385,13 @@ packages:
   '@quasar/extras@1.16.8':
     resolution: {integrity: sha512-mNSwQ6wkIVoAemhYdLm9q/FVqLHmVONZgCYdLLeqpakKNsR0r/zHQnCngzdDaXI7veYEvE0uW1gJa1wdQsxXxA==}
 
-  '@quasar/vite-plugin@1.6.0':
-    resolution: {integrity: sha512-LmbV76G1CwWZbrEQhqyZpkRQTJyO3xpW55aXY1zWN+JhyUeG77CcMCEWteBVnJ6I6ehUPFDC9ONd2+WlwH6rNQ==}
-    engines: {node: '>=12'}
+  '@quasar/vite-plugin@1.7.0':
+    resolution: {integrity: sha512-ia4w1n4DuPYm92MQLPNpMqLJID1WGGRyVGxkVeg8V+V25Vh3p9QBo++iuXR4sW/bCmzzx66Ko6VStsr1zp90GQ==}
+    engines: {node: '>=18'}
     peerDependencies:
-      '@vitejs/plugin-vue': ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0-beta.0
-      quasar: ^2.8.0
-      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0-beta.0
+      '@vitejs/plugin-vue': ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+      quasar: ^2.16.0
+      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
       vue: ^3.0.0
 
   '@rollup/pluginutils@5.0.5':
@@ -563,11 +563,11 @@ packages:
     peerDependencies:
       vite: ^2.9.0 || ^3.0.0-0 || ^4.0.0
 
-  '@vitejs/plugin-vue@4.4.0':
-    resolution: {integrity: sha512-xdguqb+VUwiRpSg+nsc2HtbAUSGak25DXYvpQQi4RVU1Xq1uworyoH/md9Rfd8zMmPR/pSghr309QNcftUVseg==}
+  '@vitejs/plugin-vue@4.6.2':
+    resolution: {integrity: sha512-kqf7SGFoG+80aZG6Pf+gsZIVvGSCKE98JbiWqcCV9cThtg91Jav0yvYFC9Zb+jKetNGF6ZKeoaxgZfND21fWKw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^4.0.0
+      vite: ^4.0.0 || ^5.0.0
       vue: ^3.2.25
 
   '@vitest/expect@1.0.4':
@@ -1560,9 +1560,9 @@ snapshots:
 
   '@quasar/extras@1.16.8': {}
 
-  '@quasar/vite-plugin@1.6.0(@vitejs/plugin-vue@4.4.0(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2)))(quasar@2.17.0)(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))':
+  '@quasar/vite-plugin@1.7.0(@vitejs/plugin-vue@4.6.2(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2)))(quasar@2.17.0)(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))':
     dependencies:
-      '@vitejs/plugin-vue': 4.4.0(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))
+      '@vitejs/plugin-vue': 4.6.2(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))
       quasar: 2.17.0
       vite: 4.5.0(less@4.2.0)
       vue: 3.5.8(typescript@5.2.2)
@@ -1767,7 +1767,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  '@vitejs/plugin-vue@4.4.0(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))':
+  '@vitejs/plugin-vue@4.6.2(vite@4.5.0(less@4.2.0))(vue@3.5.8(typescript@5.2.2))':
     dependencies:
       vite: 4.5.0(less@4.2.0)
       vue: 3.5.8(typescript@5.2.2)

@@ -5,6 +5,10 @@ from niceguiToolkit.services.intercept_service import (
     HookerContext,
 )
 from niceguiToolkit.services.caller_service import get_caller_file
+from niceguiToolkit.libs.trackBall import TrackBall
+
+from nicegui import app as ng_app, Client as ng_Client
+
 # from niceguiToolkit.services.intercept_service import (
 #     intercept_element_constructor,
 #     InterceptConfig,
@@ -23,3 +27,10 @@ def inject_layout_tool(
 
     # config = InterceptConfig(current_project_path=Path(get_frame().f_code.co_filename))
     # intercept_element_constructor(config)
+
+    @ng_app.on_connect
+    async def on_connect(client: ng_Client):
+        await client.connected()
+
+        if not TrackBall.has_in_client():
+            TrackBall()

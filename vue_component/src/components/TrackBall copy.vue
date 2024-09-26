@@ -125,10 +125,32 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
 
 // setGlobals
 setGlobals(selectedElement);
+
+function test_mouseenter() {
+  const target = document.querySelector(".layout-tool-id-1")! as HTMLElement;
+  updateHoverTarget(target);
+}
+
+function test_mouseout() {
+  updateHoverTarget(null);
+}
+
+function test_click() {
+  const target = document.querySelector(".layout-tool-id-1")! as HTMLElement;
+  updateAimingTarget(target);
+}
 </script>
 
 <template>
   <Teleport to="body">
+    <button
+      @mouseenter="test_mouseenter"
+      @mouseout="test_mouseout"
+      @click="test_click"
+    >
+      test
+    </button>
+
     <VisHover></VisHover>
 
     <Aiming :model="aimingModel" style="z-index: 9999999"></Aiming>
