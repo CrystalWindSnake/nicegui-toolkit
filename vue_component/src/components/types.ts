@@ -15,3 +15,12 @@ export type TSelectedChangeEventArgs = {
   flexInfo: TFlexInfo;
   parentFlexInfo: TFlexInfo;
 };
+
+export type TAction = "style" | "props" | "classes";
+export type TCommandType = "set" | "del";
+
+export type TCommandEvent = {
+  action: TAction;
+  commandType: TCommandType;
+  values: Record<string, any>;
+};

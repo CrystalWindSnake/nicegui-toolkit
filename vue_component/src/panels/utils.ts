@@ -1,6 +1,7 @@
-import { sendCommand, TCommandEvent } from "@/hooks/command";
 import { getInitValue } from "@/hooks/propsMapping";
 import { computed } from "vue";
+import { TCommandEvent } from "@/components/types";
+import { sendCommand } from "@/hooks/globals";
 
 export function createStyleRefModel(
   styleName: string,

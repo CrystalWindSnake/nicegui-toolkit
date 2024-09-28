@@ -8,9 +8,12 @@ import { useTypeNameTag, getComponentExpose } from "./trackBallUtils";
 
 import * as tbUtils from "./trackBallUtils";
 import * as utils from "./utils";
-import { type TSelectorConfig, TSelectedChangeEventArgs } from "./types";
-import { onMounted, ref, watch } from "vue";
-import { TCommandEvent, register as registerCommand } from "@/hooks/command";
+import {
+  type TSelectorConfig,
+  TSelectedChangeEventArgs,
+  TCommandEvent,
+} from "./types";
+import { onMounted, watch } from "vue";
 import * as globals from "@/hooks/globals";
 import { useAiming } from "./Aiming";
 
@@ -43,17 +46,17 @@ function emitCommnad(commands: TCommandEvent[]) {
     throw new Error("not found selected element");
   }
   emit("command", { id: id, commands });
-  console.log("send cmd:", commands);
 }
-
-registerCommand(emitCommnad);
 
 // onMounted
 onMounted(() => {
   tbUtils.createClientStyleLinkTag(props.styleUrl);
 });
 
-globals.initGlobals(props.selectorConfig);
+globals.initGlobals({
+  selectorConfig: props.selectorConfig,
+  emitCommandFn: emitCommnad,
+});
 
 const { typeNameTagStyles, typeName } = useTypeNameTag(
   props.selectorConfig,

@@ -1,27 +1,10 @@
-import { TSelectorConfig } from "@/components/types";
-import { Ref, ref, ComputedRef, computed, reactive } from "vue";
-
-import {
-  useElementBounding,
-  useElementByPoint,
-  useEventListener,
-  useMouse,
-  useMutationObserver,
-  useWindowSize,
-} from "@vueuse/core";
-
-const globalsObject = {
-  selectTarget: null as Ref<HTMLElement | null> | null,
-};
-
-type TGlobalsObject = typeof globalsObject;
-
-type TNotNull = {
-  [name in keyof TGlobalsObject]: NonNullable<TGlobalsObject[name]>;
-};
+import { TSelectorConfig, TCommandEvent } from "@/components/types";
+import { ref, ComputedRef, computed } from "vue";
+import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
 
 export const SelectedTarget = ref<HTMLElement | null>(null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
+let emitCommandFn: (commands: TCommandEvent[]) => void;
 
 let EXECUTING_FLAG = false;
 
@@ -33,13 +16,23 @@ export function getExecutingFlag() {
   return EXECUTING_FLAG;
 }
 
-export function initGlobals(config: TSelectorConfig) {
-  const { hoverElement: _hoverElement } = useHoverElement(config);
+export function initGlobals(config: {
+  selectorConfig: TSelectorConfig;
+  emitCommandFn: (commands: TCommandEvent[]) => void;
+}) {
+  emitCommandFn = config.emitCommandFn;
 
-  // useAiming();
+  const { hoverElement: _hoverElement } = useHoverElement(
+    config.selectorConfig
+  );
+
   hookPageMouseEvent(_hoverElement);
 
   hoverElement = _hoverElement;
+}
+
+export function sendCommand(commands: TCommandEvent[]) {
+  emitCommandFn(commands);
 }
 
 function useHoverElement(config: TSelectorConfig) {
