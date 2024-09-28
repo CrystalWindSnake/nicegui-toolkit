@@ -2,11 +2,10 @@ from pathlib import Path
 from typing import Callable
 import nicegui as ng_vars
 from nicegui.element import Element
-from niceguiToolkit.utils.types import (
-    _TNiceguiComponentId,
-)
+from niceguiToolkit.record_tracker import RecordTracker
 
 from niceguiToolkit import consts
+
 
 # from niceguiToolkit.layout.events import (
 #     TrackBallSelectdEventArguments,
@@ -29,6 +28,8 @@ class TrackBall(Element, component="trackBall.js"):
         }
         self._props["styleUrl"] = _STYLE_URL
         self.props("data-ng-toolkit-trackball")
+
+        self.record_tracker = RecordTracker()
 
     @staticmethod
     def has_in_client():

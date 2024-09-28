@@ -1,17 +1,9 @@
-import { ComputedRef, Ref, computed, watch } from "vue";
+import { ComputedRef, Ref, computed } from "vue";
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 
-import {
-  useElementByPoint,
-  useEventListener,
-  useMouse,
-  useWindowSize,
-} from "@vueuse/core";
+import { useMouse, useWindowSize } from "@vueuse/core";
 
 import * as utils from "./utils";
-import { getExecutingFlag } from "@/hooks/globals";
-import { updateHoverTarget } from "./VisHover";
-import { updateAimingTarget } from "./Aiming";
 
 export function useTypeNameTag(
   config: TSelectorConfig,
@@ -62,87 +54,12 @@ export function useTypeNameTag(
   };
 }
 
-export function useHoverElement(config: TSelectorConfig) {
-  const { x, y } = useMouse({ type: "client" });
-  const { element } = useElementByPoint({ x, y });
-
-  const hoverElement = computed(() => {
-    if (element.value === null) {
-      return null;
-    }
-
-    const target = element.value.closest(config.selectors);
-    if (target === null) {
-      return null;
-    }
-
-    // if panel child
-    if (target.closest("[layout-tool-panel]")) {
-      return null;
-    }
-
-    return target as HTMLElement;
-  });
-
-  watch(hoverElement, (ele) => {
-    updateHoverTarget(ele);
-  });
-
-  return { hoverElement };
-}
-
 function isColorPicker(target: HTMLElement) {
   const picker = target.closest(".q-color-picker");
   if (!picker) {
     return false;
   }
   return true;
-}
-
-export function hookPageMouseEvent(
-  hoverElement: ComputedRef<HTMLElement | null>
-) {
-  useEventListener(
-    document.querySelector("body"),
-    "click",
-    (e) => {
-      if (getExecutingFlag()) {
-        return;
-      }
-
-      const target = e.target as HTMLElement;
-
-      // click layout tool
-      if (target.closest("[layout-tool-panel]")) {
-        return;
-      }
-
-      // click color picker
-      if (isColorPicker(target)) {
-        return;
-      }
-
-      if (hoverElement.value === null) {
-        return;
-      }
-
-      updateAimingTarget(hoverElement.value);
-
-      e.stopPropagation();
-    },
-    { capture: true }
-  );
-
-  useEventListener(
-    document.querySelector("body"),
-    "mouseenter",
-    (e) => {
-      if (hoverElement.value) {
-        e.stopPropagation();
-      }
-    },
-    { capture: true }
-  );
 }
 
 export function getBoxParentId(target: HTMLElement, config: TSelectorConfig) {

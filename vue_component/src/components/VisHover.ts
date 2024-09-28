@@ -4,24 +4,25 @@ import {
   useWindowSize,
 } from "@vueuse/core";
 import { computed, reactive, ref } from "vue";
+import * as globals from "@/hooks/globals";
 
 export type TModel = ReturnType<typeof useVisHover>;
 
-const hoverElement = ref<HTMLElement | null>(null);
+// const hoverElement = ref<HTMLElement | null>(null);
 
-export function updateHoverTarget(target: HTMLElement | null) {
-  hoverElement.value = target;
-}
+// export function updateHoverTarget(target: HTMLElement | null) {
+//   hoverElement.value = target;
+// }
 
 export function useVisHover() {
   const { width: winWidth, height: winHeight } = useWindowSize();
 
-  const bounding = reactive(useElementBounding(hoverElement));
+  const bounding = reactive(useElementBounding(globals.hoverElement));
 
   useEventListener("scroll", bounding.update, true);
 
   const rectStyles = computed(() => {
-    if (hoverElement.value) {
+    if (globals.hoverElement.value) {
       return {
         display: "block",
         width: bounding.width,
@@ -40,7 +41,7 @@ export function useVisHover() {
   });
 
   const topLine = computed(() => {
-    if (hoverElement.value) {
+    if (globals.hoverElement.value) {
       return {
         x1: 0,
         y1: bounding.top,
@@ -59,7 +60,7 @@ export function useVisHover() {
   });
 
   const rightLine = computed(() => {
-    if (hoverElement.value) {
+    if (globals.hoverElement.value) {
       return {
         x1: bounding.left + bounding.width,
         y1: 0,
@@ -78,7 +79,7 @@ export function useVisHover() {
   });
 
   const bottomLine = computed(() => {
-    if (hoverElement.value) {
+    if (globals.hoverElement.value) {
       return {
         x1: 0,
         y1: bounding.top + bounding.height,
@@ -97,7 +98,7 @@ export function useVisHover() {
   });
 
   const leftLine = computed(() => {
-    if (hoverElement.value) {
+    if (globals.hoverElement.value) {
       return {
         x1: bounding.left,
         y1: 0,
@@ -115,5 +116,5 @@ export function useVisHover() {
     };
   });
 
-  return { hoverElement, rectStyles, topLine, rightLine, bottomLine, leftLine };
+  return { rectStyles, topLine, rightLine, bottomLine, leftLine };
 }

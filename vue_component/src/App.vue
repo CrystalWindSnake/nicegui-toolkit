@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DataEditor from "@/panels/Spacing/DataEditor.vue";
+// import DataEditor from "@/panels/Spacing/DataEditor.vue";
 import App from "@/temps/App.vue";
 import { ref } from "vue";
 </script>

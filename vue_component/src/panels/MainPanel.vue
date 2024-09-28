@@ -4,12 +4,12 @@ import Spacing from "./Spacing/Spacing.vue";
 import Layout from "./Layout/Layout.vue";
 import FlexItem from "./FlexItem/FlexItem.vue";
 import Size from "./Size/Size.vue";
-import { getGlobals } from "@/hooks/globals";
+import * as globals from "@/hooks/globals";
 import { bindSelectTarget } from "@/hooks/propsMapping";
 
 const tab = ref("style");
 
-const selectTarget = getGlobals().selectTarget;
+const selectTarget = globals.SelectedTarget;
 
 bindSelectTarget(selectTarget);
 

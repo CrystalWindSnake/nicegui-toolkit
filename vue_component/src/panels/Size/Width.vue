@@ -5,13 +5,13 @@ import { useValueInput } from "@/commons/valueInput";
 import { widthOptions } from "./data";
 import { valueToStyleModel } from "./utils";
 
-import { getSelectTarget } from "@/components/Aiming";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
 import { watch } from "vue";
+import * as globals from "@/hooks/globals";
 
 const options = widthOptions;
 
-const selectTarget = getSelectTarget();
+const selectTarget = globals.SelectedTarget;
 const getter = buildRefGetter(selectTarget);
 
 const width = getter.getStyle("width");
@@ -21,8 +21,6 @@ watch(width, (value) => {
   const dto = buildInputValueDto(value);
 
   const { number, unit } = dto.splitTo();
-
-  
 });
 
 const valueInputModel = useValueInput(

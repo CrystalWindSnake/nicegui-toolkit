@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { createStyleRefModel } from "@/panels/utils";
 import { computed, Ref } from "vue";
-import { getGlobals } from "@/hooks/globals";
+import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
 
 import { useToggleButtons } from "@/commons/toggleButtons";
@@ -9,7 +9,7 @@ import ToggleButtons from "@/commons/ToggleButtons.vue";
 
 const displayModel = createStyleRefModel("display");
 
-const selectTarget = getGlobals().selectTarget;
+const selectTarget = globals.SelectedTarget;
 
 const getter = buildRefGetter(selectTarget);
 

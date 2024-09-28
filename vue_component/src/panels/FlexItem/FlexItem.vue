@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { createStyleRefModel } from "@/panels/utils";
 import { computed } from "vue";
-import { getGlobals } from "@/hooks/globals";
+import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
 
-const getter = buildRefGetter(getGlobals().selectTarget);
+const getter = buildRefGetter(globals.SelectedTarget);
 
 const parentFlexInfo = getter.getParentFlexBoxInfo();
 

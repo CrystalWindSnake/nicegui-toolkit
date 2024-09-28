@@ -4,21 +4,15 @@ import Aiming from "./Aiming.vue";
 import Panel from "./Panel.vue";
 import VisHover from "./VisHover.vue";
 
-import {
-  useHoverElement,
-  hookPageMouseEvent,
-  useTypeNameTag,
-  getComponentExpose,
-} from "./trackBallUtils";
+import { useTypeNameTag, getComponentExpose } from "./trackBallUtils";
 
 import * as tbUtils from "./trackBallUtils";
 import * as utils from "./utils";
 import { type TSelectorConfig, TSelectedChangeEventArgs } from "./types";
 import { onMounted, ref, watch } from "vue";
 import { TCommandEvent, register as registerCommand } from "@/hooks/command";
-import { setGlobals } from "@/hooks/globals";
-import { updateHoverTarget } from "./VisHover";
-import { updateAimingTarget, useAiming } from "./Aiming";
+import * as globals from "@/hooks/globals";
+import { useAiming } from "./Aiming";
 
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
@@ -39,7 +33,7 @@ const emit = defineEmits<{
 }>();
 
 function emitCommnad(commands: TCommandEvent[]) {
-  const target = selectedElement.value;
+  const target = globals.SelectedTarget.value;
   if (!target) {
     // throw new Error("No components are selected");
     return;
@@ -59,22 +53,18 @@ onMounted(() => {
   tbUtils.createClientStyleLinkTag(props.styleUrl);
 });
 
-const { hoverElement } = useHoverElement(props.selectorConfig);
+globals.initGlobals(props.selectorConfig);
 
 const { typeNameTagStyles, typeName } = useTypeNameTag(
   props.selectorConfig,
-  hoverElement
+  globals.hoverElement
 );
 
 // aiming
 const aimingModel = useAiming();
 
-const selectedElement = aimingModel.selectTarget;
-
-hookPageMouseEvent(hoverElement);
-
 // events
-watch(hoverElement, (target) => {
+watch(globals.hoverElement, (target) => {
   if (target) {
     const id = utils.getElementId(target, props.selectorConfig);
     emit("hoverChange", { id });
@@ -84,7 +74,7 @@ watch(hoverElement, (target) => {
   emit("hoverChange", { id: null });
 });
 
-watch(selectedElement, (target) => {
+watch(globals.SelectedTarget, (target) => {
   const flexInfo = {
     isFlex: false,
     direction: null,
@@ -121,10 +111,7 @@ watch(selectedElement, (target) => {
 });
 
 // Expose
-defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
-
-// setGlobals
-setGlobals(selectedElement);
+defineExpose(getComponentExpose(props.selectorConfig, globals.SelectedTarget));
 </script>
 
 <template>

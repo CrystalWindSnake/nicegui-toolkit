@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { setExecutingFlag } from "@/hooks/globals";
+import * as globals from "@/hooks/globals";
 import { ref } from "vue";
 import { type TModel } from "./valueInput";
 
@@ -61,8 +61,8 @@ function onInputUpdate(e: Event) {
           color="teal"
           emit-value
           options-selected-class="text-deep-orange"
-          @popup-show="setExecutingFlag(true)"
-          @popup-hide="setExecutingFlag(false)"
+          @popup-show="globals.setExecutingFlag(true)"
+          @popup-hide="globals.setExecutingFlag(false)"
           popup-content-style="z-index:9999999"
         >
           <template v-slot:option="scope">

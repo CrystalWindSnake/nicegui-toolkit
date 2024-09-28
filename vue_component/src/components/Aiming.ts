@@ -5,24 +5,27 @@ import {
   useEventListener,
   useMutationObserver,
 } from "@vueuse/core";
+import * as globals from "@/hooks/globals";
 
 export type TModel = ReturnType<typeof useAiming>;
 
-const selectTarget = ref<HTMLElement | null>(null);
+// const selectTarget = ref<HTMLElement | null>(null);
 
-export function updateAimingTarget(target: HTMLElement | null) {
-  selectTarget.value = target;
-}
+// export function updateAimingTarget(target: HTMLElement | null) {
+//   selectTarget.value = target;
+// }
 
-export function getSelectTarget() {
-  return readonly(selectTarget) as Readonly<Ref<HTMLElement | null>>;
-}
+// export function getSelectTarget() {
+//   return readonly(selectTarget) as Readonly<Ref<HTMLElement | null>>;
+// }
 
 export function useAiming() {
-  const bounding = reactive(useElementBounding(selectTarget));
+  const selectedTarget = globals.SelectedTarget;
+
+  const bounding = reactive(useElementBounding(selectedTarget));
 
   useMutationObserver(
-    selectTarget,
+    selectedTarget,
     () => {
       bounding.update();
     },
@@ -32,7 +35,7 @@ export function useAiming() {
   useEventListener("scroll", bounding.update, true);
 
   const rectStyles = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         display: "block",
         width: bounding.width,
@@ -51,7 +54,7 @@ export function useAiming() {
   });
 
   const p1 = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         cx: bounding.x,
         cy: bounding.y,
@@ -64,7 +67,7 @@ export function useAiming() {
   });
 
   const p2 = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         cx: bounding.x + bounding.width / 2,
         cy: bounding.y,
@@ -77,7 +80,7 @@ export function useAiming() {
   });
 
   const p3 = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         cx: bounding.x + bounding.width,
         cy: bounding.y,
@@ -90,7 +93,7 @@ export function useAiming() {
   });
 
   const p4 = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         cx: bounding.x + bounding.width,
         cy: bounding.y + bounding.height / 2,
@@ -103,7 +106,7 @@ export function useAiming() {
   });
 
   const p5 = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         cx: bounding.x + bounding.width,
         cy: bounding.y + bounding.height,
@@ -116,7 +119,7 @@ export function useAiming() {
   });
 
   const p6 = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         cx: bounding.x + bounding.width / 2,
         cy: bounding.y + bounding.height,
@@ -129,7 +132,7 @@ export function useAiming() {
   });
 
   const p7 = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         cx: bounding.x,
         cy: bounding.y + bounding.height,
@@ -142,7 +145,7 @@ export function useAiming() {
   });
 
   const p8 = computed(() => {
-    if (selectTarget.value) {
+    if (selectedTarget.value) {
       return {
         cx: bounding.x,
         cy: bounding.y + bounding.height / 2,
@@ -154,10 +157,11 @@ export function useAiming() {
     };
   });
 
-  const outTarget = readonly(selectTarget) as Readonly<Ref<HTMLElement | null>>;
+  const outTarget = readonly(selectedTarget) as Readonly<
+    Ref<HTMLElement | null>
+  >;
 
   return {
-    selectTarget: outTarget,
     rectStyles,
     p1,
     p2,
