@@ -3,6 +3,7 @@ import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
 import { minWidthOptions } from "./data";
 import { valueToStyleModel } from "./utils";
+import ItemLabel from "@/commons/ItemLabel.vue";
 
 const options = minWidthOptions;
 
@@ -21,8 +22,8 @@ valueToStyleModel(valueInputModel, "min-width", ["auto"]);
 <template>
   <q-item dense>
     <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      >Min W</q-item-section
-    >
+      ><ItemLabel key-id="min-width" label="Min W"
+    /></q-item-section>
     <q-item-section
       ><ValueInput :model="valueInputModel"></ValueInput
     ></q-item-section>

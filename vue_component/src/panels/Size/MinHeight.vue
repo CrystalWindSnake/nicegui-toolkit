@@ -3,6 +3,7 @@ import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
 import { minHeightOptions } from "./data";
 import { valueToStyleModel } from "./utils";
+import ItemLabel from "@/commons/ItemLabel.vue";
 
 const options = minHeightOptions;
 
@@ -21,8 +22,8 @@ valueToStyleModel(valueInputModel, "min-height", ["auto"]);
 <template>
   <q-item dense>
     <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      >Min H</q-item-section
-    >
+      ><ItemLabel key-id="min-height" label="Min H"
+    /></q-item-section>
     <q-item-section
       ><ValueInput :model="valueInputModel"></ValueInput
     ></q-item-section>

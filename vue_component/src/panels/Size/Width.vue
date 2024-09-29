@@ -9,6 +9,8 @@ import { buildRefGetter } from "@/hooks/targetInfoGetter";
 import { watch } from "vue";
 import * as globals from "@/hooks/globals";
 
+import ItemLabel from "@/commons/ItemLabel.vue";
+
 const options = widthOptions;
 
 const selectTarget = globals.SelectedTarget;
@@ -39,8 +41,8 @@ valueToStyleModel(valueInputModel, "width", ["auto"]);
 <template>
   <q-item dense>
     <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      >Width</q-item-section
-    >
+      ><ItemLabel key-id="width" label="Width"
+    /></q-item-section>
     <q-item-section
       ><ValueInput :model="valueInputModel"></ValueInput
     ></q-item-section>

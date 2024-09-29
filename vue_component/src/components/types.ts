@@ -4,6 +4,11 @@ export type TSelectorConfig = {
   elementTypePrefix: string;
 };
 
+export type TTargetContext = {
+  props: Record<string, any>;
+  styles: Record<string, any>;
+};
+
 type TFlexInfo = {
   isFlex: boolean;
   direction: string | null;

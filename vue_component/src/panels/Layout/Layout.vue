@@ -7,6 +7,8 @@ import { buildRefGetter } from "@/hooks/targetInfoGetter";
 import { useToggleButtons } from "@/commons/toggleButtons";
 import ToggleButtons from "@/commons/ToggleButtons.vue";
 
+import ItemLabel from "@/commons/ItemLabel.vue";
+
 const displayModel = createStyleRefModel("display");
 
 const selectTarget = globals.SelectedTarget;
@@ -111,7 +113,7 @@ const justifyToggleButtonsModel = useToggleButtons(justifyOpts, justifyModel);
       <q-list bordered>
         <!-- display -->
         <q-item class="items-center gap-2 px-3 py-2">
-          <span class="item-title text-capitalize">display </span>
+          <ItemLabel keyId="display" label="Display"></ItemLabel>
 
           <toggle-buttons
             padding="4px"

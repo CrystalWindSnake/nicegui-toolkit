@@ -3,6 +3,7 @@ import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
 import { maxHeightOptions } from "./data";
 import { valueToStyleModel } from "./utils";
+import ItemLabel from "@/commons/ItemLabel.vue";
 
 const options = maxHeightOptions;
 
@@ -22,8 +23,8 @@ valueToStyleModel(valueInputModel, "max-height", ["none"]);
 <template>
   <q-item dense>
     <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      >Max H</q-item-section
-    >
+      ><ItemLabel key-id="max-height" label="Max H"
+    /></q-item-section>
     <q-item-section
       ><ValueInput :model="valueInputModel"></ValueInput
     ></q-item-section>

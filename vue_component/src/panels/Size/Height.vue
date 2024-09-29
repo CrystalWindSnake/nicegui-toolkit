@@ -3,6 +3,7 @@ import ValueInput from "@/commons/ValueInput.vue";
 import { useValueInput } from "@/commons/valueInput";
 import { heightOptions } from "./data";
 import { valueToStyleModel } from "./utils";
+import ItemLabel from "@/commons/ItemLabel.vue";
 
 const options = heightOptions;
 
@@ -22,8 +23,8 @@ valueToStyleModel(valueInputModel, "height", ["auto"]);
 <template>
   <q-item dense>
     <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      >Height</q-item-section
-    >
+      ><ItemLabel key-id="height" label="Height"
+    /></q-item-section>
     <q-item-section
       ><ValueInput :model="valueInputModel"></ValueInput
     ></q-item-section>

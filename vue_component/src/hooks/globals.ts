@@ -1,11 +1,19 @@
 import { TSelectorConfig, TCommandEvent } from "@/components/types";
-import { ref, ComputedRef, computed } from "vue";
+import { ref, ComputedRef, computed, reactive } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
 
 export const SelectedTarget = ref<HTMLElement | null>(null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
-let emitCommandFn: (commands: TCommandEvent[]) => void;
 
+const targetElementContext: {
+  props: Map<string, any>;
+  styles: Map<string, any>;
+} = {
+  props: reactive(new Map()),
+  styles: reactive(new Map()),
+};
+
+let emitCommandFn: (commands: TCommandEvent[]) => void;
 let EXECUTING_FLAG = false;
 
 export function setExecutingFlag(executing?: boolean) {
@@ -33,6 +41,30 @@ export function initGlobals(config: {
 
 export function sendCommand(commands: TCommandEvent[]) {
   emitCommandFn(commands);
+}
+
+export function updateCurrentTargetContext(context: {
+  props?: Record<string, any>;
+  styles?: Record<string, any>;
+}) {
+  targetElementContext.props.clear();
+  targetElementContext.styles.clear();
+
+  if (context.props) {
+    for (const [key, value] of Object.entries(context.props)) {
+      targetElementContext.props.set(key, value);
+    }
+  }
+
+  if (context.styles) {
+    for (const [key, value] of Object.entries(context.styles)) {
+      targetElementContext.styles.set(key, value);
+    }
+  }
+}
+
+export function useHasChanged(key: string) {
+  return computed(() => targetElementContext.styles.has(key));
 }
 
 function useHoverElement(config: TSelectorConfig) {

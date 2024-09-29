@@ -10,15 +10,17 @@ import * as tbUtils from "./trackBallUtils";
 import * as utils from "./utils";
 import {
   type TSelectorConfig,
+  TTargetContext,
   TSelectedChangeEventArgs,
   TCommandEvent,
 } from "./types";
-import { nextTick, onMounted, watch } from "vue";
+import { onMounted, watch } from "vue";
 import * as globals from "@/hooks/globals";
 import { useAiming } from "./Aiming";
 
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
+  currentTargetContext: TTargetContext;
   resource_path?: string;
 }>();
 
@@ -57,6 +59,16 @@ globals.initGlobals({
   selectorConfig: props.selectorConfig,
   emitCommandFn: emitCommnad,
 });
+
+watch(
+  () => props.currentTargetContext,
+  () => {
+    globals.updateCurrentTargetContext(props.currentTargetContext);
+  },
+  {
+    immediate: true,
+  }
+);
 
 const { typeNameTagStyles, typeName } = useTypeNameTag(
   props.selectorConfig,

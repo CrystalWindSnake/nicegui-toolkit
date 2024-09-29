@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest",
+    "only build": "vite build",
     "build": "vite build && python scripts/vue_build_file_tran.py",
     "preview": "vite preview"
   },
