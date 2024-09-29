@@ -1,9 +1,25 @@
-import { defineConfig } from "vite";
+import { defineConfig, Plugin } from "vite";
 import vue from "@vitejs/plugin-vue";
 import Unocss from "unocss/vite";
 import * as path from "path";
 
 import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
+
+function createIgnoreModulePlugin(ignoredModules: string[]): Plugin {
+  return {
+    name: "ignore-module-plugin",
+    resolveId(id) {
+      if (ignoredModules.includes(id)) {
+        return id;
+      }
+    },
+    load(id) {
+      if (ignoredModules.includes(id)) {
+        return "export default {}";
+      }
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,6 +31,7 @@ export default defineConfig({
       template: { transformAssetUrls },
     }),
     Unocss({}),
+    createIgnoreModulePlugin(["../../static/utils/resources.js"]),
   ],
   define: {
     "process.env": {},
