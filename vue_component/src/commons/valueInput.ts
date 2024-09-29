@@ -43,9 +43,6 @@ export function useValueInput(
     lastInvaildInputValue: inputValue.value,
   };
 
-  whenInputValueChanged(selectValue, inputValue, configs, cache);
-  whenSelectValueChanged(selectValue, inputValue, configs, cache);
-
   const selectItem = ref<TItemOption | null>(null);
 
   const selectDisplay = computed(() => {
@@ -66,11 +63,15 @@ export function useValueInput(
   });
 
   function updateInput(text: string) {
+    // @ts-ignore
     inputValue.value = text;
+    whenInputValueChanged(selectValue, inputValue, configs, cache);
   }
 
   function updateSelect(value: string) {
+    // @ts-ignore
     selectValue.value = value;
+    whenSelectValueChanged(selectValue, inputValue, configs, cache);
   }
 
   return {
@@ -96,48 +97,48 @@ function whenInputValueChanged(
   const { nonValueOptions, defaultOptionValue, optionValueIfnonValue } =
     configs ?? {};
 
-  watch(inputValue, (value) => {
-    if (value === null) {
-      return;
-    }
+  const value = inputValue.value;
 
-    if (
-      nonValueOptions &&
-      defaultOptionValue &&
-      value.length > 0 &&
-      selectValue.value &&
-      nonValueOptions.includes(selectValue.value)
-    ) {
-      // input : 10 ,select: auto -> select:rem
-      selectValue.value = defaultOptionValue;
-      // if (value.length > 0 && selectValue.value) {
-      //   if (nonValueOptions.includes(selectValue.value)) {
-      //     selectValue.value = defaultOptionValue;
-      //   } else if (optionValueIfnonValue) {
-      //     selectValue.value = optionValueIfnonValue;
-      //   }
-      // }
-    }
+  if (value === null) {
+    return;
+  }
 
-    if (
-      optionValueIfnonValue &&
-      nonValueOptions &&
-      !!value &&
-      selectValue.value &&
-      nonValueOptions.includes(selectValue.value)
-    ) {
-      selectValue.value = optionValueIfnonValue;
-    }
+  if (
+    nonValueOptions &&
+    defaultOptionValue &&
+    value.length > 0 &&
+    selectValue.value &&
+    nonValueOptions.includes(selectValue.value)
+  ) {
+    // input : 10 ,select: auto -> select:rem
+    selectValue.value = defaultOptionValue;
+    // if (value.length > 0 && selectValue.value) {
+    //   if (nonValueOptions.includes(selectValue.value)) {
+    //     selectValue.value = defaultOptionValue;
+    //   } else if (optionValueIfnonValue) {
+    //     selectValue.value = optionValueIfnonValue;
+    //   }
+    // }
+  }
 
-    // current: 10rem -> input value clear -> select value change to auto
-    if (!value && nonValueOptions) {
-      selectValue.value = nonValueOptions[0];
-    }
+  if (
+    optionValueIfnonValue &&
+    nonValueOptions &&
+    !!value &&
+    selectValue.value &&
+    nonValueOptions.includes(selectValue.value)
+  ) {
+    selectValue.value = optionValueIfnonValue;
+  }
 
-    if (!!value) {
-      cache.lastInvaildInputValue = value;
-    }
-  });
+  // current: 10rem -> input value clear -> select value change to auto
+  if (!value && nonValueOptions) {
+    selectValue.value = nonValueOptions[0];
+  }
+
+  if (!!value) {
+    cache.lastInvaildInputValue = value;
+  }
 }
 
 function whenSelectValueChanged(
@@ -149,18 +150,17 @@ function whenSelectValueChanged(
   }
 ) {
   const { nonValueOptions } = configs ?? {};
+  const value = selectValue.value;
 
-  watch(selectValue, (value) => {
-    if (value === null) {
-      return;
-    }
-    // input: 10,select:auto -> input : ''
-    if (nonValueOptions && nonValueOptions.includes(value)) {
-      inputValue.value = "";
+  if (value === null) {
+    return;
+  }
+  // input: 10,select:auto -> input : ''
+  if (nonValueOptions && nonValueOptions.includes(value)) {
+    inputValue.value = "";
 
-      // input:'',select: auto to rem -> input: '10'
-    } else if (!inputValue.value && cache.lastInvaildInputValue !== null) {
-      inputValue.value = cache.lastInvaildInputValue;
-    }
-  });
+    // input:'',select: auto to rem -> input: '10'
+  } else if (!inputValue.value && cache.lastInvaildInputValue !== null) {
+    inputValue.value = cache.lastInvaildInputValue;
+  }
 }

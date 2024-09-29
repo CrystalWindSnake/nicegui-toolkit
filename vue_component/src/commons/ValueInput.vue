@@ -20,6 +20,7 @@ const {
   inputPlaceholder,
   itemOptions,
   updateInput,
+  updateSelect,
 } = model;
 
 // input events
@@ -30,6 +31,11 @@ function onInputUpdate(e: Event) {
   updateInput((e.currentTarget as HTMLInputElement).value);
 
   inputRef.value?.blur();
+}
+
+// select events
+function updateSelectValue(value: string) {
+  updateSelect(value);
 }
 </script>
 
@@ -56,13 +62,14 @@ function onInputUpdate(e: Event) {
           class="q-select"
           dense
           options-cover
-          v-model="selectValue"
+          :model-value="selectValue"
           :options="itemOptions"
           color="teal"
           emit-value
           options-selected-class="text-deep-orange"
           @popup-show="globals.setExecutingFlag(true)"
           @popup-hide="globals.setExecutingFlag(false)"
+          @update:model-value="updateSelectValue"
           popup-content-style="z-index:9999999"
         >
           <template v-slot:option="scope">

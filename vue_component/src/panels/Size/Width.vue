@@ -6,7 +6,7 @@ import { widthOptions } from "./data";
 import { valueToStyleModel } from "./utils";
 
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
-import { watch } from "vue";
+import { toRef, watch } from "vue";
 import * as globals from "@/hooks/globals";
 
 import ItemLabel from "@/commons/ItemLabel.vue";
@@ -16,18 +16,21 @@ const options = widthOptions;
 const selectTarget = globals.SelectedTarget;
 const getter = buildRefGetter(selectTarget);
 
-const width = getter.getStyle("width");
-watch(width, (value) => {
-  console.log("width:", value === null);
+// const width = getter.getStyle("width");
+// watch(width, (value) => {
+//   console.log("width:", value === null);
 
-  const dto = buildInputValueDto(value);
+//   const dto = buildInputValueDto(value);
 
-  const { number, unit } = dto.splitTo();
-});
+//   const { number, unit } = dto.splitTo();
+// });
+
+const unit = toRef("auto");
+const widthValue = toRef(null);
 
 const valueInputModel = useValueInput(
   options,
-  { selectValue: "auto" },
+  { selectValue: unit, inputValue: widthValue },
   {
     nonValueOptions: ["auto"],
     optionValueIfnonValue: "px",
