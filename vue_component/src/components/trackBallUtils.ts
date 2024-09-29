@@ -131,13 +131,13 @@ export function getComponentExpose(
   return { queryStyle, selectTarget };
 }
 
-export function createClientStyleLinkTag(styleUrl?: string) {
-  if (!styleUrl) {
+export async function createClientStyleLinkTag(resource_path?: string) {
+  if (!resource_path) {
     return;
   }
-  var link = document.createElement("link");
-  link.setAttribute("rel", "stylesheet");
-  link.setAttribute("href", styleUrl);
-  link.setAttribute("type", "text/css");
-  document.head.appendChild(link);
+
+  // @ts-ignore
+  const { loadResource } = await import("../../static/utils/resources.js");
+  const path_prefix = (window as any).path_prefix;
+  await loadResource(path_prefix + `${resource_path}/trackBall.css`);
 }

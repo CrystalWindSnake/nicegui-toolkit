@@ -13,13 +13,13 @@ import {
   TSelectedChangeEventArgs,
   TCommandEvent,
 } from "./types";
-import { onMounted, watch } from "vue";
+import { nextTick, onMounted, watch } from "vue";
 import * as globals from "@/hooks/globals";
 import { useAiming } from "./Aiming";
 
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
-  styleUrl?: string;
+  resource_path?: string;
 }>();
 
 // emits
@@ -49,8 +49,8 @@ function emitCommnad(commands: TCommandEvent[]) {
 }
 
 // onMounted
-onMounted(() => {
-  tbUtils.createClientStyleLinkTag(props.styleUrl);
+onMounted(async () => {
+  await tbUtils.createClientStyleLinkTag(props.resource_path);
 });
 
 globals.initGlobals({

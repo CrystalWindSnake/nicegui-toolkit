@@ -4,8 +4,8 @@ import shutil
 
 
 
-EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'niceguiToolkit/libs'
-
+EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'niceguiToolkit/track_ball'
+CSS_DEST_DIR_ROOT =Path(__file__).parent.parent.parent / 'niceguiToolkit/track_ball/lib'
 DIST_ROOT = Path(__file__).parent.parent / 'dist'
 
 
@@ -58,7 +58,7 @@ def copy2styls(dist_file, dest_file):
     src = DIST_ROOT / dist_file
     if not src.exists():
         return
-    to_file = EX_DEST_DIR_ROOT / dest_file
+    to_file = CSS_DEST_DIR_ROOT / dest_file
 
     shutil.copy(src, to_file)
 

@@ -3,7 +3,7 @@ from typing import Callable
 import nicegui as ng_vars
 from nicegui.element import Element
 from niceguiToolkit.record_tracker import RecordTracker
-
+from niceguiToolkit import events
 from niceguiToolkit import consts
 
 
@@ -14,22 +14,64 @@ from niceguiToolkit import consts
 #     TrackBallCommandOptions,
 # )
 
-_STYLE_FILE = Path(__file__).parent / "trackBall.css"
-_STYLE_URL = "/ng-toolkit/trackball.style.css"
+_RESOURCE = Path(__file__).parent / "lib"
 
 
 class TrackBall(Element, component="trackBall.js"):
     def __init__(self) -> None:
         super().__init__()
+
+        self.add_resource(_RESOURCE)
+
         self._props["selectorConfig"] = {
             "selectors": consts.MARK_SELECTOR,
-            "idPrefix":consts.MARK_ID_PERFIX,
+            "idPrefix": consts.MARK_ID_PERFIX,
             "elementTypePrefix": consts.MARK_ELEMENT_TYPE_PERFIX,
         }
-        self._props["styleUrl"] = _STYLE_URL
+        # self._props["styleUrl"] = _STYLE_URL
         self.props("data-ng-toolkit-trackball")
 
         self.record_tracker = RecordTracker()
+
+        def on_command(e):
+            args = e.args
+            commands = [
+                events.TrackBallCommandOptions(**cmd) for cmd in args["commands"]
+            ]
+            arg = events.TrackBallCommandsEventArguments(
+                sender=self,
+                client=self.client,
+                id=args["id"],
+                commands=commands,
+            )
+
+            target = ng_vars.ui.context.client.elements[arg.id]
+
+            for command in arg.commands:
+                values = command.values
+                if command.commandType == "set":
+                    if command.action == "props":
+                        for key, value in values.items():
+                            target._props[key] = value
+                    elif command.action == "style":
+                        for key, value in values.items():
+                            target.style[key] = value
+                    else:
+                        raise ValueError(f"unknown action {command.action}")
+                elif command.commandType == "del":
+                    if command.action == "props":
+                        for key in values.keys():
+                            del target._props[key]
+                    elif command.action == "style":
+                        for key in values.keys():
+                            del target.style[key]
+                    else:
+                        raise ValueError(f"unknown action {command.action}")
+                else:
+                    raise ValueError(f"unknown commandType {command.commandType}")
+            target.update()
+
+        self.on("command", on_command)
 
     @staticmethod
     def has_in_client():

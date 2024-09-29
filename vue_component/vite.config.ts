@@ -41,7 +41,7 @@ export default defineConfig({
       // },
     },
     rollupOptions: {
-      external: ["vue"],
+      external: ["vue", "../../static/utils/resources.js"],
       output: {
         globals: {
           vue: "Vue",

@@ -1,11 +1,10 @@
-from pathlib import Path
 from typing import Literal
 from niceguiToolkit.services.intercept_service import (
     Hooker,
     HookerContext,
 )
 from niceguiToolkit.services.caller_service import get_caller_file
-from niceguiToolkit.libs.trackBall import TrackBall
+from niceguiToolkit.track_ball.trackBall import TrackBall
 
 from nicegui import app as ng_app, Client as ng_Client
 
