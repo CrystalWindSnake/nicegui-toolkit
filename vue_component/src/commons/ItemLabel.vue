@@ -8,7 +8,7 @@ const hasChanged = globals.useHasChanged(props.keyId);
 </script>
 
 <template>
-  <div>
+  <div class="w-[10ch] truncate">
     <span
       class="item-title text-capitalize"
       :class="{ 'bg-gray-100': hasChanged }"

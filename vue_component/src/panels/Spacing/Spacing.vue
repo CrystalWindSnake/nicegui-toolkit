@@ -70,12 +70,7 @@ const paddingFilter = (value: number) => value >= 0;
 </script>
 
 <template>
-  <q-expansion-item
-    expand-separator
-    label="Spacing(间距)"
-    header-class="text-red-1 bg-green-8"
-    expand-icon-class="text-red-1"
-  >
+  <a-collapse-item header="Spacing(间距)" key="spacing">
     <div class="relative w-full" style="height: 8rem">
       <!-- labels -->
       <p
@@ -134,7 +129,7 @@ const paddingFilter = (value: number) => value >= 0;
 
       <!-- padding -->
       <SliderBlock
-        class="absolute h-full bg-blue-grey-8"
+        class="absolute h-full bg-blue-500"
         direction="left"
         style-name="padding-left"
         :value-filter="paddingFilter"
@@ -146,7 +141,7 @@ const paddingFilter = (value: number) => value >= 0;
       ></SliderBlock>
 
       <SliderBlock
-        class="absolute w-full bg-blue-grey-8"
+        class="absolute w-full bg-blue-500"
         direction="up"
         style-name="padding-top"
         :value-filter="paddingFilter"
@@ -159,7 +154,7 @@ const paddingFilter = (value: number) => value >= 0;
       ></SliderBlock>
 
       <SliderBlock
-        class="absolute h-full bg-blue-grey-8"
+        class="absolute h-full bg-blue-500"
         direction="right"
         style-name="padding-right"
         :value-filter="paddingFilter"
@@ -171,7 +166,7 @@ const paddingFilter = (value: number) => value >= 0;
       ></SliderBlock>
 
       <SliderBlock
-        class="absolute w-full bg-blue-grey-8"
+        class="absolute w-full bg-blue-500"
         direction="bottom"
         style-name="padding-bottom"
         :value-filter="paddingFilter"
@@ -182,7 +177,7 @@ const paddingFilter = (value: number) => value >= 0;
         }"
       ></SliderBlock>
     </div>
-  </q-expansion-item>
+  </a-collapse-item>
 </template>
 
 <style scoped lang="less"></style>

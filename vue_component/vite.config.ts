@@ -4,6 +4,7 @@ import Unocss from "unocss/vite";
 import * as path from "path";
 
 import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
+import { vitePluginForArco } from "@arco-plugins/vite-vue";
 
 function createIgnoreModulePlugin(ignoredModules: string[]): Plugin {
   return {
@@ -28,7 +29,10 @@ export default defineConfig({
       script: {
         defineModel: true,
       },
-      template: { transformAssetUrls },
+      // template: { transformAssetUrls },
+    }),
+    vitePluginForArco({
+      style: "css",
     }),
     Unocss({}),
     createIgnoreModulePlugin(["../../static/utils/resources.js"]),

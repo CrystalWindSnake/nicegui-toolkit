@@ -11,7 +11,6 @@ const props = defineProps<{
 const model = props.model;
 
 const inputRef = ref<HTMLElement | null>(null);
-const selectRef = ref<HTMLElement | null>(null);
 
 const {
   inputValue,
@@ -34,13 +33,47 @@ function onInputUpdate(e: Event) {
 }
 
 // select events
-function updateSelectValue(value: string) {
+function updateSelectValue(value: any) {
   updateSelect(value);
 }
 </script>
 
 <template>
   <div class="cus-input">
+    <a-input
+      ref="inputRef"
+      class="w-[8em]"
+      :model-value="inputValue"
+      :placeholder="inputPlaceholder"
+      @blur="onInputUpdate"
+      @press-enter="onInputUpdate"
+    >
+    </a-input>
+
+    <!-- .
+ 
+@change="updateSelectValue"
+-->
+
+    <a-select
+      class="w-[6em]"
+      :model-value="selectValue"
+      placeholder="Please select ..."
+      popup-container="[layout-tool-panel]"
+      style="z-index: 999999"
+      @change="updateSelectValue"
+      @popup-visible-change="(v) => globals.setExecutingFlag(v)"
+    >
+      <a-option
+        v-for="item in itemOptions"
+        :key="item.value"
+        :value="item.value"
+        :label="item.value"
+      ></a-option>
+    </a-select>
+  </div>
+
+  <!-- <div v-if="false" class="cus-input">
     <q-input
       ref="inputRef"
       class="q-input"
@@ -85,7 +118,7 @@ function updateSelectValue(value: string) {
         </q-select>
       </template>
     </q-input>
-  </div>
+  </div> -->
 </template>
 
 <style scoped lang="less">

@@ -12,7 +12,7 @@ export type TModel = ReturnType<typeof useToggleButtons>;
 
 export function useToggleButtons(
   options: MaybeRef<TOption[]>,
-  value?: MaybeRef<string | null>
+  value?: MaybeRef<string | undefined>
 ) {
   const resultValue = makeRef(value);
 

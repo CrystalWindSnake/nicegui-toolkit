@@ -9,7 +9,28 @@ import MinHeight from "./MinHeight.vue";
 </script>
 
 <template>
-  <q-expansion-item
+  <a-collapse-item header="Size(大小)" key="size">
+    <a-list :gridProps="{ gutter: 0, span: 24 }" :bordered="true">
+      <a-list-item>
+        <a-list>
+          <Width></Width>
+          <!-- <MinWidth></MinWidth>
+          <MaxWidth></MaxWidth> -->
+        </a-list>
+      </a-list-item>
+
+      <!-- <a-list-item>
+        <a-list>
+          <Height></Height>
+          <MinHeight></MinHeight>
+          <MaxHeight></MaxHeight>
+        </a-list>
+      </a-list-item> -->
+    </a-list>
+  </a-collapse-item>
+
+  <!-- <q-expansion-item
+    v-if="false"
     expand-separator
     label="Size(大小)"
     header-class="text-red-1 bg-green-8"
@@ -33,7 +54,7 @@ import MinHeight from "./MinHeight.vue";
         </q-item>
       </q-list>
     </div>
-  </q-expansion-item>
+  </q-expansion-item> -->
 </template>
 
 <style scoped lang="less">

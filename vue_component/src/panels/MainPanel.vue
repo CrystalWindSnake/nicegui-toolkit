@@ -7,8 +7,6 @@ import Size from "./Size/Size.vue";
 import * as globals from "@/hooks/globals";
 import { bindSelectTarget } from "@/hooks/propsMapping";
 
-const tab = ref("style");
-
 const selectTarget = globals.SelectedTarget;
 
 bindSelectTarget(selectTarget);
@@ -18,12 +16,28 @@ const showPanels = computed(() => !!selectTarget.value);
 
 <template>
   <div>
-    <q-tabs class="bg-secondary-5" v-model="tab" :align="`left`" dense no-caps>
+    <a-tabs :hide-content="!showPanels">
+      <a-tab-pane key="style" title="style">
+        <a-collapse>
+          <FlexItem></FlexItem>
+
+          <Layout></Layout>
+
+          <Spacing></Spacing>
+
+          <Size></Size>
+        </a-collapse>
+      </a-tab-pane>
+
+      <a-tab-pane key="cusStyle" title="cus style"> </a-tab-pane>
+    </a-tabs>
+
+    <!-- <q-tabs class="bg-secondary-5" v-model="tab" :align="`left`" dense no-caps>
       <q-tab name="style" label="style" />
       <q-tab name="cusStyle" label="cus style" />
-    </q-tabs>
+    </q-tabs> -->
 
-    <q-tab-panels
+    <!-- <q-tab-panels
       v-show="showPanels"
       v-model="tab"
       keep-alive
@@ -46,7 +60,7 @@ const showPanels = computed(() => !!selectTarget.value);
           <Size></Size>
         </q-list>
       </q-tab-panel>
-    </q-tab-panels>
+    </q-tab-panels> -->
   </div>
 </template>
 

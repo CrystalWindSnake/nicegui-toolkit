@@ -153,4 +153,8 @@ defineExpose(getComponentExpose(props.selectorConfig, globals.SelectedTarget));
   </Teleport>
 </template>
 
-<style scoped></style>
+<style>
+.arco-collapse-item-content {
+  padding: 0;
+}
+</style>

@@ -1,5 +1,5 @@
 import { makeRef } from "@/hooks/utils";
-import { MaybeRef, ref, computed, Ref, watch } from "vue";
+import { MaybeRef, ref, computed, Ref } from "vue";
 
 type TItemOption = { label: string; value: string };
 type TOption = string | TItemOption;
@@ -17,8 +17,8 @@ type TConfigs =
 export function useValueInput(
   options: TOption[],
   values?: {
-    inputValue?: MaybeRef<string | null>;
-    selectValue?: MaybeRef<string | null>;
+    inputValue?: MaybeRef<string | undefined>;
+    selectValue?: MaybeRef<string | undefined>;
   },
   configs?: TConfigs
 ) {
@@ -36,8 +36,8 @@ export function useValueInput(
     return itemOptions.find((v) => v.value === value);
   }
 
-  const inputValue = makeRef(values.inputValue ?? null);
-  const selectValue = makeRef(values.selectValue ?? null);
+  const inputValue = makeRef(values.inputValue ?? undefined);
+  const selectValue = makeRef(values.selectValue ?? undefined);
 
   const cache = {
     lastInvaildInputValue: inputValue.value,
@@ -87,11 +87,11 @@ export function useValueInput(
 }
 
 function whenInputValueChanged(
-  selectValue: Ref<string | null>,
-  inputValue: Ref<string | null>,
+  selectValue: Ref<string | undefined>,
+  inputValue: Ref<string | undefined>,
   configs: TConfigs,
   cache: {
-    lastInvaildInputValue: string | null;
+    lastInvaildInputValue: string | undefined;
   }
 ) {
   const { nonValueOptions, defaultOptionValue, optionValueIfnonValue } =
@@ -99,7 +99,7 @@ function whenInputValueChanged(
 
   const value = inputValue.value;
 
-  if (value === null) {
+  if (!value) {
     return;
   }
 
@@ -142,22 +142,22 @@ function whenInputValueChanged(
 }
 
 function whenSelectValueChanged(
-  selectValue: Ref<string | null>,
-  inputValue: Ref<string | null>,
+  selectValue: Ref<string | undefined>,
+  inputValue: Ref<string | undefined>,
   configs: TConfigs,
   cache: {
-    lastInvaildInputValue: string | null;
+    lastInvaildInputValue: string | undefined;
   }
 ) {
   const { nonValueOptions } = configs ?? {};
   const value = selectValue.value;
 
-  if (value === null) {
+  if (!value) {
     return;
   }
   // input: 10,select:auto -> input : ''
   if (nonValueOptions && nonValueOptions.includes(value)) {
-    inputValue.value = "";
+    inputValue.value = undefined;
 
     // input:'',select: auto to rem -> input: '10'
   } else if (!inputValue.value && cache.lastInvaildInputValue !== null) {

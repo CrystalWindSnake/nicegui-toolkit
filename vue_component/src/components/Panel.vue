@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useDraggable } from "@vueuse/core";
-
-// const props = defineProps<{}>();
+import { IconBug } from "@arco-design/web-vue/es/icon";
 
 const el = ref<HTMLElement | null>(null);
 const { style } = useDraggable(el, {
@@ -15,11 +14,13 @@ const { style } = useDraggable(el, {
   <div :style="style" style="position: fixed" layout-tool-panel>
     <div
       ref="el"
-      class="cursor-move bg-secondary row items-center gap-2 text-cyan-1 text-h6 text-weight-bolder px-2"
+      class="cursor-move bg-[#EDF8BB] row items-center gap-2 text-cyan-500 text-xl px-2"
       style="width: 100%; top: 0; left: 0; z-index: 999; height: 2rem"
     >
-      <q-icon name="gps_fixed"></q-icon>
-      <span>toolkit</span>
+      <a-space class="h-full">
+        <icon-bug size="24"></icon-bug>
+        <span class="font-bold">toolkit</span>
+      </a-space>
     </div>
     <slot></slot>
     <slot name="footer"></slot>

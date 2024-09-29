@@ -62,68 +62,71 @@ const alignConfigs = computed(() => {
 </script>
 
 <template>
-  <q-expansion-item
+  <a-collapse-item
     v-if="parentFlexInfo.isFlex"
-    expand-separator
-    label="FlexItem(Flex子元素)"
-    header-class="text-red-1 bg-green-8"
-    expand-icon-class="text-red-1"
+    header="FlexItem(Flex子元素)"
+    key="flex-item"
   >
-    <div class="col no-wrap">
-      <q-list bordered>
-        <!-- align -->
-        <q-item class="items-center gap-2 px-3 py-2">
-          <span class="item-title text-left text-caption text-capitalize">{{
-            alignConfigs.title
-          }}</span>
-          <q-btn-toggle
-            v-model="alignModel"
-            padding="8px"
-            size="sm"
-            toggle-color="primary"
-            :options="[
-              { value: 'flex-start', slot: 'start' },
-              { value: 'center', slot: 'center' },
-              { value: 'flex-end', slot: 'end' },
-              { value: 'stretch', slot: 'stretch' },
-            ]"
-          >
-            <template v-slot:start>
-              <q-icon :name="alignConfigs.start.icon">
-                <q-tooltip style="z-index: 99999999">
-                  {{ alignConfigs.start.tooltipLabel }}
-                </q-tooltip>
-              </q-icon>
-            </template>
+    <div class="col no-wrap outline">
+      <!-- align -->
 
-            <template v-slot:center>
-              <q-icon :name="alignConfigs.center.icon">
-                <q-tooltip style="z-index: 99999999">
-                  {{ alignConfigs.center.tooltipLabel }}
-                </q-tooltip>
-              </q-icon>
-            </template>
+      <span class="item-title text-left text-caption text-capitalize">{{
+        alignConfigs.title
+      }}</span>
 
-            <template v-slot:end>
-              <q-icon :name="alignConfigs.end.icon">
-                <q-tooltip style="z-index: 99999999">
-                  {{ alignConfigs.end.tooltipLabel }}
-                </q-tooltip>
-              </q-icon>
-            </template>
+      <a-radio-group type="button" v-model="alignModel">
+        <a-radio value="flex-start">flex-start</a-radio>
+        <a-radio value="center">center</a-radio>
+        <a-radio value="flex-end">flex-end</a-radio>
+        <a-radio value="stretch">stretch</a-radio>
+      </a-radio-group>
 
-            <template v-slot:stretch>
-              <q-icon :name="alignConfigs.stretch.icon">
-                <q-tooltip style="z-index: 99999999">
-                  {{ alignConfigs.stretch.tooltipLabel }}
-                </q-tooltip>
-              </q-icon>
-            </template>
-          </q-btn-toggle>
-        </q-item>
-      </q-list>
+      <!-- <q-btn-toggle
+        v-model="alignModel"
+        padding="8px"
+        size="sm"
+        toggle-color="primary"
+        :options="[
+          { value: 'flex-start', slot: 'start' },
+          { value: 'center', slot: 'center' },
+          { value: 'flex-end', slot: 'end' },
+          { value: 'stretch', slot: 'stretch' },
+        ]"
+      >
+        <template v-slot:start>
+          <q-icon :name="alignConfigs.start.icon">
+            <q-tooltip style="z-index: 99999999">
+              {{ alignConfigs.start.tooltipLabel }}
+            </q-tooltip>
+          </q-icon>
+        </template>
+
+        <template v-slot:center>
+          <q-icon :name="alignConfigs.center.icon">
+            <q-tooltip style="z-index: 99999999">
+              {{ alignConfigs.center.tooltipLabel }}
+            </q-tooltip>
+          </q-icon>
+        </template>
+
+        <template v-slot:end>
+          <q-icon :name="alignConfigs.end.icon">
+            <q-tooltip style="z-index: 99999999">
+              {{ alignConfigs.end.tooltipLabel }}
+            </q-tooltip>
+          </q-icon>
+        </template>
+
+        <template v-slot:stretch>
+          <q-icon :name="alignConfigs.stretch.icon">
+            <q-tooltip style="z-index: 99999999">
+              {{ alignConfigs.stretch.tooltipLabel }}
+            </q-tooltip>
+          </q-icon>
+        </template>
+      </q-btn-toggle> -->
     </div>
-  </q-expansion-item>
+  </a-collapse-item>
 </template>
 
 <style scoped lang="less">

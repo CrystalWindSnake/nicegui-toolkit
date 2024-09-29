@@ -8,6 +8,7 @@ import { useToggleButtons } from "@/commons/toggleButtons";
 import ToggleButtons from "@/commons/ToggleButtons.vue";
 
 import ItemLabel from "@/commons/ItemLabel.vue";
+import ListItem from "@/commons/ListItem.vue";
 
 const displayModel = createStyleRefModel("display");
 
@@ -103,59 +104,47 @@ const justifyToggleButtonsModel = useToggleButtons(justifyOpts, justifyModel);
 </script>
 
 <template>
-  <q-expansion-item
-    expand-separator
-    label="Layout(布局)"
-    header-class="text-red-1 bg-green-8"
-    expand-icon-class="text-red-1"
-  >
-    <div class="col no-wrap">
-      <q-list bordered>
-        <!-- display -->
-        <q-item class="items-center gap-2 px-3 py-2">
-          <ItemLabel keyId="display" label="Display"></ItemLabel>
+  <a-collapse-item header="Layout(布局)" key="layout">
+    <a-list size="small">
+      <!-- display -->
 
-          <toggle-buttons
-            padding="4px"
-            :model="displayToggleButtonsModel"
-          ></toggle-buttons>
-        </q-item>
+      <ListItem>
+        <ItemLabel keyId="display" label="Display"></ItemLabel>
 
-        <q-separator />
+        <toggle-buttons
+          padding="4px"
+          :model="displayToggleButtonsModel"
+        ></toggle-buttons>
+      </ListItem>
 
-        <!-- flexbox setting -->
-        <div v-if="flexInfo.isFlex">
-          <!-- Direction -->
-          <q-item class="items-center gap-2 px-3 py-2">
-            <span class="item-title text-caption text-capitalize"
-              >direction</span
-            >
+      <!-- flexbox setting -->
+      <template v-if="flexInfo.isFlex">
+        <!-- Direction -->
+        <ListItem>
+          <span class="item-title text-caption text-capitalize">direction</span>
 
-            <toggle-buttons
-              :model="directionToggleButtonsModel"
-            ></toggle-buttons>
-          </q-item>
+          <toggle-buttons :model="directionToggleButtonsModel"></toggle-buttons>
+        </ListItem>
 
-          <!-- align -->
-          <q-item class="items-center gap-2 px-3 py-2">
-            <span class="item-title text-left text-caption text-capitalize">{{
-              alignTitle
-            }}</span>
+        <!-- align -->
+        <ListItem>
+          <span class="item-title text-left text-caption text-capitalize">{{
+            alignTitle
+          }}</span>
 
-            <toggle-buttons :model="alignToggleButtonsModel"></toggle-buttons>
-          </q-item>
+          <toggle-buttons :model="alignToggleButtonsModel"></toggle-buttons>
+        </ListItem>
 
-          <!-- justify -->
-          <q-item class="items-center gap-2 px-3 py-2">
-            <span class="item-title text-left text-caption text-capitalize">{{
-              justifyTitle
-            }}</span>
-            <toggle-buttons :model="justifyToggleButtonsModel"></toggle-buttons>
-          </q-item>
-        </div>
-      </q-list>
-    </div>
-  </q-expansion-item>
+        <!-- justify -->
+        <ListItem>
+          <span class="item-title text-left text-caption text-capitalize">{{
+            justifyTitle
+          }}</span>
+          <toggle-buttons :model="justifyToggleButtonsModel"></toggle-buttons>
+        </ListItem>
+      </template>
+    </a-list>
+  </a-collapse-item>
 </template>
 
 <style scoped lang="less">

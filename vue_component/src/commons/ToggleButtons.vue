@@ -14,7 +14,13 @@ const toggleOpts = computed(() =>
 </script>
 
 <template>
-  <q-btn-toggle
+  <a-radio-group type="button" v-model="value">
+    <a-radio v-for="opt in toggleOpts" :key="opt.value" :value="opt.value"
+      >{{ opt.slot }}
+    </a-radio>
+  </a-radio-group>
+
+  <!-- <q-btn-toggle
     v-model="value"
     padding="8px"
     size="sm"
@@ -30,7 +36,7 @@ const toggleOpts = computed(() =>
 
       <span v-else>{{ opt.label }}</span>
     </template>
-  </q-btn-toggle>
+  </q-btn-toggle> -->
 </template>
 
 <style scoped></style>

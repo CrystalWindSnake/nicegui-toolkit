@@ -26,7 +26,7 @@ const getter = buildRefGetter(selectTarget);
 // });
 
 const unit = toRef("auto");
-const widthValue = toRef(null);
+const widthValue = toRef(undefined);
 
 const valueInputModel = useValueInput(
   options,
@@ -42,6 +42,11 @@ valueToStyleModel(valueInputModel, "width", ["auto"]);
 </script>
 
 <template>
+  <div class="w-full flex flex-row">
+    <ItemLabel key-id="width" label="Width" />
+    <ValueInput :model="valueInputModel"></ValueInput>
+  </div>
+  <!-- 
   <q-item dense>
     <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
       ><ItemLabel key-id="width" label="Width"
@@ -49,7 +54,7 @@ valueToStyleModel(valueInputModel, "width", ["auto"]);
     <q-item-section
       ><ValueInput :model="valueInputModel"></ValueInput
     ></q-item-section>
-  </q-item>
+  </q-item> -->
 </template>
 
 <style scoped lang="less">
