@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 import nicegui as ng_vars
 from nicegui.element import Element
 from niceguiToolkit.record_tracker import RecordTracker
@@ -14,6 +15,7 @@ class TrackBall(Element, component="trackBall.js"):
         super().__init__()
 
         self.add_resource(_RESOURCE)
+        self._current_target_id: Optional[int] = None
 
         self._props["selectorConfig"] = {
             "selectors": consts.MARK_SELECTOR,
@@ -42,7 +44,8 @@ class TrackBall(Element, component="trackBall.js"):
                 commands=commands,
             )
 
-            target = ng_vars.ui.context.client.elements[arg.id]
+            target = self.get_current_target_element()
+            assert target is not None, "target should not be None"
 
             for command in arg.commands:
                 values = command.values
@@ -50,6 +53,7 @@ class TrackBall(Element, component="trackBall.js"):
                     target._style[key] = value
 
             target.update()
+            self._update_current_target_context()
 
         self.on("setCommand", on_command)
 
@@ -65,14 +69,13 @@ class TrackBall(Element, component="trackBall.js"):
                 parentFlexInfo=events.FlexInfo(**args["parentFlexInfo"]),
             )
 
-            if not arg.id:
-                return
+            self._current_target_id = arg.id
 
-            target = ng_vars.ui.context.client.elements[arg.id]
-            self._props["currentTargetContext"] = {
-                "props": target._props,
-                "styles": target._style,
-            }
+            self._update_current_target_context()
+
+            target = self.get_current_target_element()
+            if target is None:
+                return
 
             self.update()
 
@@ -91,7 +94,8 @@ class TrackBall(Element, component="trackBall.js"):
                 commands=commands,
             )
 
-            target = ng_vars.ui.context.client.elements[arg.id]
+            target = self.get_current_target_element()
+            assert target is not None, "target should not be None"
 
             for command in arg.commands:
                 name = command.propertyName
@@ -104,8 +108,27 @@ class TrackBall(Element, component="trackBall.js"):
                     target._classes.remove(name)
 
             target.update()
+            self._update_current_target_context()
+            self.run_method("onServerResetCommand", arg.commands[0].propertyName)
 
         self.on("resetCommand", on_reset_command)
+
+    def _update_current_target_context(self):
+        target = self.get_current_target_element()
+        context = {}
+        if target is not None:
+            context = {
+                "props": target._props,
+                "styles": target._style,
+            }
+
+        self._props["currentTargetContext"] = context
+        self.update()
+
+    def get_current_target_element(self):
+        if self._current_target_id is None:
+            return None
+        return ng_vars.ui.context.client.elements[self._current_target_id]
 
     @staticmethod
     def has_in_client():

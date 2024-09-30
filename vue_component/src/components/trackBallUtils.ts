@@ -1,9 +1,9 @@
 import { ComputedRef, Ref, computed } from "vue";
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
-
 import { useMouse, useWindowSize } from "@vueuse/core";
 
 import * as utils from "./utils";
+import * as globals from "@/hooks/globals";
 
 export function useTypeNameTag(
   config: TSelectorConfig,
@@ -128,7 +128,11 @@ export function getComponentExpose(
     selectedElement.value = target;
   }
 
-  return { queryStyle, selectTarget };
+  function onServerResetCommand(propertyName: string) {
+    globals.triggerPropertyUpdate(propertyName);
+  }
+
+  return { queryStyle, selectTarget, onServerResetCommand };
 }
 
 export async function createClientStyleLinkTag(resource_path?: string) {

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { createStyleRefModel } from "@/panels/utils";
 import { computed, Ref } from "vue";
 import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
@@ -10,7 +9,7 @@ import { useIconRadio } from "@/commons/iconRadio";
 import ItemLabel from "@/commons/ItemLabel.vue";
 import ListItem from "@/commons/ListItem.vue";
 
-const displayModel = createStyleRefModel("display");
+const displayModel = globals.createReactiveProperty("display");
 
 const selectTarget = globals.SelectedTarget;
 
@@ -21,8 +20,7 @@ const displayIconRadioModel = useIconRadio(
     { value: "block", icon: "inbox" },
     { value: "flex", icon: "inventory_2" },
   ],
-  displayModel.value,
-  (value) => (displayModel.value = value)
+  displayModel
 );
 
 const flexInfo = getter.getFlexBoxInfo(
@@ -30,19 +28,18 @@ const flexInfo = getter.getFlexBoxInfo(
 );
 
 // direction
-const directionModel = createStyleRefModel("flex-direction");
+const directionModel = globals.createReactiveProperty("flex-direction");
 
 const directionIconRadioModel = useIconRadio(
   [
     { value: "row", label: "Horizontal" },
     { value: "column", label: "Vertical" },
   ],
-  directionModel.value,
-  (value) => (directionModel.value = value)
+  directionModel
 );
 
 // align config
-const alignModel = createStyleRefModel("align-items");
+const alignModel = globals.createReactiveProperty("align-items");
 
 const alignTitle = computed(() =>
   directionIconRadioModel.value.value === "row"
@@ -70,15 +67,11 @@ const alignOpts = computed(() => {
   ];
 });
 
-const alignIconRadioModel = useIconRadio(
-  alignOpts,
-  alignModel.value,
-  (value) => (alignModel.value = value)
-);
+const alignIconRadioModel = useIconRadio(alignOpts, alignModel);
 
 // justify config
 
-const justifyModel = createStyleRefModel("justify-content");
+const justifyModel = globals.createReactiveProperty("justify-content");
 
 const justifyTitle = computed(() =>
   directionIconRadioModel.value.value === "row"
@@ -106,11 +99,7 @@ const justifyOpts = computed(() => {
   ];
 });
 
-const justifyIconRadioModel = useIconRadio(
-  justifyOpts,
-  justifyModel.value,
-  (value) => (justifyModel.value = value)
-);
+const justifyIconRadioModel = useIconRadio(justifyOpts, justifyModel);
 </script>
 
 <template>

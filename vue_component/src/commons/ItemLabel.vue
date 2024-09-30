@@ -4,8 +4,8 @@ import { computed, ref } from "vue";
 const props = defineProps<{ keyId: string; label?: string }>();
 
 const label = computed(() => props.label ?? props.keyId);
-
 const hasChanged = globals.useHasChanged(props.keyId);
+const popoverVisible = ref(false);
 
 function reset() {
   globals.sendResetCommnad(props.keyId);
@@ -13,15 +13,19 @@ function reset() {
 
 const divStyle = computed(() => {
   if (hasChanged.value) {
-    return "pointer-events:all;cursor: pointer;";
+    return "cursor: pointer;";
   }
 
-  return "pointer-events:none;cursor: none;";
+  return "cursor: default;";
 });
 </script>
 
 <template>
-  <a-popover popup-container="[layout-tool-panel]" trigger="click">
+  <a-popover
+    popup-container="[layout-tool-panel]"
+    trigger="click"
+    :disabled="!hasChanged"
+  >
     <div class="w-[10ch] truncate" :style="divStyle">
       <span
         class="item-title text-capitalize"

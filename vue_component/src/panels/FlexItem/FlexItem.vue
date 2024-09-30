@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { createStyleRefModel } from "@/panels/utils";
 import { computed } from "vue";
 import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
@@ -10,7 +9,7 @@ const getter = buildRefGetter(globals.SelectedTarget);
 
 const parentFlexInfo = getter.getParentFlexBoxInfo();
 
-const alignModel = createStyleRefModel("align-self");
+const alignModel = globals.createReactiveProperty("align-self");
 
 const alignConfigs = computed(() => {
   if (parentFlexInfo.value.direction === "row") {
@@ -62,12 +61,15 @@ const alignConfigs = computed(() => {
   };
 });
 
-const iconRadioModel = useIconRadio([
-  { value: "flex-start", icon: "align_horizontal_left" },
-  { value: "center", icon: "align_horizontal_center" },
-  { value: "flex-end", icon: "align_horizontal_right" },
-  { value: "stretch", icon: "settings_overscan" },
-]);
+const iconRadioModel = useIconRadio(
+  [
+    { value: "flex-start", icon: "align_horizontal_left" },
+    { value: "center", icon: "align_horizontal_center" },
+    { value: "flex-end", icon: "align_horizontal_right" },
+    { value: "stretch", icon: "settings_overscan" },
+  ],
+  alignModel
+);
 </script>
 
 <template>

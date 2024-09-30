@@ -7,3 +7,8 @@ export function makeRef<T>(value: MaybeRefOrGetter<T>) {
 
   return ref(toValue(value));
 }
+
+export function getComputedStyle(target: HTMLElement, styleName: string) {
+  const styles = window.getComputedStyle(target, null);
+  return styles.getPropertyValue(styleName);
+}

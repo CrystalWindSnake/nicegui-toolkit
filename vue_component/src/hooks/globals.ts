@@ -5,9 +5,13 @@ import {
 } from "@/components/types";
 import { ref, ComputedRef, computed, reactive } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
+import * as reactiveProperty from "./reactiveProperty";
 
 export const SelectedTarget = ref<HTMLElement | null>(null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
+
+export const { createReactiveProperty, triggerPropertyUpdate } =
+  reactiveProperty.builder(SelectedTarget);
 
 const targetElementContext: {
   props: Map<string, any>;
