@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Literal
+from typing import Any, Dict, List, Optional, Literal
 from nicegui.dataclasses import KWONLY_SLOTS
 from nicegui.events import UiEventArguments
 from dataclasses import dataclass
@@ -19,13 +19,24 @@ class TrackBallSelectdEventArguments(UiEventArguments):
 
 
 @dataclass(**KWONLY_SLOTS)
-class TrackBallCommandOptions:
-    action: Literal["style", "props"]
-    commandType: Literal["set", "del"]
-    values: Dict
+class TrackBallSetCommandOptions:
+    propertyName: str
+    values: Dict[str, Any]
 
 
 @dataclass(**KWONLY_SLOTS)
-class TrackBallCommandsEventArguments(UiEventArguments):
+class TrackBallSetCommandsEventArguments(UiEventArguments):
     id: int
-    commands: List[TrackBallCommandOptions]
+    commands: List[TrackBallSetCommandOptions]
+
+
+@dataclass(**KWONLY_SLOTS)
+class TrackBallResetCommandOptions:
+    propertyName: str
+    type: Literal["style", "props", "classes"]
+
+
+@dataclass(**KWONLY_SLOTS)
+class TrackBallResetCommandsEventArguments(UiEventArguments):
+    id: int
+    commands: List[TrackBallResetCommandOptions]

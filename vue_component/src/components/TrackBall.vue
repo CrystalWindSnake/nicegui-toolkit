@@ -12,7 +12,8 @@ import {
   type TSelectorConfig,
   TTargetContext,
   TSelectedChangeEventArgs,
-  TCommandEvent,
+  TSetCommand,
+  TResetCommand,
 } from "./types";
 import { onMounted, watch } from "vue";
 import * as globals from "@/hooks/globals";
@@ -29,25 +30,43 @@ const emit = defineEmits<{
   (event: "hoverChange", args: { id: number | null }): void;
   (event: "selectedChange", args: TSelectedChangeEventArgs): void;
   (
-    event: "command",
+    event: "setCommand",
     args: {
       id: number;
-      commands: TCommandEvent[];
+      commands: TSetCommand[];
+    }
+  ): void;
+  (
+    event: "resetCommand",
+    args: {
+      id: number;
+      commands: TResetCommand[];
     }
   ): void;
 }>();
 
-function emitCommnad(commands: TCommandEvent[]) {
+function emitSetCommnad(commands: TSetCommand[]) {
   const target = globals.SelectedTarget.value;
   if (!target) {
-    // throw new Error("No components are selected");
     return;
   }
   const id = utils.getElementId(target, props.selectorConfig);
   if (!id) {
     throw new Error("not found selected element");
   }
-  emit("command", { id: id, commands });
+  emit("setCommand", { id: id, commands });
+}
+
+function emitResetCommnad(commands: TResetCommand[]) {
+  const target = globals.SelectedTarget.value;
+  if (!target) {
+    return;
+  }
+  const id = utils.getElementId(target, props.selectorConfig);
+  if (!id) {
+    throw new Error("not found selected element");
+  }
+  emit("resetCommand", { id: id, commands });
 }
 
 // onMounted
@@ -57,7 +76,8 @@ onMounted(async () => {
 
 globals.initGlobals({
   selectorConfig: props.selectorConfig,
-  emitCommandFn: emitCommnad,
+  emitSetCommandFn: emitSetCommnad,
+  emitResetCommandFn: emitResetCommnad,
 });
 
 watch(

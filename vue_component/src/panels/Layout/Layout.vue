@@ -21,7 +21,8 @@ const displayIconRadioModel = useIconRadio(
     { value: "block", icon: "inbox" },
     { value: "flex", icon: "inventory_2" },
   ],
-  displayModel.value
+  displayModel.value,
+  (value) => (displayModel.value = value)
 );
 
 const flexInfo = getter.getFlexBoxInfo(
@@ -36,7 +37,8 @@ const directionIconRadioModel = useIconRadio(
     { value: "row", label: "Horizontal" },
     { value: "column", label: "Vertical" },
   ],
-  directionModel.value
+  directionModel.value,
+  (value) => (directionModel.value = value)
 );
 
 // align config
@@ -68,7 +70,11 @@ const alignOpts = computed(() => {
   ];
 });
 
-const alignIconRadioModel = useIconRadio(alignOpts, alignModel.value);
+const alignIconRadioModel = useIconRadio(
+  alignOpts,
+  alignModel.value,
+  (value) => (alignModel.value = value)
+);
 
 // justify config
 
@@ -100,7 +106,11 @@ const justifyOpts = computed(() => {
   ];
 });
 
-const justifyIconRadioModel = useIconRadio(justifyOpts, justifyModel.value);
+const justifyIconRadioModel = useIconRadio(
+  justifyOpts,
+  justifyModel.value,
+  (value) => (justifyModel.value = value)
+);
 </script>
 
 <template>
@@ -117,20 +127,20 @@ const justifyIconRadioModel = useIconRadio(justifyOpts, justifyModel.value);
       <template v-if="flexInfo.isFlex">
         <!-- Direction -->
         <ListItem>
-          <ItemLabel keyId="direction" label="direction"></ItemLabel>
+          <ItemLabel keyId="flex-direction" label="direction"></ItemLabel>
           <IconRadio :model="directionIconRadioModel"></IconRadio>
         </ListItem>
 
         <!-- align -->
         <ListItem>
-          <ItemLabel keyId="direction" :label="alignTitle"></ItemLabel>
+          <ItemLabel keyId="align-items" :label="alignTitle"></ItemLabel>
 
           <IconRadio :model="alignIconRadioModel"></IconRadio>
         </ListItem>
 
         <!-- justify -->
         <ListItem>
-          <ItemLabel keyId="direction" :label="justifyTitle"></ItemLabel>
+          <ItemLabel keyId="justify-content" :label="justifyTitle"></ItemLabel>
 
           <IconRadio :model="justifyIconRadioModel"></IconRadio>
         </ListItem>

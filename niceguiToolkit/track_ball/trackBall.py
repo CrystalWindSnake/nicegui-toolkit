@@ -1,18 +1,10 @@
 from pathlib import Path
-from typing import Callable
 import nicegui as ng_vars
 from nicegui.element import Element
 from niceguiToolkit.record_tracker import RecordTracker
 from niceguiToolkit import events
 from niceguiToolkit import consts
 
-
-# from niceguiToolkit.layout.events import (
-#     TrackBallSelectdEventArguments,
-#     FlexInfo,
-#     TrackBallCommandsEventArguments,
-#     TrackBallCommandOptions,
-# )
 
 _RESOURCE = Path(__file__).parent / "lib"
 
@@ -28,17 +20,22 @@ class TrackBall(Element, component="trackBall.js"):
             "idPrefix": consts.MARK_ID_PERFIX,
             "elementTypePrefix": consts.MARK_ELEMENT_TYPE_PERFIX,
         }
-        # self._props["styleUrl"] = _STYLE_URL
+        self._props["currentTargetContext"] = {"props": {}, "styles": {}}
         self.props("data-ng-toolkit-trackball")
 
         self.record_tracker = RecordTracker()
 
+        self._register_setCommand_event()
+        self._register_select_event()
+        self._register_resetCommand_event()
+
+    def _register_setCommand_event(self):
         def on_command(e):
             args = e.args
             commands = [
-                events.TrackBallCommandOptions(**cmd) for cmd in args["commands"]
+                events.TrackBallSetCommandOptions(**cmd) for cmd in args["commands"]
             ]
-            arg = events.TrackBallCommandsEventArguments(
+            arg = events.TrackBallSetCommandsEventArguments(
                 sender=self,
                 client=self.client,
                 id=args["id"],
@@ -49,29 +46,66 @@ class TrackBall(Element, component="trackBall.js"):
 
             for command in arg.commands:
                 values = command.values
-                if command.commandType == "set":
-                    if command.action == "props":
-                        for key, value in values.items():
-                            target._props[key] = value
-                    elif command.action == "style":
-                        for key, value in values.items():
-                            target.style[key] = value
-                    else:
-                        raise ValueError(f"unknown action {command.action}")
-                elif command.commandType == "del":
-                    if command.action == "props":
-                        for key in values.keys():
-                            del target._props[key]
-                    elif command.action == "style":
-                        for key in values.keys():
-                            del target.style[key]
-                    else:
-                        raise ValueError(f"unknown action {command.action}")
-                else:
-                    raise ValueError(f"unknown commandType {command.commandType}")
+                for key, value in values.items():
+                    target._style[key] = value
+
             target.update()
 
-        self.on("command", on_command)
+        self.on("setCommand", on_command)
+
+    def _register_select_event(self):
+        def on_select(e):
+            args = e.args
+            arg = events.TrackBallSelectdEventArguments(
+                sender=self,
+                client=self.client,
+                id=args["id"],
+                parentBoxId=args["parentBoxId"],
+                flexInfo=events.FlexInfo(**args["flexInfo"]),
+                parentFlexInfo=events.FlexInfo(**args["parentFlexInfo"]),
+            )
+
+            if not arg.id:
+                return
+
+            target = ng_vars.ui.context.client.elements[arg.id]
+            self._props["currentTargetContext"] = {
+                "props": target._props,
+                "styles": target._style,
+            }
+
+            self.update()
+
+        self.on("selectedChange", on_select)
+
+    def _register_resetCommand_event(self):
+        def on_reset_command(e):
+            args = e.args
+            commands = [
+                events.TrackBallResetCommandOptions(**cmd) for cmd in args["commands"]
+            ]
+            arg = events.TrackBallResetCommandsEventArguments(
+                sender=self,
+                client=self.client,
+                id=args["id"],
+                commands=commands,
+            )
+
+            target = ng_vars.ui.context.client.elements[arg.id]
+
+            for command in arg.commands:
+                name = command.propertyName
+
+                if command.type == "style":
+                    del target._style[name]
+                elif command.type == "prop":
+                    del target._props[name]
+                elif command.type == "classes":
+                    target._classes.remove(name)
+
+            target.update()
+
+        self.on("resetCommand", on_reset_command)
 
     @staticmethod
     def has_in_client():
@@ -79,60 +113,3 @@ class TrackBall(Element, component="trackBall.js"):
             if "data-ng-toolkit-trackball" in element._props:
                 return True
         return False
-
-    # def on_hover(self, handler: Callable[[int], None]):
-    #     def inner_handler(e):
-    #         handler(e.args["id"])
-
-    #     return self.on("hoverChange", inner_handler)
-
-    # def on_select(
-    #     self,
-    #     handler: Callable[[TrackBallSelectdEventArguments], None],
-    # ):
-    #     def inner_handler(e):
-    #         args = e.args
-    #         arg = TrackBallSelectdEventArguments(
-    #             sender=self,
-    #             client=self.client,
-    #             id=args["id"],
-    #             parentBoxId=args["parentBoxId"],
-    #             flexInfo=FlexInfo(**args["flexInfo"]),
-    #             parentFlexInfo=FlexInfo(**args["parentFlexInfo"]),
-    #         )
-    #         handler(arg)
-
-    #     return self.on("selectedChange", inner_handler)
-
-    # def on_command(
-    #     self,
-    #     handler: Callable[
-    #         [TrackBallCommandsEventArguments],
-    #         None,
-    #     ],
-    # ):
-    #     def inner_handler(e):
-    #         args = e.args
-    #         commands = [TrackBallCommandOptions(**cmd) for cmd in args["commands"]]
-    #         arg = TrackBallCommandsEventArguments(
-    #             sender=self,
-    #             client=self.client,
-    #             id=args["id"],
-    #             commands=commands,
-    #         )
-    #         handler(arg)
-
-    #     return self.on("command", inner_handler)
-
-    # async def query_style(self, id: _TNiceguiComponentId, name: str):
-    #     return await self.run_method("queryStyle", id, name)
-
-    # def select_target(self, id: _TNiceguiComponentId):
-    #     self.run_method("selectTarget", id)
-
-    # @staticmethod
-    # def add_style_static_file():
-    #     ng_vars.app.add_static_file(
-    #         local_file=_STYLE_FILE,
-    #         url_path=_STYLE_URL,
-    #     )

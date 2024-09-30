@@ -1,4 +1,8 @@
-import { TSelectorConfig, TCommandEvent, TAction } from "@/components/types";
+import {
+  TSelectorConfig,
+  TSetCommand,
+  TResetCommand,
+} from "@/components/types";
 import { ref, ComputedRef, computed, reactive } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
 
@@ -13,7 +17,8 @@ const targetElementContext: {
   styles: reactive(new Map()),
 };
 
-let emitCommandFn: (commands: TCommandEvent[]) => void;
+let emitSetCommandFn: (commands: TSetCommand[]) => void;
+let emitResetCommandFn: (commands: TResetCommand[]) => void;
 let EXECUTING_FLAG = false;
 
 export function setExecutingFlag(executing?: boolean) {
@@ -26,9 +31,11 @@ export function getExecutingFlag() {
 
 export function initGlobals(config: {
   selectorConfig: TSelectorConfig;
-  emitCommandFn: (commands: TCommandEvent[]) => void;
+  emitSetCommandFn: (commands: TSetCommand[]) => void;
+  emitResetCommandFn: (commands: TResetCommand[]) => void;
 }) {
-  emitCommandFn = config.emitCommandFn;
+  emitSetCommandFn = config.emitSetCommandFn;
+  emitResetCommandFn = config.emitResetCommandFn;
 
   const { hoverElement: _hoverElement } = useHoverElement(
     config.selectorConfig
@@ -39,12 +46,18 @@ export function initGlobals(config: {
   hoverElement = _hoverElement;
 }
 
-export function sendCommand(commands: TCommandEvent[]) {
-  emitCommandFn(commands);
+export function sendSetCommand(commands: TSetCommand | TSetCommand[]) {
+  if (!Array.isArray(commands)) {
+    commands = [commands];
+  }
+  emitSetCommandFn(commands);
 }
 
-export function resetCommnad(key: string, action: TAction = "style") {
-  sendCommand([{ commandType: "del", action, values: { [key]: undefined } }]);
+export function sendResetCommnad(
+  propertyName: string,
+  type: TResetCommand["type"] = "style"
+) {
+  emitResetCommandFn([{ propertyName, type }]);
 }
 
 export function updateCurrentTargetContext(context: {

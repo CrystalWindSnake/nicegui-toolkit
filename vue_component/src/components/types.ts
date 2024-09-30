@@ -21,11 +21,12 @@ export type TSelectedChangeEventArgs = {
   parentFlexInfo: TFlexInfo;
 };
 
-export type TAction = "style" | "props" | "classes";
-export type TCommandType = "set" | "del";
-
-export type TCommandEvent = {
-  action: TAction;
-  commandType: TCommandType;
+export type TSetCommand = {
+  propertyName: string;
   values: Record<string, any>;
+};
+
+export type TResetCommand = {
+  propertyName: string;
+  type: "style" | "props" | "classes";
 };

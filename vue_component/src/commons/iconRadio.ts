@@ -1,5 +1,4 @@
-import { makeRef } from "@/hooks/utils";
-import { MaybeRef, ref, computed, Ref, toValue } from "vue";
+import { MaybeRef, ref, computed, watch, toValue } from "vue";
 
 type TOption = {
   label?: string;
@@ -12,7 +11,8 @@ export type TModel = ReturnType<typeof useIconRadio>;
 
 export function useIconRadio(
   options: MaybeRef<TOption[]>,
-  defaultValue?: string | undefined
+  defaultValue?: string | undefined,
+  onValueChange?: (value: string) => void
 ) {
   const resultValue = ref(defaultValue ?? undefined);
 
@@ -27,6 +27,12 @@ export function useIconRadio(
       };
     });
   });
+
+  if (onValueChange) {
+    watch(resultValue, (value) => {
+      onValueChange(value!);
+    });
+  }
 
   return {
     value: resultValue,
