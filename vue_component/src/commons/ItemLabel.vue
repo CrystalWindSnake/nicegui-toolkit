@@ -8,13 +8,19 @@ const hasChanged = globals.useHasChanged(props.keyId);
 </script>
 
 <template>
-  <div class="w-[10ch] truncate">
-    <span
-      class="item-title text-capitalize"
-      :class="{ 'bg-gray-100': hasChanged }"
-      >{{ label }}</span
-    >
-  </div>
+  <a-popover popup-container="[layout-tool-panel]">
+    <div class="w-[10ch] truncate">
+      <span
+        class="item-title text-capitalize"
+        :class="{ 'bg-gray-100': hasChanged }"
+        >{{ label }}</span
+      >
+    </div>
+
+    <template #content>
+      <a-button type="outline">reset</a-button>
+    </template>
+  </a-popover>
 </template>
 
 <style scoped></style>
