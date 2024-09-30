@@ -3,6 +3,8 @@ import { createStyleRefModel } from "@/panels/utils";
 import { computed } from "vue";
 import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
+import IconRadio from "@/commons/IconRadio.vue";
+import { useIconRadio } from "@/commons/iconRadio";
 
 const getter = buildRefGetter(globals.SelectedTarget);
 
@@ -59,6 +61,13 @@ const alignConfigs = computed(() => {
     },
   };
 });
+
+const iconRadioModel = useIconRadio([
+  { value: "flex-start", icon: "align_horizontal_left" },
+  { value: "center", icon: "align_horizontal_center" },
+  { value: "flex-end", icon: "align_horizontal_right" },
+  { value: "stretch", icon: "settings_overscan" },
+]);
 </script>
 
 <template>
@@ -74,12 +83,14 @@ const alignConfigs = computed(() => {
         alignConfigs.title
       }}</span>
 
-      <a-radio-group type="button" v-model="alignModel">
+      <IconRadio :model="iconRadioModel"></IconRadio>
+
+      <!-- <a-radio-group type="button" v-model="alignModel">
         <a-radio value="flex-start">flex-start</a-radio>
         <a-radio value="center">center</a-radio>
         <a-radio value="flex-end">flex-end</a-radio>
         <a-radio value="stretch">stretch</a-radio>
-      </a-radio-group>
+      </a-radio-group> -->
 
       <!-- <q-btn-toggle
         v-model="alignModel"

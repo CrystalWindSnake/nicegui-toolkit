@@ -4,8 +4,8 @@ import { computed, Ref } from "vue";
 import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
 
-import { useToggleButtons } from "@/commons/toggleButtons";
-import ToggleButtons from "@/commons/ToggleButtons.vue";
+import IconRadio from "@/commons/IconRadio.vue";
+import { useIconRadio } from "@/commons/iconRadio";
 
 import ItemLabel from "@/commons/ItemLabel.vue";
 import ListItem from "@/commons/ListItem.vue";
@@ -16,40 +16,40 @@ const selectTarget = globals.SelectedTarget;
 
 const getter = buildRefGetter(selectTarget);
 
-const displayToggleButtonsModel = useToggleButtons(
+const displayIconRadioModel = useIconRadio(
   [
     { value: "block", icon: "inbox" },
     { value: "flex", icon: "inventory_2" },
   ],
-  displayModel
+  displayModel.value
 );
 
 const flexInfo = getter.getFlexBoxInfo(
-  displayToggleButtonsModel.value as Ref<string>
+  displayIconRadioModel.value as Ref<string>
 );
 
 // direction
 const directionModel = createStyleRefModel("flex-direction");
 
-const directionToggleButtonsModel = useToggleButtons(
+const directionIconRadioModel = useIconRadio(
   [
     { value: "row", label: "Horizontal" },
     { value: "column", label: "Vertical" },
   ],
-  directionModel
+  directionModel.value
 );
 
 // align config
 const alignModel = createStyleRefModel("align-items");
 
 const alignTitle = computed(() =>
-  directionToggleButtonsModel.value.value === "row"
+  directionIconRadioModel.value.value === "row"
     ? "vertical align"
     : "horizontal align"
 );
 
 const alignOpts = computed(() => {
-  if (directionToggleButtonsModel.value.value === "row") {
+  if (directionIconRadioModel.value.value === "row") {
     return [
       { value: "start", icon: "vertical_align_top", tooltip: "top" },
 
@@ -68,20 +68,20 @@ const alignOpts = computed(() => {
   ];
 });
 
-const alignToggleButtonsModel = useToggleButtons(alignOpts, alignModel);
+const alignIconRadioModel = useIconRadio(alignOpts, alignModel.value);
 
 // justify config
 
 const justifyModel = createStyleRefModel("justify-content");
 
 const justifyTitle = computed(() =>
-  directionToggleButtonsModel.value.value === "row"
+  directionIconRadioModel.value.value === "row"
     ? "vertical justify"
     : "horizontal justify"
 );
 
 const justifyOpts = computed(() => {
-  if (directionToggleButtonsModel.value.value === "row") {
+  if (directionIconRadioModel.value.value === "row") {
     return [
       { value: "start", icon: "align_horizontal_left", tooltip: "left" },
 
@@ -100,7 +100,7 @@ const justifyOpts = computed(() => {
   ];
 });
 
-const justifyToggleButtonsModel = useToggleButtons(justifyOpts, justifyModel);
+const justifyIconRadioModel = useIconRadio(justifyOpts, justifyModel.value);
 </script>
 
 <template>
@@ -110,37 +110,29 @@ const justifyToggleButtonsModel = useToggleButtons(justifyOpts, justifyModel);
 
       <ListItem>
         <ItemLabel keyId="display" label="Display"></ItemLabel>
-
-        <toggle-buttons
-          padding="4px"
-          :model="displayToggleButtonsModel"
-        ></toggle-buttons>
+        <IconRadio :model="displayIconRadioModel"></IconRadio>
       </ListItem>
 
       <!-- flexbox setting -->
       <template v-if="flexInfo.isFlex">
         <!-- Direction -->
         <ListItem>
-          <span class="item-title text-caption text-capitalize">direction</span>
-
-          <toggle-buttons :model="directionToggleButtonsModel"></toggle-buttons>
+          <ItemLabel keyId="direction" label="direction"></ItemLabel>
+          <IconRadio :model="directionIconRadioModel"></IconRadio>
         </ListItem>
 
         <!-- align -->
         <ListItem>
-          <span class="item-title text-left text-caption text-capitalize">{{
-            alignTitle
-          }}</span>
+          <ItemLabel keyId="direction" :label="alignTitle"></ItemLabel>
 
-          <toggle-buttons :model="alignToggleButtonsModel"></toggle-buttons>
+          <IconRadio :model="alignIconRadioModel"></IconRadio>
         </ListItem>
 
         <!-- justify -->
         <ListItem>
-          <span class="item-title text-left text-caption text-capitalize">{{
-            justifyTitle
-          }}</span>
-          <toggle-buttons :model="justifyToggleButtonsModel"></toggle-buttons>
+          <ItemLabel keyId="direction" :label="justifyTitle"></ItemLabel>
+
+          <IconRadio :model="justifyIconRadioModel"></IconRadio>
         </ListItem>
       </template>
     </a-list>

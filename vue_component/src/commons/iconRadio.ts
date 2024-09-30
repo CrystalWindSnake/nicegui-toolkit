@@ -8,13 +8,13 @@ type TOption = {
   tooltip?: string;
 };
 
-export type TModel = ReturnType<typeof useToggleButtons>;
+export type TModel = ReturnType<typeof useIconRadio>;
 
-export function useToggleButtons(
+export function useIconRadio(
   options: MaybeRef<TOption[]>,
-  value?: MaybeRef<string | undefined>
+  defaultValue?: string | undefined
 ) {
-  const resultValue = makeRef(value);
+  const resultValue = ref(defaultValue ?? undefined);
 
   const resultOptions = computed(() => {
     return toValue(options).map((v) => {
