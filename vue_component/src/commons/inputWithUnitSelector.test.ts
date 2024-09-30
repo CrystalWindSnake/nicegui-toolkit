@@ -1,5 +1,5 @@
 import { nextTick } from "vue";
-import { useValueInput } from "./valueInput";
+import { useInputWithUnitSelector } from "./inputWithUnitSelector";
 import { expect, describe, it } from "vitest";
 
 describe("useCommon", () => {
@@ -13,11 +13,11 @@ describe("useCommon", () => {
         value: "auto",
       },
     ];
-    const model = useValueInput(
-      widthOptions,
-      { selectValue: "auto" },
-      { nonValueOptions: ["auto"], optionValueIfnonValue: "rem" }
-    );
+    const model = useInputWithUnitSelector({
+      options: widthOptions,
+      defaultValues: { select: "auto" },
+      configs: { nonValueOptions: ["auto"], optionValueIfnonValue: "rem" },
+    });
 
     expect(model.selectValue.value).toBe("auto");
     expect(model.selectDisplay.value).toBe("-");
@@ -35,11 +35,12 @@ describe("useCommon", () => {
         value: "auto",
       },
     ];
-    const model = useValueInput(
-      widthOptions,
-      { selectValue: "auto" },
-      { nonValueOptions: ["auto"], optionValueIfnonValue: "rem" }
-    );
+
+    const model = useInputWithUnitSelector({
+      options: widthOptions,
+      defaultValues: { select: "auto" },
+      configs: { nonValueOptions: ["auto"], optionValueIfnonValue: "rem" },
+    });
 
     expect(model.selectValue.value).toBe("auto");
     expect(model.inputValue.value).toBeNull();
@@ -60,11 +61,12 @@ describe("useCommon", () => {
         value: "auto",
       },
     ];
-    const model = useValueInput(
-      widthOptions,
-      { selectValue: "px", inputValue: "100" },
-      { nonValueOptions: ["auto"], optionValueIfnonValue: "rem" }
-    );
+
+    const model = useInputWithUnitSelector({
+      options: widthOptions,
+      defaultValues: { select: "px", input: "100" },
+      configs: { nonValueOptions: ["auto"], optionValueIfnonValue: "rem" },
+    });
 
     expect(model.selectValue.value).toBe("px");
     expect(model.inputValue.value).toBe("100");

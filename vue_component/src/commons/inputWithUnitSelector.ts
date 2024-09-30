@@ -1,10 +1,9 @@
-import { makeRef } from "@/hooks/utils";
-import { MaybeRef, ref, computed, Ref } from "vue";
+import { ref, computed, Ref } from "vue";
 
 type TItemOption = { label: string; value: string };
 type TOption = string | TItemOption;
 
-export type TModel = ReturnType<typeof useValueInput>;
+export type TModel = ReturnType<typeof useInputWithUnitSelector>;
 
 type TConfigs =
   | {
@@ -14,15 +13,21 @@ type TConfigs =
     }
   | undefined;
 
-export function useValueInput(
-  options: TOption[],
-  values?: {
-    inputValue?: MaybeRef<string | undefined>;
-    selectValue?: MaybeRef<string | undefined>;
-  },
-  configs?: TConfigs
-) {
-  values = values ?? {};
+export function useInputWithUnitSelector(settings: {
+  options: TOption[];
+  defaultValues?: { input?: string | undefined; select?: string | undefined };
+  configs?: TConfigs;
+}) {
+  const {
+    defaultValues = { input: undefined, select: undefined },
+    options,
+    configs,
+  } = settings;
+
+  const inputValue = ref<string | undefined>(defaultValues.input);
+  const selectValue = ref<string | undefined>(
+    defaultValues.select ?? configs?.defaultOptionValue
+  );
 
   const itemOptions = options.map((opt) => {
     if (typeof opt === "string") {
@@ -35,9 +40,6 @@ export function useValueInput(
   function getItemFromOptions(value: string) {
     return itemOptions.find((v) => v.value === value);
   }
-
-  const inputValue = makeRef(values.inputValue ?? undefined);
-  const selectValue = makeRef(values.selectValue ?? undefined);
 
   const cache = {
     lastInvaildInputValue: inputValue.value,
@@ -63,16 +65,17 @@ export function useValueInput(
   });
 
   function updateInput(text: string) {
-    // @ts-ignore
     inputValue.value = text;
     whenInputValueChanged(selectValue, inputValue, configs, cache);
   }
 
   function updateSelect(value: string) {
-    // @ts-ignore
     selectValue.value = value;
     whenSelectValueChanged(selectValue, inputValue, configs, cache);
   }
+
+  whenInputValueChanged(selectValue, inputValue, configs, cache);
+  whenSelectValueChanged(selectValue, inputValue, configs, cache);
 
   return {
     inputValue,

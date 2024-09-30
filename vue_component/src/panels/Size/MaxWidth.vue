@@ -1,34 +1,32 @@
 <script setup lang="ts">
-import ValueInput from "@/commons/ValueInput.vue";
-import { useValueInput } from "@/commons/valueInput";
+import InputWithUnitSelector from "@/commons/InputWithUnitSelector.vue";
+import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
+
 import { maxWidthOptions } from "./data";
 import { valueToStyleModel } from "./utils";
 import ItemLabel from "@/commons/ItemLabel.vue";
 
 const options = maxWidthOptions;
 
-const valueInputModel = useValueInput(
+const inputWithUnitSelectorModel = useInputWithUnitSelector({
   options,
-  { selectValue: "none" },
-  {
+  configs: {
     optionValueIfnonValue: "px",
     nonValueOptions: ["none"],
     defaultOptionValue: "none",
-  }
-);
+  },
+});
 
-valueToStyleModel(valueInputModel, "max-width", ["none"]);
+valueToStyleModel(inputWithUnitSelectorModel, "max-width", ["none"]);
 </script>
 
 <template>
-  <q-item dense>
-    <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      ><ItemLabel key-id="max-width" label="Max W"
-    /></q-item-section>
-    <q-item-section
-      ><ValueInput :model="valueInputModel"></ValueInput
-    ></q-item-section>
-  </q-item>
+  <div class="w-full flex flex-row">
+    <ItemLabel key-id="max-width" label="Max W" />
+    <InputWithUnitSelector
+      :model="inputWithUnitSelectorModel"
+    ></InputWithUnitSelector>
+  </div>
 </template>
 
 <style scoped lang="less">

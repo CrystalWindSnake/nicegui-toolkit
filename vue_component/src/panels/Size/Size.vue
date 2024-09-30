@@ -14,8 +14,8 @@ import MinHeight from "./MinHeight.vue";
       <a-list-item>
         <a-list>
           <Width></Width>
-          <!-- <MinWidth></MinWidth>
-          <MaxWidth></MaxWidth> -->
+          <MinWidth></MinWidth>
+          <MaxWidth></MaxWidth>
         </a-list>
       </a-list-item>
 

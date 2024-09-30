@@ -1,33 +1,35 @@
 <script setup lang="ts">
-import ValueInput from "@/commons/ValueInput.vue";
-import { useValueInput } from "@/commons/valueInput";
+import InputWithUnitSelector from "@/commons/InputWithUnitSelector.vue";
+import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
+
 import { minWidthOptions } from "./data";
 import { valueToStyleModel } from "./utils";
 import ItemLabel from "@/commons/ItemLabel.vue";
 
 const options = minWidthOptions;
 
-const valueInputModel = useValueInput(
+const inputWithUnitSelectorModel = useInputWithUnitSelector({
   options,
-  { inputValue: "0", selectValue: "px" },
-  {
+  defaultValues: {
+    input: "0",
+    select: "px",
+  },
+  configs: {
     optionValueIfnonValue: "px",
     nonValueOptions: ["auto"],
-  }
-);
+  },
+});
 
-valueToStyleModel(valueInputModel, "min-width", ["auto"]);
+valueToStyleModel(inputWithUnitSelectorModel, "min-width", ["auto"]);
 </script>
 
 <template>
-  <q-item dense>
-    <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      ><ItemLabel key-id="min-width" label="Min W"
-    /></q-item-section>
-    <q-item-section
-      ><ValueInput :model="valueInputModel"></ValueInput
-    ></q-item-section>
-  </q-item>
+  <div class="w-full flex flex-row">
+    <ItemLabel key-id="min-width" label="Min W" />
+    <InputWithUnitSelector
+      :model="inputWithUnitSelectorModel"
+    ></InputWithUnitSelector>
+  </div>
 </template>
 
 <style scoped lang="less">

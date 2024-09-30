@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import ValueInput from "@/commons/ValueInput.vue";
-import { useValueInput } from "@/commons/valueInput";
+import InputWithUnitSelector from "@/commons/InputWithUnitSelector.vue";
+import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
 
 import { widthOptions } from "./data";
-import { valueToStyleModel } from "./utils";
 
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
 import { toRef, watch } from "vue";
@@ -28,33 +27,25 @@ const getter = buildRefGetter(selectTarget);
 const unit = toRef("auto");
 const widthValue = toRef(undefined);
 
-const valueInputModel = useValueInput(
+const inputWithUnitSelectorModel = useInputWithUnitSelector({
   options,
-  { selectValue: unit, inputValue: widthValue },
-  {
+  configs: {
     nonValueOptions: ["auto"],
     optionValueIfnonValue: "px",
     defaultOptionValue: "auto",
-  }
-);
+  },
+});
 
-valueToStyleModel(valueInputModel, "width", ["auto"]);
+// valueToStyleModel(valueInputModel, "width", ["auto"]);
 </script>
 
 <template>
   <div class="w-full flex flex-row">
     <ItemLabel key-id="width" label="Width" />
-    <ValueInput :model="valueInputModel"></ValueInput>
+    <InputWithUnitSelector
+      :model="inputWithUnitSelectorModel"
+    ></InputWithUnitSelector>
   </div>
-  <!-- 
-  <q-item dense>
-    <q-item-section class="item-title" style="flex-grow: 0; flex-basis: auto"
-      ><ItemLabel key-id="width" label="Width"
-    /></q-item-section>
-    <q-item-section
-      ><ValueInput :model="valueInputModel"></ValueInput
-    ></q-item-section>
-  </q-item> -->
 </template>
 
 <style scoped lang="less">
