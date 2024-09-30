@@ -1,4 +1,4 @@
-import { TSelectorConfig, TCommandEvent } from "@/components/types";
+import { TSelectorConfig, TCommandEvent, TAction } from "@/components/types";
 import { ref, ComputedRef, computed, reactive } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
 
@@ -41,6 +41,10 @@ export function initGlobals(config: {
 
 export function sendCommand(commands: TCommandEvent[]) {
   emitCommandFn(commands);
+}
+
+export function resetCommnad(key: string, action: TAction = "style") {
+  sendCommand([{ commandType: "del", action, values: { [key]: undefined } }]);
 }
 
 export function updateCurrentTargetContext(context: {

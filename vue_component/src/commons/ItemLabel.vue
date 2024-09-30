@@ -5,6 +5,10 @@ const props = defineProps<{ keyId: string; label?: string }>();
 const label = props.label ?? props.keyId;
 
 const hasChanged = globals.useHasChanged(props.keyId);
+
+function reset() {
+  globals.resetCommnad(props.keyId);
+}
 </script>
 
 <template>
@@ -18,7 +22,7 @@ const hasChanged = globals.useHasChanged(props.keyId);
     </div>
 
     <template #content>
-      <a-button type="outline">reset</a-button>
+      <a-button type="outline" @click="reset">reset</a-button>
     </template>
   </a-popover>
 </template>
