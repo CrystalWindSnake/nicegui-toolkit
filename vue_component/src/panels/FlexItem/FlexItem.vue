@@ -2,6 +2,9 @@
 import { computed } from "vue";
 import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
+import ItemLabel from "@/commons/ItemLabel.vue";
+import ListItem from "@/commons/ListItem.vue";
+
 import IconRadio from "@/commons/IconRadio.vue";
 import { useIconRadio } from "@/commons/iconRadio";
 
@@ -78,67 +81,12 @@ const iconRadioModel = useIconRadio(
     header="FlexItem(Flex子元素)"
     key="flex-item"
   >
-    <div class="col no-wrap outline">
-      <!-- align -->
-
-      <span class="item-title text-left text-caption text-capitalize">{{
-        alignConfigs.title
-      }}</span>
-
-      <IconRadio :model="iconRadioModel"></IconRadio>
-
-      <!-- <a-radio-group type="button" v-model="alignModel">
-        <a-radio value="flex-start">flex-start</a-radio>
-        <a-radio value="center">center</a-radio>
-        <a-radio value="flex-end">flex-end</a-radio>
-        <a-radio value="stretch">stretch</a-radio>
-      </a-radio-group> -->
-
-      <!-- <q-btn-toggle
-        v-model="alignModel"
-        padding="8px"
-        size="sm"
-        toggle-color="primary"
-        :options="[
-          { value: 'flex-start', slot: 'start' },
-          { value: 'center', slot: 'center' },
-          { value: 'flex-end', slot: 'end' },
-          { value: 'stretch', slot: 'stretch' },
-        ]"
-      >
-        <template v-slot:start>
-          <q-icon :name="alignConfigs.start.icon">
-            <q-tooltip style="z-index: 99999999">
-              {{ alignConfigs.start.tooltipLabel }}
-            </q-tooltip>
-          </q-icon>
-        </template>
-
-        <template v-slot:center>
-          <q-icon :name="alignConfigs.center.icon">
-            <q-tooltip style="z-index: 99999999">
-              {{ alignConfigs.center.tooltipLabel }}
-            </q-tooltip>
-          </q-icon>
-        </template>
-
-        <template v-slot:end>
-          <q-icon :name="alignConfigs.end.icon">
-            <q-tooltip style="z-index: 99999999">
-              {{ alignConfigs.end.tooltipLabel }}
-            </q-tooltip>
-          </q-icon>
-        </template>
-
-        <template v-slot:stretch>
-          <q-icon :name="alignConfigs.stretch.icon">
-            <q-tooltip style="z-index: 99999999">
-              {{ alignConfigs.stretch.tooltipLabel }}
-            </q-tooltip>
-          </q-icon>
-        </template>
-      </q-btn-toggle> -->
-    </div>
+    <a-list size="small">
+      <ListItem>
+        <ItemLabel keyId="align-self" :label="alignConfigs.title"></ItemLabel>
+        <IconRadio :model="iconRadioModel"></IconRadio>
+      </ListItem>
+    </a-list>
   </a-collapse-item>
 </template>
 
