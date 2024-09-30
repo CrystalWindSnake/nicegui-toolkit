@@ -15,7 +15,7 @@ const { style } = useDraggable(el, {
     <div
       ref="el"
       class="cursor-move bg-[#EDF8BB] row items-center gap-2 text-cyan-500 text-xl px-2"
-      style="width: 100%; top: 0; left: 0; z-index: 999; height: 2rem"
+      style="top: 0; left: 0; z-index: 999; height: 2rem"
     >
       <a-space class="h-full">
         <icon-bug size="24"></icon-bug>

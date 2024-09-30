@@ -18,7 +18,7 @@ const showPanels = computed(() => !!selectTarget.value);
   <div>
     <a-tabs :hide-content="!showPanels">
       <a-tab-pane key="style" title="style">
-        <a-collapse>
+        <a-collapse accordion>
           <FlexItem></FlexItem>
 
           <Layout></Layout>
