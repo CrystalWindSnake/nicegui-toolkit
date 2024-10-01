@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import InputWithUnitSelector from "@/commons/InputWithUnitSelector.vue";
 import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
-
 import { heightOptions } from "./data";
-import { valueToStyleModel } from "./utils";
 import ItemLabel from "@/commons/ItemLabel.vue";
+import * as globals from "@/hooks/globals";
+import { sizeOnChanged } from "./utils";
 
 const options = heightOptions;
+
+const propertyModel = globals.createReactiveProperty("height");
 
 const inputWithUnitSelectorModel = useInputWithUnitSelector({
   options,
@@ -16,9 +18,8 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
     defaultOptionValue: "auto",
     specialProperty: "height",
   },
+  onChanged: sizeOnChanged(propertyModel),
 });
-
-valueToStyleModel(inputWithUnitSelectorModel, "height", ["auto"]);
 </script>
 
 <template>

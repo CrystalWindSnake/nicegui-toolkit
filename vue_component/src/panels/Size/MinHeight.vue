@@ -3,10 +3,12 @@ import InputWithUnitSelector from "@/commons/InputWithUnitSelector.vue";
 import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
 
 import { minHeightOptions } from "./data";
-import { valueToStyleModel } from "./utils";
 import ItemLabel from "@/commons/ItemLabel.vue";
+import * as globals from "@/hooks/globals";
+import { sizeOnChanged } from "./utils";
 
 const options = minHeightOptions;
+const propertyModel = globals.createReactiveProperty("min-height");
 
 const inputWithUnitSelectorModel = useInputWithUnitSelector({
   options,
@@ -19,9 +21,8 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
     nonValueOptions: ["auto"],
     specialProperty: "height",
   },
+  onChanged: sizeOnChanged(propertyModel),
 });
-
-valueToStyleModel(inputWithUnitSelectorModel, "min-height", ["auto"]);
 </script>
 
 <template>

@@ -3,10 +3,12 @@ import InputWithUnitSelector from "@/commons/InputWithUnitSelector.vue";
 import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
 
 import { maxHeightOptions } from "./data";
-import { valueToStyleModel } from "./utils";
 import ItemLabel from "@/commons/ItemLabel.vue";
+import * as globals from "@/hooks/globals";
+import { sizeOnChanged } from "./utils";
 
 const options = maxHeightOptions;
+const propertyModel = globals.createReactiveProperty("max-height");
 
 const inputWithUnitSelectorModel = useInputWithUnitSelector({
   options,
@@ -16,9 +18,8 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
     defaultOptionValue: "none",
     specialProperty: "height",
   },
+  onChanged: sizeOnChanged(propertyModel),
 });
-
-valueToStyleModel(inputWithUnitSelectorModel, "max-height", ["none"]);
 </script>
 
 <template>

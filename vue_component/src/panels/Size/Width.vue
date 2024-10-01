@@ -1,31 +1,14 @@
 <script setup lang="ts">
 import InputWithUnitSelector from "@/commons/InputWithUnitSelector.vue";
-import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
-
-import { widthOptions } from "./data";
-
-import { buildRefGetter } from "@/hooks/targetInfoGetter";
-import { toRef, watch } from "vue";
-import * as globals from "@/hooks/globals";
-
 import ItemLabel from "@/commons/ItemLabel.vue";
+import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
+import { widthOptions } from "./data";
+import * as globals from "@/hooks/globals";
+import { sizeOnChanged } from "./utils";
 
 const options = widthOptions;
 
-const selectTarget = globals.SelectedTarget;
-const getter = buildRefGetter(selectTarget);
-
-// const width = getter.getStyle("width");
-// watch(width, (value) => {
-//   console.log("width:", value === null);
-
-//   const dto = buildInputValueDto(value);
-
-//   const { number, unit } = dto.splitTo();
-// });
-
-const unit = toRef("auto");
-const widthValue = toRef(undefined);
+const propertyModel = globals.createReactiveProperty("width");
 
 const inputWithUnitSelectorModel = useInputWithUnitSelector({
   options,
@@ -35,9 +18,8 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
     defaultOptionValue: "auto",
     specialProperty: "width",
   },
+  onChanged: sizeOnChanged(propertyModel),
 });
-
-// valueToStyleModel(valueInputModel, "width", ["auto"]);
 </script>
 
 <template>

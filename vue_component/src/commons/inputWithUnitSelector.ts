@@ -1,4 +1,4 @@
-import { ref, computed, Ref } from "vue";
+import { ref, computed, Ref, watch } from "vue";
 import * as utils from "@/hooks/utils";
 
 type TItemOption = { label: string; value: string };
@@ -19,6 +19,7 @@ export function useInputWithUnitSelector(settings: {
   options: TOption[];
   defaultValues?: { input?: string | undefined; select?: string | undefined };
   configs?: TConfigs;
+  onChanged?: (number: string | undefined, unit: string | undefined) => void;
 }) {
   const {
     defaultValues = { input: undefined, select: undefined },
@@ -68,11 +69,13 @@ export function useInputWithUnitSelector(settings: {
 
   function updateInput(text: string) {
     whenInputValueChanged(selectValue, inputValue, configs, cache);
+    settings.onChanged?.(inputValue.value, selectValue.value);
   }
 
   function updateSelect(value: string) {
     selectValue.value = value;
     whenSelectValueChanged(selectValue, inputValue, configs, cache);
+    settings.onChanged?.(inputValue.value, selectValue.value);
   }
 
   whenInputValueChanged(selectValue, inputValue, configs, cache);
