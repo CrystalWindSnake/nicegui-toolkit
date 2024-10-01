@@ -7,7 +7,6 @@ import IconRadio from "@/commons/IconRadio.vue";
 import { useIconRadio } from "@/commons/iconRadio";
 
 import ItemLabel from "@/commons/ItemLabel.vue";
-import ListItem from "@/commons/ListItem.vue";
 
 const displayModel = globals.createReactiveProperty("display");
 
