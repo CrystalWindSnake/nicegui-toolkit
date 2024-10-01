@@ -4,13 +4,12 @@ import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
 
 import { maxWidthOptions } from "./data";
 import ItemLabel from "@/commons/ItemLabel.vue";
-import * as globals from "@/hooks/globals";
-import { sizeOnChanged } from "./utils";
 
 const options = maxWidthOptions;
-const propertyModel = globals.createReactiveProperty("max-width");
 
 const inputWithUnitSelectorModel = useInputWithUnitSelector({
+  propertyName: "max-width",
+  defaultValues: { input: undefined, select: "none" },
   options,
   configs: {
     optionValueIfnonValue: "px",
@@ -18,7 +17,6 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
     defaultOptionValue: "none",
     specialProperty: "width",
   },
-  onChanged: sizeOnChanged(propertyModel),
 });
 </script>
 

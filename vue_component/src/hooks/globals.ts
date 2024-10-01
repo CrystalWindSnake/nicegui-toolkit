@@ -3,19 +3,15 @@ import {
   TSetCommand,
   TResetCommand,
 } from "@/components/types";
-import { ref, ComputedRef, computed } from "vue";
+import { ComputedRef, computed } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
-import * as reactiveProperty from "./reactiveProperty";
-export {
-  updateCurrentTargetContext,
-  useHasChanged,
-} from "./targetElementContext";
+import { updateTargetElement } from "@/hooks/targetElementContext";
 
-export const SelectedTarget = ref<HTMLElement | null>(null);
+// export const SelectedTarget = ref<HTMLElement | null>(null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
 
-export const { createReactiveProperty, triggerPropertyUpdate } =
-  reactiveProperty.builder(SelectedTarget);
+// export const { createReactiveProperty, triggerPropertyUpdate } =
+//   reactiveProperty.builder(SelectedTarget);
 
 let emitSetCommandFn: (commands: TSetCommand[]) => void;
 let emitResetCommandFn: (commands: TResetCommand[]) => void;
@@ -110,7 +106,7 @@ function hookPageMouseEvent(hoverElement: ComputedRef<HTMLElement | null>) {
         return;
       }
 
-      SelectedTarget.value = hoverElement.value;
+      updateTargetElement(hoverElement.value);
 
       e.stopPropagation();
     },

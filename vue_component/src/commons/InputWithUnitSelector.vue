@@ -11,9 +11,10 @@ const {
   inputValue,
   selectValue,
   inputPlaceholder,
+  itemOptions,
+  userEdited,
   updateInput,
   updateSelect,
-  itemOptions,
 } = props.model;
 const inputRef = ref<HTMLElement | null>(null);
 
@@ -24,12 +25,15 @@ function onInputUpdate(value: string, e: Event) {
   }
   updateInput(value);
 
+  userEdited();
+
   inputRef.value?.blur();
 }
 
 // select events
 function updateSelectValue(value: any) {
   updateSelect(value);
+  userEdited();
 }
 </script>
 

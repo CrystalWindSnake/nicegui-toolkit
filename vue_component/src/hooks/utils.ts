@@ -21,7 +21,7 @@ export function getWindowSize() {
 }
 
 export function parseUnitStyleValue(styleValue: string) {
-  const regex = /^(\d*\.?\d+)(px|%)$|^auto$/i;
+  const regex = /^(\d*\.?\d+)(px|%|rem|em|ex|ch|vw|vh|vmin|vmax)$|^auto$/i;
 
   const match = styleValue.match(regex);
 

@@ -2,17 +2,16 @@
 import { computed } from "vue";
 import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
+import { selectedTarget } from "@/hooks/targetElementContext";
 import ItemLabel from "@/commons/ItemLabel.vue";
 import ListItem from "@/commons/ListItem.vue";
 
 import IconRadio from "@/commons/IconRadio.vue";
 import { useIconRadio } from "@/commons/iconRadio";
 
-const getter = buildRefGetter(globals.SelectedTarget);
+const getter = buildRefGetter(selectedTarget);
 
 const parentFlexInfo = getter.getParentFlexBoxInfo();
-
-const alignModel = globals.createReactiveProperty("align-self");
 
 const alignConfigs = computed(() => {
   if (parentFlexInfo.value.direction === "row") {
@@ -64,15 +63,15 @@ const alignConfigs = computed(() => {
   };
 });
 
-const iconRadioModel = useIconRadio(
-  [
+const iconRadioModel = useIconRadio({
+  propertyName: "align-self",
+  options: [
     { value: "flex-start", icon: "align_horizontal_left" },
     { value: "center", icon: "align_horizontal_center" },
     { value: "flex-end", icon: "align_horizontal_right" },
     { value: "stretch", icon: "settings_overscan" },
   ],
-  alignModel
-);
+});
 </script>
 
 <template>

@@ -4,6 +4,7 @@ import { useMouse, useWindowSize } from "@vueuse/core";
 
 import * as utils from "./utils";
 import * as globals from "@/hooks/globals";
+import * as targetElementContext from "@/hooks/targetElementContext";
 
 export function useTypeNameTag(
   config: TSelectorConfig,
@@ -129,7 +130,8 @@ export function getComponentExpose(
   }
 
   function onServerResetCommand(propertyName: string) {
-    globals.triggerPropertyUpdate(propertyName);
+    // globals.triggerPropertyUpdate(propertyName);
+    targetElementContext.triggerUpdateFlag(propertyName);
   }
 
   return { queryStyle, selectTarget, onServerResetCommand };

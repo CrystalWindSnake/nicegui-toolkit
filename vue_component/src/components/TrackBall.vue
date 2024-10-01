@@ -17,6 +17,7 @@ import {
 } from "./types";
 import { onMounted, watch } from "vue";
 import * as globals from "@/hooks/globals";
+import * as targetElementContext from "@/hooks/targetElementContext";
 import { useAiming } from "./Aiming";
 
 const props = defineProps<{
@@ -46,7 +47,7 @@ const emit = defineEmits<{
 }>();
 
 function emitSetCommnad(commands: TSetCommand[]) {
-  const target = globals.SelectedTarget.value;
+  const target = targetElementContext.selectedTarget.value;
   if (!target) {
     return;
   }
@@ -58,7 +59,7 @@ function emitSetCommnad(commands: TSetCommand[]) {
 }
 
 function emitResetCommnad(commands: TResetCommand[]) {
-  const target = globals.SelectedTarget.value;
+  const target = targetElementContext.selectedTarget.value;
   if (!target) {
     return;
   }
@@ -83,7 +84,7 @@ globals.initGlobals({
 watch(
   () => props.currentTargetContext,
   () => {
-    globals.updateCurrentTargetContext(props.currentTargetContext);
+    targetElementContext.updateCurrentTargetContext(props.currentTargetContext);
   },
   {
     immediate: true,
@@ -110,7 +111,7 @@ watch(globals.hoverElement, (target) => {
   emit("hoverChange", { id: null });
 });
 
-watch(globals.SelectedTarget, (target) => {
+watch(targetElementContext.selectedTarget, (target) => {
   const flexInfo = {
     isFlex: false,
     direction: null,
@@ -147,7 +148,9 @@ watch(globals.SelectedTarget, (target) => {
 });
 
 // Expose
-defineExpose(getComponentExpose(props.selectorConfig, globals.SelectedTarget));
+defineExpose(
+  getComponentExpose(props.selectorConfig, targetElementContext.selectedTarget)
+);
 </script>
 
 <template>

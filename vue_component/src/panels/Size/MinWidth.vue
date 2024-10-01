@@ -4,24 +4,18 @@ import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
 
 import { minWidthOptions } from "./data";
 import ItemLabel from "@/commons/ItemLabel.vue";
-import * as globals from "@/hooks/globals";
-import { sizeOnChanged } from "./utils";
 
 const options = minWidthOptions;
-const propertyModel = globals.createReactiveProperty("min-width");
 
 const inputWithUnitSelectorModel = useInputWithUnitSelector({
+  propertyName: "min-width",
+  defaultValues: { input: "0", select: "px" },
   options,
-  defaultValues: {
-    input: "0",
-    select: "px",
-  },
   configs: {
     optionValueIfnonValue: "px",
     nonValueOptions: ["auto"],
     specialProperty: "width",
   },
-  onChanged: sizeOnChanged(propertyModel),
 });
 </script>
 

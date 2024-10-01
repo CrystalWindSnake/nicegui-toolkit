@@ -4,24 +4,18 @@ import { useInputWithUnitSelector } from "@/commons/inputWithUnitSelector";
 
 import { minHeightOptions } from "./data";
 import ItemLabel from "@/commons/ItemLabel.vue";
-import * as globals from "@/hooks/globals";
-import { sizeOnChanged } from "./utils";
 
 const options = minHeightOptions;
-const propertyModel = globals.createReactiveProperty("min-height");
 
 const inputWithUnitSelectorModel = useInputWithUnitSelector({
+  propertyName: "min-height",
+  defaultValues: { input: "0", select: "px" },
   options,
-  defaultValues: {
-    input: "0",
-    select: "px",
-  },
   configs: {
     optionValueIfnonValue: "px",
     nonValueOptions: ["auto"],
     specialProperty: "height",
   },
-  onChanged: sizeOnChanged(propertyModel),
 });
 </script>
 

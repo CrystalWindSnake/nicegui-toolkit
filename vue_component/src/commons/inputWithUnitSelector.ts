@@ -1,5 +1,7 @@
 import { ref, computed, Ref, watch } from "vue";
 import * as utils from "@/hooks/utils";
+import * as globals from "@/hooks/globals";
+import { getTargetContext, useUpdateFlag } from "@/hooks/targetElementContext";
 
 type TItemOption = { label: string; value: string };
 type TOption = string | TItemOption;
@@ -15,11 +17,18 @@ type TConfigs =
     }
   | undefined;
 
+function getStyleInContext(
+  stylesMap: ReturnType<typeof getTargetContext>,
+  propertyName: string
+) {
+  return stylesMap.styles.get(propertyName);
+}
+
 export function useInputWithUnitSelector(settings: {
+  propertyName: string;
   options: TOption[];
   defaultValues?: { input?: string | undefined; select?: string | undefined };
   configs?: TConfigs;
-  onChanged?: (number: string | undefined, unit: string | undefined) => void;
 }) {
   const {
     defaultValues = { input: undefined, select: undefined },
@@ -44,10 +53,6 @@ export function useInputWithUnitSelector(settings: {
     return itemOptions.find((v) => v.value === value);
   }
 
-  const cache = {
-    lastInvaildInputValue: inputValue.value,
-  };
-
   const selectItem = ref<TItemOption | null>(null);
 
   const selectDisplay = computed(() => {
@@ -67,19 +72,54 @@ export function useInputWithUnitSelector(settings: {
     return "";
   });
 
+  const updateFlag = useUpdateFlag(settings.propertyName);
+
+  watch(updateFlag, () => {
+    const styleValue = getStyleInContext(
+      getTargetContext(),
+      settings.propertyName
+    ) as string;
+
+    if (styleValue === undefined) {
+      inputValue.value = defaultValues.input;
+      selectValue.value = defaultValues.select;
+      return;
+    }
+
+    const { number, unit } = utils.parseUnitStyleValue(styleValue);
+
+    inputValue.value = number;
+    selectValue.value = unit;
+  });
+
+  function userEdited() {
+    const number = inputValue.value;
+    const unit = selectValue.value;
+
+    let newValue = "";
+    if (unit === "auto") {
+      newValue = unit;
+    } else {
+      newValue = `${number}${unit}`;
+    }
+
+    globals.sendSetCommand({
+      propertyName: settings.propertyName,
+      values: { [settings.propertyName]: newValue },
+    });
+  }
+
   function updateInput(text: string) {
-    whenInputValueChanged(selectValue, inputValue, configs, cache);
-    settings.onChanged?.(inputValue.value, selectValue.value);
+    whenInputValueChanged(selectValue, inputValue, configs);
   }
 
   function updateSelect(value: string) {
     selectValue.value = value;
-    whenSelectValueChanged(selectValue, inputValue, configs, cache);
-    settings.onChanged?.(inputValue.value, selectValue.value);
+    whenSelectValueChanged(selectValue, inputValue, configs);
   }
 
-  whenInputValueChanged(selectValue, inputValue, configs, cache);
-  whenSelectValueChanged(selectValue, inputValue, configs, cache);
+  whenInputValueChanged(selectValue, inputValue, configs);
+  whenSelectValueChanged(selectValue, inputValue, configs);
 
   return {
     inputValue,
@@ -88,18 +128,16 @@ export function useInputWithUnitSelector(settings: {
     selectDisplay,
     inputPlaceholder,
     itemOptions,
-    updateInput,
+    userEdited,
     updateSelect,
+    updateInput,
   };
 }
 
 function whenInputValueChanged(
   selectValue: Ref<string | undefined>,
   inputValue: Ref<string | undefined>,
-  configs: TConfigs,
-  cache: {
-    lastInvaildInputValue: string | undefined;
-  }
+  configs: TConfigs
 ) {
   const { nonValueOptions, defaultOptionValue, optionValueIfnonValue } =
     configs ?? {};
@@ -142,19 +180,12 @@ function whenInputValueChanged(
   if (!value && nonValueOptions) {
     selectValue.value = nonValueOptions[0];
   }
-
-  if (!!value) {
-    cache.lastInvaildInputValue = value;
-  }
 }
 
 function whenSelectValueChanged(
   selectValue: Ref<string | undefined>,
   inputValue: Ref<string | undefined>,
-  configs: TConfigs,
-  cache: {
-    lastInvaildInputValue: string | undefined;
-  }
+  configs: TConfigs
 ) {
   const { nonValueOptions } = configs ?? {};
   const value = selectValue.value;

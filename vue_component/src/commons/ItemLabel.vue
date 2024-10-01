@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import * as globals from "@/hooks/globals";
+import * as targetElementContext from "@/hooks/targetElementContext";
+
 import { computed } from "vue";
 const props = defineProps<{ keyId: string; label?: string }>();
 
@@ -9,7 +11,7 @@ const emit = defineEmits<{
 }>();
 
 const label = computed(() => props.label ?? props.keyId);
-const hasChanged = globals.useHasChanged(props.keyId);
+const hasChanged = targetElementContext.useHasChanged(props.keyId);
 
 function reset() {
   globals.sendResetCommnad(props.keyId);

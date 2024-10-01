@@ -5,10 +5,11 @@ const props = defineProps<{
   model: TModel;
 }>();
 
-const { value, options } = props.model;
+const { value, options, userEdited } = props.model;
 
 function onCheck(tagValue: string) {
   value.value = tagValue;
+  userEdited();
 }
 </script>
 

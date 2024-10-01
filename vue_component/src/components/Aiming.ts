@@ -5,7 +5,7 @@ import {
   useEventListener,
   useMutationObserver,
 } from "@vueuse/core";
-import * as globals from "@/hooks/globals";
+import { selectedTarget } from "@/hooks/targetElementContext";
 
 export type TModel = ReturnType<typeof useAiming>;
 
@@ -20,8 +20,6 @@ export type TModel = ReturnType<typeof useAiming>;
 // }
 
 export function useAiming() {
-  const selectedTarget = globals.SelectedTarget;
-
   const bounding = reactive(useElementBounding(selectedTarget));
 
   useMutationObserver(

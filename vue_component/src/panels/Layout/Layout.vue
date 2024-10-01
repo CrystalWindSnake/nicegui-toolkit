@@ -1,45 +1,36 @@
 <script setup lang="ts">
 import { computed, Ref } from "vue";
-import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
-
+import { selectedTarget } from "@/hooks/targetElementContext";
 import IconRadio from "@/commons/IconRadio.vue";
 import { useIconRadio } from "@/commons/iconRadio";
 
 import ItemLabel from "@/commons/ItemLabel.vue";
 
-const displayModel = globals.createReactiveProperty("display");
+const getter = buildRefGetter(selectedTarget);
 
-const selectTarget = globals.SelectedTarget;
-
-const getter = buildRefGetter(selectTarget);
-
-const displayIconRadioModel = useIconRadio(
-  [
+const displayIconRadioModel = useIconRadio({
+  propertyName: "display",
+  options: [
     { value: "block", icon: "inbox" },
     { value: "flex", icon: "inventory_2" },
   ],
-  displayModel
-);
+});
 
 const flexInfo = getter.getFlexBoxInfo(
   displayIconRadioModel.value as Ref<string>
 );
 
 // direction
-const directionModel = globals.createReactiveProperty("flex-direction");
-
-const directionIconRadioModel = useIconRadio(
-  [
+const directionIconRadioModel = useIconRadio({
+  propertyName: "flex-direction",
+  options: [
     { value: "row", label: "Horizontal" },
     { value: "column", label: "Vertical" },
   ],
-  directionModel
-);
+});
 
 // align config
-const alignModel = globals.createReactiveProperty("align-items");
-
 const alignTitle = computed(() =>
   directionIconRadioModel.value.value === "row"
     ? "vertical align"
@@ -66,11 +57,12 @@ const alignOpts = computed(() => {
   ];
 });
 
-const alignIconRadioModel = useIconRadio(alignOpts, alignModel);
+const alignIconRadioModel = useIconRadio({
+  propertyName: "align-items",
+  options: alignOpts,
+});
 
 // justify config
-
-const justifyModel = globals.createReactiveProperty("justify-content");
 
 const justifyTitle = computed(() =>
   directionIconRadioModel.value.value === "row"
@@ -98,7 +90,10 @@ const justifyOpts = computed(() => {
   ];
 });
 
-const justifyIconRadioModel = useIconRadio(justifyOpts, justifyModel);
+const justifyIconRadioModel = useIconRadio({
+  propertyName: "justify-content",
+  options: justifyOpts,
+});
 </script>
 
 <template>

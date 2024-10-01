@@ -4,14 +4,12 @@ import Spacing from "./Spacing/Spacing.vue";
 import Layout from "./Layout/Layout.vue";
 import FlexItem from "./FlexItem/FlexItem.vue";
 import Size from "./Size/Size.vue";
-import * as globals from "@/hooks/globals";
 import { bindSelectTarget } from "@/hooks/propsMapping";
+import { selectedTarget } from "@/hooks/targetElementContext";
 
-const selectTarget = globals.SelectedTarget;
+bindSelectTarget(selectedTarget);
 
-bindSelectTarget(selectTarget);
-
-const showPanels = computed(() => !!selectTarget.value);
+const showPanels = computed(() => !!selectedTarget.value);
 </script>
 
 <template>
