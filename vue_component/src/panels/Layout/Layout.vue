@@ -104,37 +104,32 @@ const justifyIconRadioModel = useIconRadio(justifyOpts, justifyModel);
 
 <template>
   <a-collapse-item header="Layout(布局)" key="layout">
-    <a-list size="small">
+    <div class="grid grid-cols-[auto_auto] gap-y-2 items-center justify-start">
       <!-- display -->
 
-      <ListItem>
-        <ItemLabel keyId="display" label="Display"></ItemLabel>
-        <IconRadio :model="displayIconRadioModel"></IconRadio>
-      </ListItem>
+      <ItemLabel keyId="display" label="Display"></ItemLabel>
+      <IconRadio :model="displayIconRadioModel"></IconRadio>
 
       <!-- flexbox setting -->
       <template v-if="flexInfo.isFlex">
         <!-- Direction -->
-        <ListItem>
-          <ItemLabel keyId="flex-direction" label="direction"></ItemLabel>
-          <IconRadio :model="directionIconRadioModel"></IconRadio>
-        </ListItem>
+
+        <ItemLabel keyId="flex-direction" label="direction"></ItemLabel>
+        <IconRadio :model="directionIconRadioModel"></IconRadio>
 
         <!-- align -->
-        <ListItem>
-          <ItemLabel keyId="align-items" :label="alignTitle"></ItemLabel>
 
-          <IconRadio :model="alignIconRadioModel"></IconRadio>
-        </ListItem>
+        <ItemLabel keyId="align-items" :label="alignTitle"></ItemLabel>
+
+        <IconRadio :model="alignIconRadioModel"></IconRadio>
 
         <!-- justify -->
-        <ListItem>
-          <ItemLabel keyId="justify-content" :label="justifyTitle"></ItemLabel>
 
-          <IconRadio :model="justifyIconRadioModel"></IconRadio>
-        </ListItem>
+        <ItemLabel keyId="justify-content" :label="justifyTitle"></ItemLabel>
+
+        <IconRadio :model="justifyIconRadioModel"></IconRadio>
       </template>
-    </a-list>
+    </div>
   </a-collapse-item>
 </template>
 
