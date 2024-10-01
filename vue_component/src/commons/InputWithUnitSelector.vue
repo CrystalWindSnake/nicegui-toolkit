@@ -37,6 +37,7 @@ function updateSelectValue(value: any) {
   <div class="grid gap-0 grid-cols-[auto_auto] ring-offset-1 ring-1">
     <AInput
       ref="inputRef"
+      size="mini"
       :model-value="inputValue"
       :placeholder="inputPlaceholder"
       @blur="onInputUpdate"
@@ -44,6 +45,7 @@ function updateSelectValue(value: any) {
     ></AInput>
     <ASelect
       popup-container="[layout-tool-panel]"
+      size="mini"
       :options="itemOptions"
       :model-value="selectValue"
       @change="updateSelectValue"

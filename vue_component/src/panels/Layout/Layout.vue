@@ -104,7 +104,9 @@ const justifyIconRadioModel = useIconRadio(justifyOpts, justifyModel);
 
 <template>
   <a-collapse-item header="Layout(布局)" key="layout">
-    <div class="grid grid-cols-[auto_auto] gap-y-2 items-center justify-start">
+    <div
+      class="grid grid-cols-[minmax(18ch,auto)_auto] gap-y-2 items-center justify-start"
+    >
       <!-- display -->
 
       <ItemLabel keyId="display" label="Display"></ItemLabel>
