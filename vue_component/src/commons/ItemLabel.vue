@@ -3,11 +3,17 @@ import * as globals from "@/hooks/globals";
 import { computed } from "vue";
 const props = defineProps<{ keyId: string; label?: string }>();
 
+// emit
+const emit = defineEmits<{
+  (event: "reset"): void;
+}>();
+
 const label = computed(() => props.label ?? props.keyId);
 const hasChanged = globals.useHasChanged(props.keyId);
 
 function reset() {
   globals.sendResetCommnad(props.keyId);
+  emit("reset");
 }
 
 const divStyle = computed(() => {

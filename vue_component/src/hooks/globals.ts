@@ -3,23 +3,19 @@ import {
   TSetCommand,
   TResetCommand,
 } from "@/components/types";
-import { ref, ComputedRef, computed, reactive } from "vue";
+import { ref, ComputedRef, computed } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
 import * as reactiveProperty from "./reactiveProperty";
+export {
+  updateCurrentTargetContext,
+  useHasChanged,
+} from "./targetElementContext";
 
 export const SelectedTarget = ref<HTMLElement | null>(null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
 
 export const { createReactiveProperty, triggerPropertyUpdate } =
   reactiveProperty.builder(SelectedTarget);
-
-const targetElementContext: {
-  props: Map<string, any>;
-  styles: Map<string, any>;
-} = {
-  props: reactive(new Map()),
-  styles: reactive(new Map()),
-};
 
 let emitSetCommandFn: (commands: TSetCommand[]) => void;
 let emitResetCommandFn: (commands: TResetCommand[]) => void;
@@ -62,30 +58,6 @@ export function sendResetCommnad(
   type: TResetCommand["type"] = "style"
 ) {
   emitResetCommandFn([{ propertyName, type }]);
-}
-
-export function updateCurrentTargetContext(context: {
-  props?: Record<string, any>;
-  styles?: Record<string, any>;
-}) {
-  targetElementContext.props.clear();
-  targetElementContext.styles.clear();
-
-  if (context.props) {
-    for (const [key, value] of Object.entries(context.props)) {
-      targetElementContext.props.set(key, value);
-    }
-  }
-
-  if (context.styles) {
-    for (const [key, value] of Object.entries(context.styles)) {
-      targetElementContext.styles.set(key, value);
-    }
-  }
-}
-
-export function useHasChanged(key: string) {
-  return computed(() => targetElementContext.styles.has(key));
 }
 
 function useHoverElement(config: TSelectorConfig) {

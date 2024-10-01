@@ -174,7 +174,7 @@ defineExpose(getComponentExpose(props.selectorConfig, globals.SelectedTarget));
 
 <style>
 .arco-collapse-item-content {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .x-unit-select .arco-select-view-suffix {

@@ -19,3 +19,17 @@ export function getWindowSize() {
     height: window.innerHeight,
   };
 }
+
+export function parseUnitStyleValue(styleValue: string) {
+  const regex = /^(\d*\.?\d+)(px|%)$|^auto$/i;
+
+  const match = styleValue.match(regex);
+
+  if (match) {
+    const number = match[1] || "";
+    const unit = match[2] || "auto";
+    return { number, unit };
+  } else {
+    return { number: "", unit: "" };
+  }
+}
