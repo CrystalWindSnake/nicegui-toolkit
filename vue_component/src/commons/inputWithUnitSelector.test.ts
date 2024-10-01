@@ -22,7 +22,7 @@ describe("useCommon", () => {
     expect(model.selectValue.value).toBe("auto");
     expect(model.selectDisplay.value).toBe("-");
     expect(model.inputPlaceholder.value).toBe("auto");
-    expect(model.inputValue.value).toBeNull();
+    expect(model.inputValue.value).toBeUndefined();
   });
 
   it("input empty and auto unit,then input 100,unit should change", async () => {
@@ -43,9 +43,9 @@ describe("useCommon", () => {
     });
 
     expect(model.selectValue.value).toBe("auto");
-    expect(model.inputValue.value).toBeNull();
+    expect(model.inputValue.value).toBeUndefined();
 
-    model.inputValue.value = "100";
+    model.updateInput("100");
 
     await nextTick();
     expect(model.selectValue.value).toBe("rem");
@@ -71,7 +71,7 @@ describe("useCommon", () => {
     expect(model.selectValue.value).toBe("px");
     expect(model.inputValue.value).toBe("100");
 
-    model.selectValue.value = "em";
+    model.updateSelect("em");
 
     await nextTick();
     expect(model.inputValue.value).toBe("100");

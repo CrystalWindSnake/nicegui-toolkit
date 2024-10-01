@@ -157,10 +157,9 @@ defineExpose(getComponentExpose(props.selectorConfig, globals.SelectedTarget));
     <Aiming :model="aimingModel" style="z-index: 9999999"></Aiming>
 
     <Panel class="non-selectable" style="z-index: 9999999; width: 350px">
+      <slot name="header"></slot>
       <MainPanel></MainPanel>
-      <template v-slot:footer>
-        <slot name="footer"></slot>
-      </template>
+      <slot name="footer"></slot>
     </Panel>
 
     <div

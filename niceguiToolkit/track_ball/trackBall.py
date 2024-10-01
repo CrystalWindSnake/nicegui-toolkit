@@ -52,6 +52,8 @@ class TrackBall(Element, component="trackBall.js"):
                 for key, value in values.items():
                     target._style[key] = value
 
+                    self.record_tracker.add_record(target.id, key)
+
             target.update()
             self._update_current_target_context()
 
@@ -106,6 +108,8 @@ class TrackBall(Element, component="trackBall.js"):
                     del target._props[name]
                 elif command.type == "classes":
                     target._classes.remove(name)
+
+                self.record_tracker.remove_record(target.id, name)
 
             target.update()
             self._update_current_target_context()

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Literal, Callable, List
+from typing import Any, Dict, Literal, Callable, List
 from nicegui import ui
 
 TRecordType = Literal["props", "style", "class"]
@@ -8,15 +8,14 @@ _TNG_ELEMENT_ID = int
 
 @dataclass
 class Command:
-    type: TRecordType
-    fn: Callable[[ui.element], None]
-    applied: bool = False
+    property_name: str
 
 
-@dataclass(frozen=True)
+@dataclass
 class Record:
     ng_element_id: _TNG_ELEMENT_ID
     commands: List[Command] = field(default_factory=list)
+    applied: bool = False
 
     def __hash__(self):
         return hash(self.ng_element_id)
@@ -34,31 +33,31 @@ class RecordTracker:
     def add_record(
         self,
         ng_element_id: _TNG_ELEMENT_ID,
-        type: TRecordType,
-        command_fn: Callable[[ui.element], None],
+        property_name: str,
     ):
         record = self.records.get(ng_element_id)
         if record is None:
             record = Record(ng_element_id)
             self.records[ng_element_id] = record
-        record.commands.append(Command(type, command_fn))
+        record.commands.append(Command(property_name))
 
     def apply_records(self):
-        for record in self.records.values():
-            target = ui.context.client.elements.get(record.ng_element_id)
+        pass
 
-            if target is None:
-                raise ValueError(f"element with id {record.ng_element_id} not found")
+    def remove_record(self, ng_element_id: _TNG_ELEMENT_ID, property_name: str):
+        record = self.records.get(ng_element_id)
+        if record is not None:
+            record.commands = [
+                command
+                for command in record.commands
+                if command.property_name != property_name
+            ]
 
-            for command in record.commands:
-                command.fn(target)
-                command.applied = True
-
-    def has_unapplied_records(self) -> bool:
-        for record in self.records.values():
-            if not all(command.applied for command in record.commands):
-                return True
-        return False
+    # def has_unapplied_records(self) -> bool:
+    #     for record in self.records.values():
+    #         if not all(command.applied for command in record.commands):
+    #             return True
+    #     return False
 
     def clear_records(self):
         self.records.clear()
