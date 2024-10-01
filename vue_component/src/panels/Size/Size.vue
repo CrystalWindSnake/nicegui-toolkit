@@ -10,23 +10,31 @@ import MinHeight from "./MinHeight.vue";
 
 <template>
   <a-collapse-item header="Size(大小)" key="size">
-    <a-list :gridProps="{ gutter: 0, span: 24 }" :bordered="true">
-      <a-list-item>
+    <div class="grid grid-cols-[auto_1fr] items-center px-2 gap-y-1">
+      <Width></Width>
+      <MinWidth></MinWidth>
+      <MaxWidth></MaxWidth>
+
+      <Height></Height>
+      <MinHeight></MinHeight>
+      <MaxHeight></MaxHeight>
+    </div>
+
+    <!-- <a-list-item>
         <a-list>
           <Width></Width>
           <MinWidth></MinWidth>
           <MaxWidth></MaxWidth>
         </a-list>
-      </a-list-item>
+      </a-list-item> -->
 
-      <!-- <a-list-item>
+    <!-- <a-list-item>
         <a-list>
           <Height></Height>
           <MinHeight></MinHeight>
           <MaxHeight></MaxHeight>
         </a-list>
       </a-list-item> -->
-    </a-list>
   </a-collapse-item>
 
   <!-- <q-expansion-item

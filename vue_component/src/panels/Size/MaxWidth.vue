@@ -14,6 +14,7 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
     optionValueIfnonValue: "px",
     nonValueOptions: ["none"],
     defaultOptionValue: "none",
+    specialProperty: "width",
   },
 });
 
@@ -21,12 +22,10 @@ valueToStyleModel(inputWithUnitSelectorModel, "max-width", ["none"]);
 </script>
 
 <template>
-  <div class="w-full flex flex-row">
-    <ItemLabel key-id="max-width" label="Max W" />
-    <InputWithUnitSelector
-      :model="inputWithUnitSelectorModel"
-    ></InputWithUnitSelector>
-  </div>
+  <ItemLabel key-id="max-width" label="Max W" />
+  <InputWithUnitSelector
+    :model="inputWithUnitSelectorModel"
+  ></InputWithUnitSelector>
 </template>
 
 <style scoped lang="less">

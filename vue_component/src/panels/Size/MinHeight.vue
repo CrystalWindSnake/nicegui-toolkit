@@ -17,6 +17,7 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
   configs: {
     optionValueIfnonValue: "px",
     nonValueOptions: ["auto"],
+    specialProperty: "height",
   },
 });
 
@@ -24,12 +25,10 @@ valueToStyleModel(inputWithUnitSelectorModel, "min-height", ["auto"]);
 </script>
 
 <template>
-  <div class="w-full flex flex-row">
-    <ItemLabel key-id="min-height" label="Min H" />
-    <InputWithUnitSelector
-      :model="inputWithUnitSelectorModel"
-    ></InputWithUnitSelector>
-  </div>
+  <ItemLabel key-id="min-height" label="Min H" />
+  <InputWithUnitSelector
+    :model="inputWithUnitSelectorModel"
+  ></InputWithUnitSelector>
 </template>
 
 <style scoped lang="less">

@@ -34,7 +34,7 @@ function updateSelectValue(value: any) {
 </script>
 
 <template>
-  <div class="grid gap-0 grid-cols-[auto_5rem]">
+  <div class="grid gap-0 grid-cols-[auto_8ch] w-[18ch]">
     <AInput
       ref="inputRef"
       :model-value="inputValue"
@@ -47,7 +47,10 @@ function updateSelectValue(value: any) {
       :options="itemOptions"
       :model-value="selectValue"
       @change="updateSelectValue"
-    ></ASelect>
+      class="p-0"
+    >
+      <template #arrow-icon></template>
+    </ASelect>
   </div>
 </template>
 

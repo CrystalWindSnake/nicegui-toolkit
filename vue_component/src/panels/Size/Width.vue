@@ -33,6 +33,7 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
     nonValueOptions: ["auto"],
     optionValueIfnonValue: "px",
     defaultOptionValue: "auto",
+    specialProperty: "width",
   },
 });
 
@@ -40,12 +41,10 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
 </script>
 
 <template>
-  <div class="w-full flex flex-row">
-    <ItemLabel key-id="width" label="Width" />
-    <InputWithUnitSelector
-      :model="inputWithUnitSelectorModel"
-    ></InputWithUnitSelector>
-  </div>
+  <ItemLabel key-id="width" label="Width" />
+  <InputWithUnitSelector
+    :model="inputWithUnitSelectorModel"
+  ></InputWithUnitSelector>
 </template>
 
 <style scoped lang="less">

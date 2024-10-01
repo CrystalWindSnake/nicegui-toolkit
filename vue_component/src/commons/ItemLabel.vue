@@ -27,7 +27,7 @@ const divStyle = computed(() => {
     cancel-text="No"
     @ok="reset"
   >
-    <div class="w-[10ch] truncate" :style="divStyle">
+    <div class="px-2" :style="divStyle">
       <span
         class="item-title text-capitalize"
         :class="{ 'bg-gray-300': hasChanged }"

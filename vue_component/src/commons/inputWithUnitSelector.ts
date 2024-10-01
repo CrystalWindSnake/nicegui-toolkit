@@ -1,4 +1,5 @@
 import { ref, computed, Ref } from "vue";
+import * as utils from "@/hooks/utils";
 
 type TItemOption = { label: string; value: string };
 type TOption = string | TItemOption;
@@ -10,6 +11,7 @@ type TConfigs =
       nonValueOptions?: string[];
       defaultOptionValue?: string;
       optionValueIfnonValue?: string;
+      specialProperty?: "width" | "height";
     }
   | undefined;
 
@@ -163,7 +165,13 @@ function whenSelectValueChanged(
     inputValue.value = undefined;
 
     // input:'',select: auto to rem -> input: '10'
-  } else if (!inputValue.value && cache.lastInvaildInputValue !== null) {
-    inputValue.value = cache.lastInvaildInputValue;
+  } else if (!inputValue.value && configs?.specialProperty) {
+    const windowSize = utils.getWindowSize();
+
+    if (configs.specialProperty === "width") {
+      inputValue.value = `${windowSize.width}`;
+    } else if (configs.specialProperty === "height") {
+      inputValue.value = `${windowSize.height}`;
+    }
   }
 }
