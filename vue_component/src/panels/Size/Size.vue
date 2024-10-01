@@ -10,7 +10,7 @@ import MinHeight from "./MinHeight.vue";
 
 <template>
   <a-collapse-item header="Size(大小)" key="size">
-    <div class="grid grid-cols-[auto_1fr] items-center px-2 gap-y-1">
+    <div class="grid grid-cols-[auto_1fr_auto_1fr] items-center px-2 gap-y-1">
       <Width></Width>
       <MinWidth></MinWidth>
       <MaxWidth></MaxWidth>

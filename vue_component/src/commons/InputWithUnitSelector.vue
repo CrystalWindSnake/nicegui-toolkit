@@ -34,7 +34,7 @@ function updateSelectValue(value: any) {
 </script>
 
 <template>
-  <div class="grid gap-0 grid-cols-[auto_8ch] w-[18ch]">
+  <div class="grid gap-0 grid-cols-[auto_auto]">
     <AInput
       ref="inputRef"
       :model-value="inputValue"
@@ -47,7 +47,8 @@ function updateSelectValue(value: any) {
       :options="itemOptions"
       :model-value="selectValue"
       @change="updateSelectValue"
-      class="p-0"
+      class="x-unit-select p-0 min-w-[4ch]"
+      :trigger-props="{ contentClass: 'w-[8ch]' }"
     >
       <template #arrow-icon></template>
     </ASelect>
