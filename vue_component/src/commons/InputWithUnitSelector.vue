@@ -34,7 +34,7 @@ function updateSelectValue(value: any) {
 </script>
 
 <template>
-  <div class="grid gap-0 grid-cols-[auto_auto]">
+  <div class="grid gap-0 grid-cols-[auto_auto] ring-offset-1 ring-1">
     <AInput
       ref="inputRef"
       :model-value="inputValue"
