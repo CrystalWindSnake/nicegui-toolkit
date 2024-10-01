@@ -67,7 +67,6 @@ export function useInputWithUnitSelector(settings: {
   });
 
   function updateInput(text: string) {
-    inputValue.value = text;
     whenInputValueChanged(selectValue, inputValue, configs, cache);
   }
 

@@ -18,11 +18,11 @@ const {
 const inputRef = ref<HTMLElement | null>(null);
 
 // input events
-function onInputUpdate(e: Event) {
+function onInputUpdate(value: string, e: Event) {
   if (e.currentTarget !== e.target) {
     return;
   }
-  updateInput((e.currentTarget as HTMLInputElement).value);
+  updateInput(value);
 
   inputRef.value?.blur();
 }
@@ -38,10 +38,9 @@ function updateSelectValue(value: any) {
     <AInput
       ref="inputRef"
       size="mini"
-      :model-value="inputValue"
+      v-model="inputValue"
       :placeholder="inputPlaceholder"
-      @blur="onInputUpdate"
-      @press-enter="onInputUpdate"
+      @change="onInputUpdate"
     ></AInput>
     <ASelect
       popup-container="[layout-tool-panel]"
