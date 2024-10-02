@@ -1,13 +1,18 @@
 import { computed, reactive, readonly, Ref, ref } from "vue";
+import { TTargetContext } from "@/components/types";
 
 export const selectedTarget = ref<HTMLElement | null>(null);
 
 const targetElementContext: {
   props: Map<string, any>;
   styles: Map<string, any>;
+  propsCode: string | null;
+  stylesCode: string | null;
 } = {
   props: reactive(new Map()),
   styles: reactive(new Map()),
+  propsCode: null,
+  stylesCode: null,
 };
 
 const updateFlagMap = new Map<string, Ref<Symbol>>();
@@ -45,10 +50,9 @@ export function getTargetContext() {
   return readonly(targetElementContext);
 }
 
-export function updateCurrentTargetContext(context: {
-  props?: Record<string, any>;
-  styles?: Record<string, any>;
-}) {
+type TUpdateTargetContext = Partial<TTargetContext>;
+
+export function updateCurrentTargetContext(context: TUpdateTargetContext) {
   targetElementContext.props.clear();
   targetElementContext.styles.clear();
 
@@ -64,15 +68,30 @@ export function updateCurrentTargetContext(context: {
     }
   }
 
+  if (context.propsCode) {
+    targetElementContext.propsCode = context.propsCode;
+  }
+
+  if (context.stylesCode) {
+    targetElementContext.stylesCode = context.stylesCode;
+  }
+
   triggerAllUpdateFlags();
+}
+
+export function getContextCode() {
+  return {
+    props: targetElementContext.propsCode,
+    styles: targetElementContext.stylesCode,
+  };
+}
+
+export function useHasChanged(key: string) {
+  return computed(() => targetElementContext.styles.has(key));
 }
 
 function triggerAllUpdateFlags() {
   for (const updateFlag of updateFlagMap.values()) {
     updateFlag.value = Symbol(updateFlag.value.description);
   }
-}
-
-export function useHasChanged(key: string) {
-  return computed(() => targetElementContext.styles.has(key));
 }

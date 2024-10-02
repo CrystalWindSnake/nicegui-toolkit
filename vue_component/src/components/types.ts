@@ -7,6 +7,8 @@ export type TSelectorConfig = {
 export type TTargetContext = {
   props: Record<string, any>;
   styles: Record<string, any>;
+  propsCode: string;
+  stylesCode: string;
 };
 
 type TFlexInfo = {

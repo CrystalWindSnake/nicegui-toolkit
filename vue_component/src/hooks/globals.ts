@@ -7,11 +7,7 @@ import { ComputedRef, computed } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
 import { updateTargetElement } from "@/hooks/targetElementContext";
 
-// export const SelectedTarget = ref<HTMLElement | null>(null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
-
-// export const { createReactiveProperty, triggerPropertyUpdate } =
-//   reactiveProperty.builder(SelectedTarget);
 
 let emitSetCommandFn: (commands: TSetCommand[]) => void;
 let emitResetCommandFn: (commands: TResetCommand[]) => void;

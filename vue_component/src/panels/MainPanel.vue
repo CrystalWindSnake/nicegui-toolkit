@@ -4,12 +4,16 @@ import Spacing from "./Spacing/Spacing.vue";
 import Layout from "./Layout/Layout.vue";
 import FlexItem from "./FlexItem/FlexItem.vue";
 import Size from "./Size/Size.vue";
+import { useTargetContextDesc } from "@/commons/targetContextDesc";
+import TargetContextDesc from "@/commons/TargetContextDesc.vue";
 import { bindSelectTarget } from "@/hooks/propsMapping";
 import { selectedTarget } from "@/hooks/targetElementContext";
 
 bindSelectTarget(selectedTarget);
 
 const showPanels = computed(() => !!selectedTarget.value);
+
+const targetContextDescModel = useTargetContextDesc();
 </script>
 
 <template>
@@ -27,6 +31,9 @@ const showPanels = computed(() => !!selectedTarget.value);
         </a-collapse>
       </a-tab-pane>
 
+      <a-tab-pane key="nicegui" title="nicegui" class="x-panel-nicegui">
+        <TargetContextDesc :model="targetContextDescModel"></TargetContextDesc>
+      </a-tab-pane>
       <a-tab-pane key="cusStyle" title="cus style"> </a-tab-pane>
     </a-tabs>
 
