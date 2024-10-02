@@ -5,6 +5,7 @@ from nicegui.element import Element
 from niceguiToolkit.record_tracker import RecordTracker
 from niceguiToolkit import events
 from niceguiToolkit import consts
+from niceguiToolkit.utils import code as code_utils
 
 
 _RESOURCE = Path(__file__).parent / "lib"
@@ -124,6 +125,8 @@ class TrackBall(Element, component="trackBall.js"):
             context = {
                 "props": target._props,
                 "styles": target._style,
+                "propsCode": code_utils.create_props_code(target),
+                "stylesCode": code_utils.create_style_code(target),
             }
 
         self._props["currentTargetContext"] = context

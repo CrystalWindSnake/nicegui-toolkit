@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, Literal, Callable, List
-from nicegui import ui
+from typing import Dict, Literal, List
 
 TRecordType = Literal["props", "style", "class"]
 _TNG_ELEMENT_ID = int

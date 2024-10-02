@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { type TModel } from "./targetContextDesc";
 const props = defineProps<{ model: TModel }>();
+
+const propsCode = props.model.code.props;
+const stylesCode = props.model.code.styles;
 </script>
 
 <template>
@@ -11,7 +14,7 @@ const props = defineProps<{ model: TModel }>();
       code
       copyable
       :code-tooltip-props="{ popupContainer: '.x-panel-nicegui' }"
-      >{{ props.model.code.props }}</ATypographyParagraph
+      >{{ propsCode }}</ATypographyParagraph
     >
   </ARow>
 
@@ -22,7 +25,7 @@ const props = defineProps<{ model: TModel }>();
       code
       copyable
       :code-tooltip-props="{ popupContainer: '.x-panel-nicegui' }"
-      >{{ props.model.code.styles }}</ATypographyParagraph
+      >{{ stylesCode }}</ATypographyParagraph
     >
   </ARow>
 </template>
