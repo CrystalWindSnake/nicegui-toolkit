@@ -44,6 +44,12 @@ const emit = defineEmits<{
       commands: TResetCommand[];
     }
   ): void;
+  (
+    event: "jumpSourceCode",
+    args: {
+      id: number;
+    }
+  ): void;
 }>();
 
 function emitSetCommnad(commands: TSetCommand[]) {
@@ -79,6 +85,17 @@ globals.initGlobals({
   selectorConfig: props.selectorConfig,
   emitSetCommandFn: emitSetCommnad,
   emitResetCommandFn: emitResetCommnad,
+  emitJumpSourceCodeFn: () => {
+    const target = targetElementContext.selectedTarget.value;
+    if (!target) {
+      return;
+    }
+    const id = utils.getElementId(target, props.selectorConfig);
+    if (!id) {
+      throw new Error("not found selected element");
+    }
+    emit("jumpSourceCode", { id });
+  },
 });
 
 watch(

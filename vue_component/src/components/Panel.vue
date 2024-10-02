@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useDraggable } from "@vueuse/core";
-import { IconBug } from "@arco-design/web-vue/es/icon";
+import { IconBug, IconCodeBlock } from "@arco-design/web-vue/es/icon";
+import { jumpToSourceCode } from "@/hooks/globals";
+import { useHasSelectedTarget } from "@/hooks/targetElementContext";
 
 const el = ref<HTMLElement | null>(null);
 const { style } = useDraggable(el, {
@@ -13,15 +15,28 @@ const { style } = useDraggable(el, {
 <template>
   <div :style="style" style="position: fixed" layout-tool-panel>
     <div
-      ref="el"
-      class="cursor-move bg-[#EDF8BB] row items-center gap-2 text-cyan-500 text-xl px-2"
+      class="flex bg-[#EDF8BB] row items-center gap-2 text-cyan-500 text-xl px-2"
       style="top: 0; left: 0; z-index: 999; height: 2rem"
     >
-      <a-space class="h-full">
-        <icon-bug size="24"></icon-bug>
-        <span class="font-bold">toolkit</span>
-      </a-space>
+      <div ref="el" class="cursor-move grow">
+        <a-space class="h-full">
+          <IconBug size="24"></IconBug>
+          <span class="font-bold">toolkit</span>
+        </a-space>
+      </div>
+
+      <a-tooltip content="jump to code">
+        <a-button
+          shape="circle"
+          size="mini"
+          @click="jumpToSourceCode"
+          v-show="useHasSelectedTarget"
+        >
+          <IconCodeBlock></IconCodeBlock>
+        </a-button>
+      </a-tooltip>
     </div>
+
     <slot></slot>
     <slot name="footer"></slot>
   </div>

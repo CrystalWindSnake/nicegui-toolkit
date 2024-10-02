@@ -6,7 +6,7 @@ from niceguiToolkit.record_tracker import RecordTracker
 from niceguiToolkit import events
 from niceguiToolkit import consts
 from niceguiToolkit.utils import code as code_utils
-
+import niceguiToolkit.services.source_code_service as source_code_service
 
 _RESOURCE = Path(__file__).parent / "lib"
 
@@ -31,6 +31,7 @@ class TrackBall(Element, component="trackBall.js"):
         self._register_setCommand_event()
         self._register_select_event()
         self._register_resetCommand_event()
+        self._register_jump_source_code()
 
     def _register_setCommand_event(self):
         def on_command(e):
@@ -117,6 +118,20 @@ class TrackBall(Element, component="trackBall.js"):
             self.run_method("onServerResetCommand", arg.commands[0].propertyName)
 
         self.on("resetCommand", on_reset_command)
+
+    def _register_jump_source_code(self):
+        def on_jump_source_code(e):
+            args = e.args
+
+            target = self.get_current_target_element()
+            if target is None:
+                ng_vars.ui.notify("No target selected")
+                return
+
+            info = code_utils.get_source_code_info(target)
+            source_code_service.jump_to_source_code(info, {})
+
+        self.on("jumpSourceCode", on_jump_source_code)
 
     def _update_current_target_context(self):
         target = self.get_current_target_element()

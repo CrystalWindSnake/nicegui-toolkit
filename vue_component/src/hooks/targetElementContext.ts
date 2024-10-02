@@ -90,6 +90,10 @@ export function useHasChanged(key: string) {
   return computed(() => targetElementContext.styles.has(key));
 }
 
+export function useHasSelectedTarget() {
+  return computed(() => selectedTarget.value !== null);
+}
+
 function triggerAllUpdateFlags() {
   for (const updateFlag of updateFlagMap.values()) {
     updateFlag.value = Symbol(updateFlag.value.description);

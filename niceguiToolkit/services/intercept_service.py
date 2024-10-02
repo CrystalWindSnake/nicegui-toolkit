@@ -4,6 +4,7 @@ from niceguiToolkit.systems.caller_system import get_caller_info, CallerInfo
 import inspect
 from pathlib import Path
 from dataclasses import dataclass, field
+import niceguiToolkit.utils.code as code_utils
 
 
 EXCLUDE_INJECT_NG_CLASSES = ["Query", "TrackBall"]
@@ -53,6 +54,8 @@ class Hooker:
                 f"layout-tool-file-{vscode_url}",
             ]
         )
+
+        code_utils.save_source_code_info(ele, info)
 
 
 class _Helper:
