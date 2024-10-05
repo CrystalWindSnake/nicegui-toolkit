@@ -4,6 +4,7 @@ import { useDraggable } from "@vueuse/core";
 import { IconBug, IconCodeBlock } from "@arco-design/web-vue/es/icon";
 import { jumpToSourceCode } from "@/hooks/globals";
 import { useHasSelectedTarget } from "@/hooks/targetElementContext";
+import { useCanApplyCommand, applyCommand } from "@/hooks/globals";
 
 const el = ref<HTMLElement | null>(null);
 const { style } = useDraggable(el, {
@@ -24,6 +25,17 @@ const { style } = useDraggable(el, {
           <span class="font-bold">toolkit</span>
         </a-space>
       </div>
+
+      <a-badge :count="9" dot :dotStyle="{ width: '10px', height: '10px' }">
+        <a-button
+          shape="circle"
+          size="mini"
+          @click="applyCommand()"
+          v-show="useCanApplyCommand"
+        >
+          <IconList></IconList>
+        </a-button>
+      </a-badge>
 
       <a-tooltip content="jump to code">
         <a-button

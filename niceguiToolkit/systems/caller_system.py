@@ -7,7 +7,9 @@ from typing import List, Union
 from collections import namedtuple
 from functools import lru_cache
 
-CallerInfo = namedtuple("CallerInfo", "filename lineno start_col end_lineno end_col")
+CallerInfo = namedtuple(
+    "CallerInfo", "filename method_name lineno start_col end_lineno end_col"
+)
 
 
 def get_caller_info(frame: FrameType):
@@ -24,16 +26,76 @@ def get_caller_info(frame: FrameType):
     assert frame_position.lineno
     assert frame_position.end_lineno
 
+    return _create_caller_info(Path(filename), lineno, frame_position)
+
+
+def _create_caller_info(
+    filename: Path,
+    lineno: int,
+    frame_position: dis.Positions,
+):
     code_lines, tokens = _utils.get_token_info(
         filename, frame_position.lineno, frame_position.end_lineno
     )
 
     (
+        method_name,
         start_col,
         end_col,
     ) = _utils.get_token_position_by_frame_position(code_lines, tokens, frame_position)
 
-    return CallerInfo(filename, lineno, start_col, frame_position.end_lineno, end_col)
+    return CallerInfo(
+        filename, method_name, lineno, start_col, frame_position.end_lineno, end_col
+    )
+
+
+class LazyCallerInfo:
+    def __init__(
+        self,
+        filename: str,
+        org_lineno,
+        frame_position: dis.Positions,
+    ) -> None:
+        self.filename = Path(filename)
+        self._org_lineno = org_lineno
+        self._frame_position = frame_position
+
+        self._caller_info = None
+
+    @property
+    def caller_info(self):
+        if self._caller_info is None:
+            self._caller_info = _create_caller_info(
+                self.filename, self._org_lineno, self._frame_position
+            )
+        return self._caller_info
+
+    @property
+    def lineno(self):
+        return self.caller_info.lineno
+
+    @property
+    def start_col(self):
+        return self.caller_info.start_col
+
+    @property
+    def end_lineno(self):
+        return self.caller_info.end_lineno
+
+    @property
+    def end_col(self):
+        return self.caller_info.end_col
+
+
+def get_lazy_caller_info(frame: FrameType):
+    filename = frame.f_code.co_filename
+    lineno = frame.f_lineno
+
+    frame_position = _utils.get_frame_position(frame)
+    assert frame_position.lineno
+    assert frame_position.end_lineno
+
+    return LazyCallerInfo(filename, lineno, frame_position)
 
 
 def clear_cache():
@@ -108,7 +170,7 @@ class _utils:
             frame.f_code, id(frame.f_code), frame.f_lasti
         )
 
-    @lru_cache
+    # @lru_cache
     @staticmethod
     def try_get_frame_position(f_code: CodeType, code_id: int, f_lasti: int):
         bc_list = list(dis.get_instructions(f_code, show_caches=True))
@@ -133,15 +195,28 @@ class _utils:
         for idx, token in enumerate(tokens):
             # cal token offset byte
             token_offset_byte = _utils.byte_count(
-                codes[token.start[0] - 1][: token.start[1]]
+                codes[token.end[0] - 1][: token.end[1]]
             )
 
-            if token_offset_byte == frame_position.col_offset:  # type: ignore
-                end_col = _utils.cal_token_end_col(tokens, idx)
+            line_no = token.end[0] + frame_position.lineno - 1  # type: ignore
+
+            if (
+                token_offset_byte == frame_position.end_col_offset
+                and line_no == frame_position.end_lineno
+            ):  # type: ignore
+                left_parenthesis, target_idx = _utils.find_preceding_left_parenthesis(
+                    tokens, idx
+                )
+
+                assert (
+                    left_parenthesis is not None and target_idx is not None
+                ), "Cannot find the left parenthesis"
 
                 return (
-                    token.start[1],
-                    end_col,
+                    tokens[target_idx - 1].string,
+                    left_parenthesis.start[1]
+                    + 1,  # add 1 for method call like `.style(`
+                    token.end[1] - 1,
                 )
 
         raise ValueError("Cannot find the token position by frame position")
@@ -172,3 +247,19 @@ class _utils:
                 if open_parens == 0:
                     return token.end[1]
         return -1
+
+    @staticmethod
+    def find_preceding_left_parenthesis(
+        tokens: List[tokenize.TokenInfo], current_token_idx: int
+    ):
+        open_parens = 1  # current token is a right parenthesis
+
+        for i in range(current_token_idx - 1, -1, -1):
+            if tokens[i].type == tokenize.OP and tokens[i].string == ")":
+                open_parens += 1
+            elif tokens[i].type == tokenize.OP and tokens[i].string == "(":
+                open_parens -= 1
+                if open_parens == 0:
+                    return tokens[i], i
+
+        return None, None

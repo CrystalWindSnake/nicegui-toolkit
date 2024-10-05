@@ -12,6 +12,7 @@ export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
 let emitSetCommandFn: (commands: TSetCommand[]) => void;
 let emitResetCommandFn: (commands: TResetCommand[]) => void;
 let emitJumpSourceCodeFn: () => void;
+let emitApplyCommandFn: () => void;
 let EXECUTING_FLAG = false;
 
 export function setExecutingFlag(executing?: boolean) {
@@ -27,10 +28,12 @@ export function initGlobals(config: {
   emitSetCommandFn: (commands: TSetCommand[]) => void;
   emitResetCommandFn: (commands: TResetCommand[]) => void;
   emitJumpSourceCodeFn: () => void;
+  emitApplyCommandFn: () => void;
 }) {
   emitSetCommandFn = config.emitSetCommandFn;
   emitResetCommandFn = config.emitResetCommandFn;
   emitJumpSourceCodeFn = config.emitJumpSourceCodeFn;
+  emitApplyCommandFn = config.emitApplyCommandFn;
 
   const { hoverElement: _hoverElement } = useHoverElement(
     config.selectorConfig
@@ -43,6 +46,14 @@ export function initGlobals(config: {
 
 export function jumpToSourceCode() {
   emitJumpSourceCodeFn();
+}
+
+export function applyCommand() {
+  emitApplyCommandFn();
+}
+
+export function useCanApplyCommand() {
+  return computed(() => true);
 }
 
 export function sendSetCommand(commands: TSetCommand | TSetCommand[]) {

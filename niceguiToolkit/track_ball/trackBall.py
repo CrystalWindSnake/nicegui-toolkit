@@ -5,7 +5,6 @@ from nicegui.element import Element
 from niceguiToolkit.record_tracker import RecordTracker
 from niceguiToolkit import events
 from niceguiToolkit import consts
-from niceguiToolkit.utils import code as code_utils
 import niceguiToolkit.services.source_code_service as source_code_service
 
 _RESOURCE = Path(__file__).parent / "lib"
@@ -32,6 +31,7 @@ class TrackBall(Element, component="trackBall.js"):
         self._register_select_event()
         self._register_resetCommand_event()
         self._register_jump_source_code()
+        self._register_apply_command_event()
 
     def _register_setCommand_event(self):
         def on_command(e):
@@ -54,7 +54,7 @@ class TrackBall(Element, component="trackBall.js"):
                 for key, value in values.items():
                     target._style[key] = value
 
-                    self.record_tracker.add_record(target.id, key)
+                    self.record_tracker.add_record(target.id, key, value)
 
             target.update()
             self._update_current_target_context()
@@ -128,10 +128,17 @@ class TrackBall(Element, component="trackBall.js"):
                 ng_vars.ui.notify("No target selected")
                 return
 
-            info = code_utils.get_source_code_info(target)
+            info = source_code_service.get_source_code_info(target)
             source_code_service.jump_to_source_code(info, {})
 
         self.on("jumpSourceCode", on_jump_source_code)
+
+    def _register_apply_command_event(self):
+        def on_apply_command(e):
+            args = e.args
+            self.record_tracker.apply_records()
+
+        self.on("applyCommand", on_apply_command)
 
     def _update_current_target_context(self):
         target = self.get_current_target_element()
@@ -140,8 +147,10 @@ class TrackBall(Element, component="trackBall.js"):
             context = {
                 "props": target._props,
                 "styles": target._style,
-                "propsCode": code_utils.create_props_code(target),
-                "stylesCode": code_utils.create_style_code(target),
+                "propsCode": source_code_service.create_props_code(target),
+                "stylesCode": source_code_service.create_style_code(
+                    self.record_tracker.get_style_data(target)
+                ),
             }
 
         self._props["currentTargetContext"] = context

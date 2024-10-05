@@ -1,13 +1,14 @@
+import types
 from typing import List
 import nicegui as ng
-from niceguiToolkit.systems.caller_system import get_caller_info, CallerInfo
+from niceguiToolkit.services import source_code_service
+from niceguiToolkit.systems.caller_system import get_lazy_caller_info, LazyCallerInfo
 import inspect
 from pathlib import Path
 from dataclasses import dataclass, field
-import niceguiToolkit.utils.code as code_utils
+from . import utils
 
-
-EXCLUDE_INJECT_NG_CLASSES = ["Query", "TrackBall"]
+EXCLUDE_INJECT_NG_CLASSES = ["Query", "QueryElement", "TrackBall"]
 
 
 @dataclass
@@ -33,17 +34,18 @@ class Hooker:
             frame = inspect.currentframe()  # type: ignore
             assert frame is not None
             frame = _Helper.get_frame_with_file_name(frame.f_back, context)
-            # assert frame is not None
             if frame is None:
                 return
-            info = get_caller_info(frame)
+            info = get_lazy_caller_info(frame)
 
             Hooker._mark_element(self, info)
+
+            Hooker.inject_style_method(self, context)
 
         ng.ui.element.__init__ = wrap_init
 
     @staticmethod
-    def _mark_element(ele: ng.ui.element, info: CallerInfo):
+    def _mark_element(ele: ng.ui.element, info: LazyCallerInfo):
         vscode_url = f"vscode://file/{info.filename}:{info.lineno}:{info.end_col}"
 
         ele._classes.extend(
@@ -55,7 +57,44 @@ class Hooker:
             ]
         )
 
-        code_utils.save_source_code_info(ele, info)
+        utils.save_source_code_info(ele, info)
+
+    @staticmethod
+    def inject_style_method(element: ng.ui.element, context: HookerContext):
+        if not isinstance(element.__class__.style, CustomStyleProperty):
+            element.__class__.style = None  # type: ignore
+
+        def style(self, *args, **kws):
+            frame = inspect.currentframe()  # type: ignore
+            assert frame is not None
+            frame = _Helper.get_frame_with_file_name(frame.f_back, context)
+            if frame is None:
+                return
+            info = get_lazy_caller_info(frame)
+            source_code_service.save_style_info(self, info)
+            return self._style(*args, **kws)
+
+        setattr(element, "style", types.MethodType(style, element))
+
+
+class CustomStyleProperty:
+    def __init__(self, context: HookerContext):
+        self.context = context
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        info = source_code_service.get_source_code_info(instance)
+
+        if info is not None:
+            frame = inspect.currentframe()  # type: ignore
+            assert frame is not None
+            frame = _Helper.get_frame_with_file_name(frame.f_back, self.context)
+            if frame is None:
+                return
+            info = get_lazy_caller_info(frame)
+            source_code_service.save_style_info(instance, info)
+        return instance._style
 
 
 class _Helper:

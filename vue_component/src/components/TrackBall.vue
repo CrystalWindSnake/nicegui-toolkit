@@ -50,6 +50,7 @@ const emit = defineEmits<{
       id: number;
     }
   ): void;
+  (event: "applyCommand"): void;
 }>();
 
 function emitSetCommnad(commands: TSetCommand[]) {
@@ -95,6 +96,9 @@ globals.initGlobals({
       throw new Error("not found selected element");
     }
     emit("jumpSourceCode", { id });
+  },
+  emitApplyCommandFn: () => {
+    emit("applyCommand");
   },
 });
 
