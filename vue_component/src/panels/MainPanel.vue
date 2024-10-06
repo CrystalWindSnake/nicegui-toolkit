@@ -4,6 +4,8 @@ import Spacing from "./Spacing/Spacing.vue";
 import Layout from "./Layout/Layout.vue";
 import FlexItem from "./FlexItem/FlexItem.vue";
 import Size from "./Size/Size.vue";
+import { useElementTree } from "@/commons/elementTree";
+import ElementTree from "@/commons/ElementTree.vue";
 import { useTargetContextDesc } from "@/commons/targetContextDesc";
 import TargetContextDesc from "@/commons/TargetContextDesc.vue";
 import { bindSelectTarget } from "@/hooks/propsMapping";
@@ -14,12 +16,14 @@ bindSelectTarget(selectedTarget);
 const showPanels = computed(() => !!selectedTarget.value);
 
 const targetContextDescModel = useTargetContextDesc();
+
+const elementTreeModel = useElementTree();
 </script>
 
 <template>
-  <div>
-    <a-tabs :hide-content="!showPanels">
-      <a-tab-pane key="style" title="style">
+  <div class="bg-white/30 backdrop-blur-md">
+    <a-tabs default-active-key="element-tree">
+      <a-tab-pane key="style" title="style" :disabled="!showPanels">
         <a-collapse accordion>
           <FlexItem></FlexItem>
 
@@ -31,41 +35,15 @@ const targetContextDescModel = useTargetContextDesc();
         </a-collapse>
       </a-tab-pane>
 
+      <a-tab-pane key="element-tree" title="navigator">
+        <ElementTree :model="elementTreeModel"></ElementTree>
+      </a-tab-pane>
+
       <a-tab-pane key="nicegui" title="nicegui" class="x-panel-nicegui">
         <TargetContextDesc :model="targetContextDescModel"></TargetContextDesc>
       </a-tab-pane>
       <a-tab-pane key="cusStyle" title="cus style"> </a-tab-pane>
     </a-tabs>
-
-    <!-- <q-tabs class="bg-secondary-5" v-model="tab" :align="`left`" dense no-caps>
-      <q-tab name="style" label="style" />
-      <q-tab name="cusStyle" label="cus style" />
-    </q-tabs> -->
-
-    <!-- <q-tab-panels
-      v-show="showPanels"
-      v-model="tab"
-      keep-alive
-      animated
-      swipeable
-      vertical
-      transition-prev="jump-up"
-      transition-next="jump-up"
-    >
-      <q-tab-panel name="style" style="padding: 0">
-        <q-list bordered>
-          <FlexItem></FlexItem>
-
-          <Layout></Layout>
-
-          <q-separator />
-          <Spacing></Spacing>
-
-          <q-separator />
-          <Size></Size>
-        </q-list>
-      </q-tab-panel>
-    </q-tab-panels> -->
   </div>
 </template>
 

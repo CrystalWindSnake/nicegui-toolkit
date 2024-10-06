@@ -6,6 +6,7 @@ import VisHover from "./VisHover.vue";
 import { useTypeNameTag, getComponentExpose } from "./trackBallUtils";
 import * as tbUtils from "./trackBallUtils";
 import * as hookUtils from "@/hooks/utils";
+import { type TElementTreeData } from "@/hooks/types";
 
 import {
   type TSelectorConfig,
@@ -23,6 +24,7 @@ const props = defineProps<{
   selectorConfig: TSelectorConfig;
   currentTargetContext: TTargetContext;
   resource_path?: string;
+  elementTreeData: TElementTreeData;
 }>();
 
 // emits
@@ -83,6 +85,7 @@ onMounted(async () => {
 
 globals.initGlobals({
   selectorConfig: props.selectorConfig,
+  elementTreeData: props.elementTreeData,
   emitSetCommandFn: emitSetCommnad,
   emitResetCommandFn: emitResetCommnad,
   emitJumpSourceCodeFn: () => {
@@ -197,7 +200,7 @@ defineExpose(
 
 <style>
 .arco-collapse-item-content {
-  padding: 0 !important;
+  padding: 2px !important;
 }
 
 .x-unit-select .arco-select-view-suffix {

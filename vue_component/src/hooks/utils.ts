@@ -69,3 +69,12 @@ export function getElementId(target: HTMLElement, config: TSelectorConfig) {
 
   return null;
 }
+
+export function getElementById(id: number, config: TSelectorConfig) {
+  const targetQuery = `*.${config.idPrefix}-${id}`;
+  const targetElement = document.querySelector<HTMLElement>(targetQuery);
+  if (!targetElement) {
+    throw new Error(`target element with id ${id} not found`);
+  }
+  return targetElement;
+}

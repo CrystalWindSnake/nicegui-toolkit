@@ -6,6 +6,7 @@ from niceguiToolkit.record_tracker import RecordTracker
 from niceguiToolkit import events
 from niceguiToolkit import consts
 import niceguiToolkit.services.source_code_service as source_code_service
+from niceguiToolkit.element_tree import get_tree_data
 
 _RESOURCE = Path(__file__).parent / "lib"
 
@@ -24,6 +25,7 @@ class TrackBall(Element, component="trackBall.js"):
         }
         self._props["currentTargetContext"] = {"props": {}, "styles": {}}
         self.props("data-ng-toolkit-trackball")
+        self._props["elementTreeData"] = get_tree_data()
 
         self.record_tracker = RecordTracker()
 

@@ -20,7 +20,14 @@ const targetElementContext: {
 const updateFlagMap = new Map<string, Ref<Symbol>>();
 
 export function getSelectedTarget() {
-  return readonly(selectedTarget);
+  return selectedTarget;
+}
+
+export function setSelectedTarget(elementId: number) {
+  selectedTarget.value = hookUtils.getElementById(
+    elementId,
+    globals.getSelectorConfig()
+  );
 }
 
 export function updateTargetElement(element: HTMLElement | null) {

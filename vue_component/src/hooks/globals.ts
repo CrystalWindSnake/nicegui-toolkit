@@ -3,13 +3,17 @@ import {
   TSetCommand,
   TResetCommand,
 } from "@/components/types";
-import { ComputedRef, computed } from "vue";
+import { ComputedRef, computed, ref } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
 import { updateTargetElement } from "@/hooks/targetElementContext";
+import { type TElementTreeData } from "@/hooks/types";
+import * as hookUtils from "@/hooks/utils";
 
+const hoverByCode = ref(null as HTMLElement | null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
 
 let selectorConfig: TSelectorConfig;
+let elementTreeData: TElementTreeData;
 let emitSetCommandFn: (commands: TSetCommand[]) => void;
 let emitResetCommandFn: (commands: TResetCommand[]) => void;
 let emitJumpSourceCodeFn: () => void;
@@ -18,6 +22,18 @@ let EXECUTING_FLAG = false;
 
 export function getSelectorConfig() {
   return selectorConfig;
+}
+
+export function setHoverByCode(elementId: number) {
+  hoverByCode.value = hookUtils.getElementById(elementId, selectorConfig);
+}
+
+export function resetHoverByCode() {
+  hoverByCode.value = null;
+}
+
+export function getElementTreeData() {
+  return elementTreeData;
 }
 
 export function setExecutingFlag(executing?: boolean) {
@@ -30,6 +46,7 @@ export function getExecutingFlag() {
 
 export function initGlobals(config: {
   selectorConfig: TSelectorConfig;
+  elementTreeData: TElementTreeData;
   emitSetCommandFn: (commands: TSetCommand[]) => void;
   emitResetCommandFn: (commands: TResetCommand[]) => void;
   emitJumpSourceCodeFn: () => void;
@@ -40,6 +57,7 @@ export function initGlobals(config: {
   emitJumpSourceCodeFn = config.emitJumpSourceCodeFn;
   emitApplyCommandFn = config.emitApplyCommandFn;
   selectorConfig = config.selectorConfig;
+  elementTreeData = config.elementTreeData;
 
   const { hoverElement: _hoverElement } = useHoverElement(
     config.selectorConfig
@@ -87,11 +105,17 @@ function useHoverElement(config: TSelectorConfig) {
 
     const target = element.value.closest(config.selectors);
     if (target === null) {
+      if (hoverByCode.value) {
+        return hoverByCode.value;
+      }
       return null;
     }
 
     // if panel child
     if (target.closest("[layout-tool-panel]")) {
+      if (hoverByCode.value) {
+        return hoverByCode.value;
+      }
       return null;
     }
 
