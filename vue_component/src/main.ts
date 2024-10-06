@@ -7,7 +7,8 @@ import Temp from "./Temp.vue";
 import App from "./App.vue";
 import tempsApp from "./temps/App.vue";
 
-import "uno.css";
+// main.ts
+import "virtual:uno.css";
 
 const app = createApp(tempsApp);
 app.use(ArcoVue);

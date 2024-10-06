@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useDraggable } from "@vueuse/core";
-import { IconBug, IconCodeBlock } from "@arco-design/web-vue/es/icon";
 import { jumpToSourceCode } from "@/hooks/globals";
-import { useHasSelectedTarget } from "@/hooks/targetElementContext";
+import {
+  useHasSelectedTarget,
+  useTargetTypeName,
+} from "@/hooks/targetElementContext";
 import { useCanApplyCommand, applyCommand } from "@/hooks/globals";
 
 const el = ref<HTMLElement | null>(null);
@@ -11,6 +13,8 @@ const { style } = useDraggable(el, {
   initialValue: { x: 40, y: 40 },
   preventDefault: true,
 });
+
+const targetTypeName = useTargetTypeName();
 </script>
 
 <template>
@@ -21,21 +25,25 @@ const { style } = useDraggable(el, {
     >
       <div ref="el" class="cursor-move grow">
         <a-space class="h-full">
-          <IconBug size="24"></IconBug>
+          <div class="i-mdi-android-debug-bridge text-2xl" />
           <span class="font-bold">toolkit</span>
+
+          <ATag color="green">{{ targetTypeName }}</ATag>
         </a-space>
       </div>
 
-      <a-badge :count="9" dot :dotStyle="{ width: '10px', height: '10px' }">
-        <a-button
-          shape="circle"
-          size="mini"
-          @click="applyCommand()"
-          v-show="useCanApplyCommand"
-        >
-          <IconList></IconList>
-        </a-button>
-      </a-badge>
+      <a-tooltip content="apply changes">
+        <a-badge :count="9" dot :dotStyle="{ width: '10px', height: '10px' }">
+          <a-button
+            shape="circle"
+            size="mini"
+            @click="applyCommand()"
+            v-show="useCanApplyCommand"
+          >
+            <div class="i-codicon-git-stash-apply text-1xl" />
+          </a-button>
+        </a-badge>
+      </a-tooltip>
 
       <a-tooltip content="jump to code">
         <a-button
@@ -44,7 +52,7 @@ const { style } = useDraggable(el, {
           @click="jumpToSourceCode"
           v-show="useHasSelectedTarget"
         >
-          <IconCodeBlock></IconCodeBlock>
+          <div class="i-mdi-code-braces"></div>
         </a-button>
       </a-tooltip>
     </div>

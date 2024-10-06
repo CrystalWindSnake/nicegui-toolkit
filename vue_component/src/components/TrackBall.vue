@@ -3,11 +3,10 @@ import MainPanel from "@/panels/MainPanel.vue";
 import Aiming from "./Aiming.vue";
 import Panel from "./Panel.vue";
 import VisHover from "./VisHover.vue";
-
 import { useTypeNameTag, getComponentExpose } from "./trackBallUtils";
-
 import * as tbUtils from "./trackBallUtils";
-import * as utils from "./utils";
+import * as hookUtils from "@/hooks/utils";
+
 import {
   type TSelectorConfig,
   TTargetContext,
@@ -58,7 +57,7 @@ function emitSetCommnad(commands: TSetCommand[]) {
   if (!target) {
     return;
   }
-  const id = utils.getElementId(target, props.selectorConfig);
+  const id = hookUtils.getElementId(target, props.selectorConfig);
   if (!id) {
     throw new Error("not found selected element");
   }
@@ -70,7 +69,7 @@ function emitResetCommnad(commands: TResetCommand[]) {
   if (!target) {
     return;
   }
-  const id = utils.getElementId(target, props.selectorConfig);
+  const id = hookUtils.getElementId(target, props.selectorConfig);
   if (!id) {
     throw new Error("not found selected element");
   }
@@ -91,7 +90,7 @@ globals.initGlobals({
     if (!target) {
       return;
     }
-    const id = utils.getElementId(target, props.selectorConfig);
+    const id = hookUtils.getElementId(target, props.selectorConfig);
     if (!id) {
       throw new Error("not found selected element");
     }
@@ -124,7 +123,7 @@ const aimingModel = useAiming();
 // events
 watch(globals.hoverElement, (target) => {
   if (target) {
-    const id = utils.getElementId(target, props.selectorConfig);
+    const id = hookUtils.getElementId(target, props.selectorConfig);
     emit("hoverChange", { id });
     return;
   }
@@ -139,7 +138,7 @@ watch(targetElementContext.selectedTarget, (target) => {
   } as TSelectedChangeEventArgs["flexInfo"];
 
   if (target) {
-    const id = utils.getElementId(target, props.selectorConfig);
+    const id = hookUtils.getElementId(target, props.selectorConfig);
 
     const parentBox = tbUtils.getBoxParentId(target, props.selectorConfig);
 

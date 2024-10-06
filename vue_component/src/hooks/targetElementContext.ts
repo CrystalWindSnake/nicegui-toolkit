@@ -1,5 +1,7 @@
 import { computed, reactive, readonly, Ref, ref } from "vue";
 import { TTargetContext } from "@/components/types";
+import * as hookUtils from "@/hooks/utils";
+import * as globals from "@/hooks/globals";
 
 export const selectedTarget = ref<HTMLElement | null>(null);
 
@@ -68,11 +70,11 @@ export function updateCurrentTargetContext(context: TUpdateTargetContext) {
     }
   }
 
-  if (context.propsCode) {
+  if (context.propsCode !== undefined) {
     targetElementContext.propsCode.value = context.propsCode;
   }
 
-  if (context.stylesCode) {
+  if (context.stylesCode !== undefined) {
     targetElementContext.stylesCode.value = context.stylesCode;
   }
 
@@ -92,6 +94,19 @@ export function useHasChanged(key: string) {
 
 export function useHasSelectedTarget() {
   return computed(() => selectedTarget.value !== null);
+}
+
+export function useTargetTypeName() {
+  return computed(() => {
+    if (selectedTarget.value === null) {
+      return null;
+    }
+
+    return hookUtils.getElementType(
+      selectedTarget.value,
+      globals.getSelectorConfig()
+    );
+  });
 }
 
 function triggerAllUpdateFlags() {

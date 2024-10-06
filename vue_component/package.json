@@ -19,7 +19,10 @@
   "devDependencies": {
     "@arco-design/web-vue": "^2.56.2",
     "@arco-plugins/vite-vue": "^1.4.5",
+    "@iconify-json/codicon": "^1.2.2",
+    "@iconify-json/mdi": "^1.2.0",
     "@quasar/vite-plugin": "^1.7.0",
+    "@unocss/preset-icons": "^0.63.3",
     "@vitejs/plugin-vue": "^4.6.2",
     "less": "^4.2.0",
     "typescript": "^5.0.2",

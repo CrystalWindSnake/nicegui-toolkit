@@ -1,4 +1,5 @@
 import { MaybeRefOrGetter, isRef, ref, toValue } from "vue";
+import { type TSelectorConfig } from "@/components/types";
 
 export function makeRef<T>(value: MaybeRefOrGetter<T>) {
   if (isRef(value)) {
@@ -32,4 +33,39 @@ export function parseUnitStyleValue(styleValue: string) {
   } else {
     return { number: "", unit: "" };
   }
+}
+
+export function hasLayoutToolMark(
+  target: HTMLElement,
+  config: TSelectorConfig
+) {
+  return target.classList.contains(config.selectors.slice(1));
+}
+
+export function getElementType(target: HTMLElement, config: TSelectorConfig) {
+  if (!hasLayoutToolMark(target, config)) {
+    return null;
+  }
+
+  for (const name of target.classList) {
+    if (name.startsWith(config.elementTypePrefix)) {
+      return name.slice(config.elementTypePrefix.length + 1);
+    }
+  }
+
+  return null;
+}
+
+export function getElementId(target: HTMLElement, config: TSelectorConfig) {
+  if (!hasLayoutToolMark(target, config)) {
+    return null;
+  }
+
+  for (const name of target.classList) {
+    if (name.startsWith(config.idPrefix)) {
+      return parseInt(name.slice(config.idPrefix.length + 1));
+    }
+  }
+
+  return null;
 }

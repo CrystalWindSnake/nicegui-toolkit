@@ -60,11 +60,11 @@ class RecordTracker:
         record = self.records[ng_element_id]
         record.commands.append(RemoveStyleCommand(property_name))
 
-    def get_style_data(self, target: ng_vars.ui.element):
+    def get_style_data(self, target: ng_vars.ui.element, exclude_exist=False):
         record = self.records.get(target.id)
         if record is not None:
-            return _Helper.create_style_data(target, record.commands)
-        return {}
+            return _Helper.create_style_data(target, record.commands, exclude_exist)
+        return {} if exclude_exist else target._style.copy()
 
     def clear_records(self):
         self.records.clear()
@@ -73,9 +73,9 @@ class RecordTracker:
 class _Helper:
     @staticmethod
     def create_style_data(
-        target: ng_vars.ui.element, commands: List[Command]
+        target: ng_vars.ui.element, commands: List[Command], exclude_exist=False
     ) -> Dict[str, str]:
-        style_data = target._style.copy()
+        style_data = {} if exclude_exist else target._style.copy()
         for command in commands:
             command.apply(style_data)
         return style_data

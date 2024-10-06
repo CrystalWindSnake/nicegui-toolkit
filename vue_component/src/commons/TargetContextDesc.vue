@@ -8,17 +8,6 @@ const stylesCode = props.model.code.styles;
 
 <template>
   <ARow>
-    <ATag>props:</ATag>
-
-    <ATypographyParagraph
-      code
-      copyable
-      :code-tooltip-props="{ popupContainer: '.x-panel-nicegui' }"
-      >{{ propsCode }}</ATypographyParagraph
-    >
-  </ARow>
-
-  <ARow>
     <ATag>styles:</ATag>
 
     <ATypographyParagraph

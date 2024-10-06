@@ -9,11 +9,16 @@ import { updateTargetElement } from "@/hooks/targetElementContext";
 
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
 
+let selectorConfig: TSelectorConfig;
 let emitSetCommandFn: (commands: TSetCommand[]) => void;
 let emitResetCommandFn: (commands: TResetCommand[]) => void;
 let emitJumpSourceCodeFn: () => void;
 let emitApplyCommandFn: () => void;
 let EXECUTING_FLAG = false;
+
+export function getSelectorConfig() {
+  return selectorConfig;
+}
 
 export function setExecutingFlag(executing?: boolean) {
   EXECUTING_FLAG = executing ?? true;
@@ -34,6 +39,7 @@ export function initGlobals(config: {
   emitResetCommandFn = config.emitResetCommandFn;
   emitJumpSourceCodeFn = config.emitJumpSourceCodeFn;
   emitApplyCommandFn = config.emitApplyCommandFn;
+  selectorConfig = config.selectorConfig;
 
   const { hoverElement: _hoverElement } = useHoverElement(
     config.selectorConfig

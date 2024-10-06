@@ -3,7 +3,6 @@ import vue from "@vitejs/plugin-vue";
 import Unocss from "unocss/vite";
 import * as path from "path";
 
-import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
 import { vitePluginForArco } from "@arco-plugins/vite-vue";
 
 function createIgnoreModulePlugin(ignoredModules: string[]): Plugin {
@@ -34,7 +33,7 @@ export default defineConfig({
     vitePluginForArco({
       style: "css",
     }),
-    Unocss({}),
+    Unocss(),
     createIgnoreModulePlugin(["../../static/utils/resources.js"]),
   ],
   define: {

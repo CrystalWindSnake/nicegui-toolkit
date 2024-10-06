@@ -66,10 +66,10 @@ const alignConfigs = computed(() => {
 const iconRadioModel = useIconRadio({
   propertyName: "align-self",
   options: [
-    { value: "flex-start", icon: "align_horizontal_left" },
-    { value: "center", icon: "align_horizontal_center" },
-    { value: "flex-end", icon: "align_horizontal_right" },
-    { value: "stretch", icon: "settings_overscan" },
+    { value: "flex-start", icon: "i-mdi-align-horizontal-left" },
+    { value: "center", icon: "i-mdi-align-horizontal-center" },
+    { value: "flex-end", icon: "i-mdi-align-horizontal-right" },
+    { value: "stretch", icon: "i-mdi-arrow-expand-horizontal" },
   ],
 });
 </script>

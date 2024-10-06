@@ -11,10 +11,7 @@ const getter = buildRefGetter(selectedTarget);
 
 const displayIconRadioModel = useIconRadio({
   propertyName: "display",
-  options: [
-    { value: "block", icon: "inbox" },
-    { value: "flex", icon: "inventory_2" },
-  ],
+  options: [{ value: "block" }, { value: "flex" }],
 });
 
 const flexInfo = getter.getFlexBoxInfo(
@@ -25,8 +22,8 @@ const flexInfo = getter.getFlexBoxInfo(
 const directionIconRadioModel = useIconRadio({
   propertyName: "flex-direction",
   options: [
-    { value: "row", label: "Horizontal" },
-    { value: "column", label: "Vertical" },
+    { value: "row", label: "Horizontal", icon: "i-mdi-arrow-right-thin" },
+    { value: "column", label: "Vertical", icon: "i-mdi-arrow-down-thin" },
   ],
 });
 
@@ -40,20 +37,28 @@ const alignTitle = computed(() =>
 const alignOpts = computed(() => {
   if (directionIconRadioModel.value.value === "row") {
     return [
-      { value: "start", icon: "vertical_align_top", tooltip: "top" },
+      { value: "start", icon: "i-mdi-align-vertical-top", tooltip: "top" },
 
-      { value: "center", icon: "align_vertical_center", tooltip: "center" },
+      {
+        value: "center",
+        icon: "i-mdi-align-vertical-center",
+        tooltip: "center",
+      },
 
-      { value: "end", icon: "vertical_align_bottom", tooltip: "bottom" },
+      { value: "end", icon: "i-mdi-align-vertical-bottom", tooltip: "bottom" },
     ];
   }
 
   return [
-    { value: "start", icon: "align_horizontal_left", tooltip: "left" },
+    { value: "start", icon: "i-mdi-align-horizontal-left", tooltip: "left" },
 
-    { value: "center", icon: "align_horizontal_center", tooltip: "center" },
+    {
+      value: "center",
+      icon: "i-mdi-align-horizontal-center",
+      tooltip: "center",
+    },
 
-    { value: "end", icon: "align_horizontal_right", tooltip: "right" },
+    { value: "end", icon: "i-mdi-align-horizontal-right", tooltip: "right" },
   ];
 });
 
@@ -73,20 +78,24 @@ const justifyTitle = computed(() =>
 const justifyOpts = computed(() => {
   if (directionIconRadioModel.value.value === "row") {
     return [
-      { value: "start", icon: "align_horizontal_left", tooltip: "left" },
+      { value: "start", icon: "i-mdi-align-horizontal-left", tooltip: "left" },
 
-      { value: "center", icon: "align_horizontal_center", tooltip: "center" },
+      {
+        value: "center",
+        icon: "i-mdi-align-horizontal-center",
+        tooltip: "center",
+      },
 
-      { value: "end", icon: "align_horizontal_right", tooltip: "right" },
+      { value: "end", icon: "i-mdi-align-horizontal-right", tooltip: "right" },
     ];
   }
 
   return [
-    { value: "start", icon: "vertical_align_top", tooltip: "top" },
+    { value: "start", icon: "i-mdi-align-vertical-top", tooltip: "top" },
 
-    { value: "center", icon: "align_vertical_center", tooltip: "center" },
+    { value: "center", icon: "i-mdi-align-vertical-center", tooltip: "center" },
 
-    { value: "end", icon: "vertical_align_bottom", tooltip: "bottom" },
+    { value: "end", icon: "i-mdi-align-vertical-bottom", tooltip: "bottom" },
   ];
 });
 

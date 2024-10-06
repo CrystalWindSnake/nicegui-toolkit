@@ -1,9 +1,7 @@
 import { ComputedRef, Ref, computed } from "vue";
 import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 import { useMouse, useWindowSize } from "@vueuse/core";
-
-import * as utils from "./utils";
-import * as globals from "@/hooks/globals";
+import * as hookUtils from "@/hooks/utils";
 import * as targetElementContext from "@/hooks/targetElementContext";
 
 export function useTypeNameTag(
@@ -43,7 +41,7 @@ export function useTypeNameTag(
 
   const typeName = computed(() => {
     if (hoverElement.value) {
-      return utils.getElementType(hoverElement.value, config);
+      return hookUtils.getElementType(hoverElement.value, config);
     }
 
     return null;
@@ -73,7 +71,7 @@ export function getBoxParentId(target: HTMLElement, config: TSelectorConfig) {
       .getComputedStyle(box, null)
       .getPropertyValue("display");
     if (display === "flex") {
-      return { id: utils.getElementId(box, config), dom: box };
+      return { id: hookUtils.getElementId(box, config), dom: box };
     }
 
     box = box.parentElement!.closest(`${config.selectors}`);
@@ -88,7 +86,7 @@ export function getFlexInfo(
   target: HTMLElement,
   config: TSelectorConfig
 ): TSelectedChangeEventArgs["flexInfo"] {
-  if (!FlexCheckTargets.has(utils.getElementType(target, config)!)) {
+  if (!FlexCheckTargets.has(hookUtils.getElementType(target, config)!)) {
     return {
       isFlex: false,
       direction: null,

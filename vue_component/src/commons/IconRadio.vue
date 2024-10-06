@@ -7,6 +7,8 @@ const props = defineProps<{
 
 const { value, options, userEdited } = props.model;
 
+const hasIcon = options.value.some((option) => option.icon);
+
 function onCheck(tagValue: string) {
   value.value = tagValue;
   userEdited();
@@ -15,16 +17,38 @@ function onCheck(tagValue: string) {
 
 <template>
   <div class="flex flex-row gap-0">
-    <ATag
-      v-for="option in options"
-      :key="option.value"
-      :checked="value === option.value"
-      checkable
-      bordered
-      color="green"
-      @check="onCheck(option.value)"
-      >{{ option.label }}</ATag
-    >
+    <template v-if="hasIcon">
+      <a-tooltip
+        :content="option.label"
+        v-for="option in options"
+        :key="option.value"
+        popup-container="[layout-tool-panel]"
+      >
+        <AButton
+          size="small"
+          type="outline"
+          :status="value === option.value ? 'success' : undefined"
+          @click="onCheck(option.value)"
+        >
+          <template #icon>
+            <span :class="option.icon"></span>
+          </template>
+        </AButton>
+      </a-tooltip>
+    </template>
+
+    <template v-else>
+      <ATag
+        v-for="option in options"
+        :key="option.value"
+        :checked="value === option.value"
+        checkable
+        bordered
+        color="green"
+        @check="onCheck(option.value)"
+        >{{ option.label }}</ATag
+      >
+    </template>
   </div>
 </template>
 
