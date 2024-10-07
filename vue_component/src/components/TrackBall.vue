@@ -199,10 +199,6 @@ defineExpose(
 </template>
 
 <style>
-.arco-collapse-item-content {
-  padding: 2px !important;
-}
-
 .x-unit-select .arco-select-view-suffix {
   padding-left: 0 !important;
 }

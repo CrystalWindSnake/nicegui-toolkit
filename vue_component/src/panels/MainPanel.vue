@@ -47,4 +47,8 @@ const elementTreeModel = useElementTree();
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+:deep(.arco-collapse-item-content) {
+  padding: 2px !important;
+}
+</style>

@@ -115,7 +115,7 @@ export function scrollElementIntoView(element: HTMLElement) {
 
   element.scrollIntoView({
     behavior: "smooth",
-    // block: "center",
-    // inline: "nearest",
+    block: "nearest",
+    inline: "nearest",
   });
 }

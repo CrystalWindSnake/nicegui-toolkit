@@ -12,7 +12,10 @@ def move_away_panel(page: PageUtils):
 
 
 def assert_hover_type_name(page: PageUtils, testid: str, expect_typeName: str):
-    page.locator(f".testid-{testid}").hover()
+    target = page.locator(f".testid-{testid}")
+
+    target.scroll_into_view_if_needed()
+    target.hover(position={"x": 10, "y": 0})
 
     typeName = page.locator(".vis-type-name").inner_text()
     assert typeName == expect_typeName
@@ -33,7 +36,7 @@ class ElementAssert:
     def assert_element(self, testid: str, type_name: Optional[str] = None):
         type_name = type_name or testid.capitalize()
 
-        self._page.wait()
+        self._page.wait(1000)
         assert_hover_type_name(self._page, testid, type_name)
         assert_hover_rect(self._page)
 

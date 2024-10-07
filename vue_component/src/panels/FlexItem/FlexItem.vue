@@ -80,12 +80,12 @@ const iconRadioModel = useIconRadio({
     header="FlexItem(Flex子元素)"
     key="flex-item"
   >
-    <a-list size="small">
-      <ListItem>
-        <ItemLabel keyId="align-self" :label="alignConfigs.title"></ItemLabel>
-        <IconRadio :model="iconRadioModel"></IconRadio>
-      </ListItem>
-    </a-list>
+    <div
+      class="grid grid-cols-[minmax(18ch,auto)_auto] gap-y-2 items-center justify-start"
+    >
+      <ItemLabel keyId="align-self" :label="alignConfigs.title"></ItemLabel>
+      <IconRadio :model="iconRadioModel"></IconRadio>
+    </div>
   </a-collapse-item>
 </template>
 
