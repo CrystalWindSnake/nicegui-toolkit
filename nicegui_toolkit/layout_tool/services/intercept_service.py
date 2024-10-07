@@ -8,6 +8,8 @@ from pathlib import Path
 from dataclasses import dataclass, field
 import nicegui_toolkit.layout_tool.consts as consts
 import nicegui_toolkit.layout_tool.types as tools_types
+import os
+
 
 EXCLUDE_INJECT_NG_CLASSES = ["Query", "QueryElement", "TrackBall"]
 
@@ -108,7 +110,10 @@ class _Helper:
     @staticmethod
     def is_descendant_of(file_path: Path, folder_path: Path) -> bool:
         try:
-            return file_path.resolve().is_relative_to(folder_path.resolve())
+            rel_path = os.path.relpath(file_path, start=folder_path)
+            if not rel_path.startswith(os.pardir):
+                return True
+            return False
         except ValueError:
             return False
 
