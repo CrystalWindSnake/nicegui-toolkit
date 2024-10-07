@@ -1,3 +1,3 @@
 import importlib.metadata
 
-__version__: str = importlib.metadata.version("niceguiToolkit")
+__version__: str = importlib.metadata.version("niceguitoolkit")
