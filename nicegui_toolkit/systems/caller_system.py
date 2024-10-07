@@ -185,12 +185,12 @@ class _utils:
     @staticmethod
     @lru_cache
     def try_get_frame_position(f_code: CodeType, code_id: int, f_lasti: int):
-        bc_list = list(dis.get_instructions(f_code, show_caches=True))
+        bc_dict = {bc.offset: bc for bc in dis.get_instructions(f_code)}
 
-        while _utils.opname(bc_list, f_lasti) == "CACHE":
+        while _utils.opname(bc_dict, f_lasti) == "CACHE":
             f_lasti -= 2
 
-        node = _utils.instruction(bc_list, f_lasti)
+        node = _utils.instruction(bc_dict, f_lasti)
         position = node.positions
         assert position is not None
         assert position.lineno is not None
@@ -238,12 +238,17 @@ class _utils:
         return len(text.encode(encoding))
 
     @staticmethod
-    def instruction(bc_list, index: int) -> dis.Instruction:
-        return bc_list[index // 2]
+    def instruction(bc_dict, index: int) -> dis.Instruction:
+        return bc_dict.get(index, None)
 
     @staticmethod
-    def opname(bc_list, index: int) -> str:
-        return _utils.instruction(bc_list, index).opname
+    def opname(bc_dict, index: int) -> str:
+        i = _utils.instruction(bc_dict, index)
+        if i is None:
+            return "CACHE"
+        return i.opname
+
+        # return _utils.instruction(bc_list, index).opname
 
     @staticmethod
     def cal_token_end_col(
