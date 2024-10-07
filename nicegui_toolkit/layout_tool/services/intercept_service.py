@@ -109,13 +109,14 @@ class CustomStyleProperty:
 class _Helper:
     @staticmethod
     def is_descendant_of(file_path: Path, folder_path: Path) -> bool:
-        try:
-            rel_path = os.path.relpath(file_path, start=folder_path)
-            if not rel_path.startswith(os.pardir):
-                return True
-            return False
-        except ValueError:
-            return False
+        directory = os.path.abspath(folder_path)
+        file = os.path.abspath(file_path)
+        common_path = os.path.commonpath([directory, file])
+        return common_path == directory
+
+    @staticmethod
+    def is_in_special_folder(file_path: Path) -> bool:
+        return ".venv" in file_path.parts
 
     @staticmethod
     def get_frame_with_file_name(frame, context: HookerContext):
@@ -125,7 +126,9 @@ class _Helper:
                 return None
 
             for folder in context.include_folders:
-                if _Helper.is_descendant_of(file_path, folder):
+                if _Helper.is_descendant_of(file_path, folder) and (
+                    not _Helper.is_in_special_folder(file_path)
+                ):
                     return frame
 
             frame = frame.f_back
