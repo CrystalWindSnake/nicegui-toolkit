@@ -6,8 +6,8 @@ from niceguiToolkit.systems.caller_system import get_lazy_caller_info, LazyCalle
 import inspect
 from pathlib import Path
 from dataclasses import dataclass, field
-from . import utils
 import niceguiToolkit.layout_tool.consts as consts
+import niceguiToolkit.layout_tool.types as tools_types
 
 EXCLUDE_INJECT_NG_CLASSES = ["Query", "QueryElement", "TrackBall"]
 
@@ -15,6 +15,7 @@ EXCLUDE_INJECT_NG_CLASSES = ["Query", "QueryElement", "TrackBall"]
 @dataclass
 class HookerContext:
     include_folders: List[Path] = field(default_factory=list)
+    IDE: tools_types._T_IDE = "vscode"
 
 
 class Hooker:
@@ -39,26 +40,31 @@ class Hooker:
                 return
             info = get_lazy_caller_info(frame)
 
-            Hooker._mark_element(self, info)
+            Hooker._mark_element(self, info, context)
 
             Hooker.inject_style_method(self, context)
 
         ng.ui.element.__init__ = wrap_init
 
     @staticmethod
-    def _mark_element(ele: ng.ui.element, info: LazyCallerInfo):
-        vscode_url = f"vscode://file/{info.filename}:{info.lineno}:{info.end_col}"
+    def _mark_element(ele: ng.ui.element, info: LazyCallerInfo, context: HookerContext):
+        if context.IDE == "vscode":
+            url = f"vscode://file/{info.filename}:{info.lineno}:{info.end_col+1}"
+        elif context.IDE == "pycharm":
+            url = f"pycharm://open?file={info.filename}&line={info.lineno}&column={info.end_col+1}"
+        else:
+            url = ""
 
         ele._classes.extend(
             [
                 consts.SELECTOR_CLASS_NAME,
                 f"{consts.MARK_ID_PERFIX}{ele.id}",
                 f"{consts.MARK_ELEMENT_TYPE_PERFIX}{type(ele).__name__}",
-                f"{consts.MARK_SOURCE_CODE_PERFIX}{vscode_url}",
+                f"{consts.MARK_SOURCE_CODE_PERFIX}{url}",
             ]
         )
 
-        utils.save_source_code_info(ele, info)
+        source_code_service.save_source_code_info(ele, info)
 
     @staticmethod
     def inject_style_method(element: ng.ui.element, context: HookerContext):

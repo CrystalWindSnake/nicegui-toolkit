@@ -147,6 +147,7 @@ class _utils:
 
         raise ValueError("Cannot get token info from file")
 
+    @lru_cache
     @staticmethod
     def _get_lines_from_file(
         file_path: Union[str, Path],
@@ -170,7 +171,7 @@ class _utils:
             frame.f_code, id(frame.f_code), frame.f_lasti
         )
 
-    # @lru_cache
+    @lru_cache
     @staticmethod
     def try_get_frame_position(f_code: CodeType, code_id: int, f_lasti: int):
         bc_list = list(dis.get_instructions(f_code, show_caches=True))
