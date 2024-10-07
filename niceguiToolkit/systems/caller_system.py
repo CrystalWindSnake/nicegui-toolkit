@@ -11,6 +11,17 @@ CallerInfo = namedtuple(
     "CallerInfo", "filename method_name lineno start_col end_lineno end_col"
 )
 
+_Positions = namedtuple(
+    "Positions",
+    [
+        "lineno",
+        "end_lineno",
+        "col_offset",
+        "end_col_offset",
+    ],
+    defaults=[None] * 4,
+)
+
 
 def get_caller_info(frame: FrameType):
     """Get the caller information of a frame.
@@ -32,7 +43,7 @@ def get_caller_info(frame: FrameType):
 def _create_caller_info(
     filename: Path,
     lineno: int,
-    frame_position: dis.Positions,
+    frame_position: _Positions,
 ):
     code_lines, tokens = _utils.get_token_info(
         filename, frame_position.lineno, frame_position.end_lineno
@@ -54,7 +65,7 @@ class LazyCallerInfo:
         self,
         filename: str,
         org_lineno,
-        frame_position: dis.Positions,
+        frame_position: _Positions,
     ) -> None:
         self.filename = Path(filename)
         self._org_lineno = org_lineno
@@ -166,10 +177,10 @@ class _utils:
         return lines
 
     @staticmethod
-    def get_frame_position(frame: FrameType):
+    def get_frame_position(frame: FrameType) -> _Positions:
         return _utils.try_get_frame_position(
             frame.f_code, id(frame.f_code), frame.f_lasti
-        )
+        )  # type: ignore
 
     @lru_cache
     @staticmethod
@@ -191,7 +202,7 @@ class _utils:
     def get_token_position_by_frame_position(
         codes: List[str],
         tokens: List[tokenize.TokenInfo],
-        frame_position: dis.Positions,
+        frame_position: _Positions,
     ):
         for idx, token in enumerate(tokens):
             # cal token offset byte
