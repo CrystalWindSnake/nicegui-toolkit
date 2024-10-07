@@ -49,21 +49,24 @@ export function getElementType(target: HTMLElement, config: TSelectorConfig) {
 
   for (const name of target.classList) {
     if (name.startsWith(config.elementTypePrefix)) {
-      return name.slice(config.elementTypePrefix.length + 1);
+      return name.slice(config.elementTypePrefix.length);
     }
   }
 
   return null;
 }
 
-export function getElementId(target: HTMLElement, config: TSelectorConfig) {
+export function getElementId(
+  target: HTMLElement,
+  config: TSelectorConfig
+): number | null {
   if (!hasLayoutToolMark(target, config)) {
     return null;
   }
 
   for (const name of target.classList) {
     if (name.startsWith(config.idPrefix)) {
-      return parseInt(name.slice(config.idPrefix.length + 1));
+      return parseInt(name.slice(config.idPrefix.length));
     }
   }
 
@@ -71,10 +74,35 @@ export function getElementId(target: HTMLElement, config: TSelectorConfig) {
 }
 
 export function getElementById(id: number, config: TSelectorConfig) {
-  const targetQuery = `*.${config.idPrefix}-${id}`;
+  const targetQuery = `*.${config.idPrefix}${id}`;
   const targetElement = document.querySelector<HTMLElement>(targetQuery);
   if (!targetElement) {
     throw new Error(`target element with id ${id} not found`);
   }
   return targetElement;
+}
+
+export function getSourceCodeLink(
+  target: HTMLElement,
+  config: TSelectorConfig
+) {
+  for (const name of target.classList) {
+    if (name.startsWith(config.sourceCodePrefix)) {
+      return name.slice(config.sourceCodePrefix.length);
+    }
+  }
+
+  throw new Error("source code link not found");
+}
+
+export function navigateTo(url: string) {
+  const a = document.createElement("a");
+  a.href = url;
+  a.style.display = "none";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  document.body.removeChild(a);
 }

@@ -5,7 +5,10 @@ import {
 } from "@/components/types";
 import { ComputedRef, computed, ref } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
-import { updateTargetElement } from "@/hooks/targetElementContext";
+import {
+  updateTargetElement,
+  selectedTarget,
+} from "@/hooks/targetElementContext";
 import { type TElementTreeData } from "@/hooks/types";
 import * as hookUtils from "@/hooks/utils";
 
@@ -69,7 +72,13 @@ export function initGlobals(config: {
 }
 
 export function jumpToSourceCode() {
-  emitJumpSourceCodeFn();
+  // emitJumpSourceCodeFn();
+
+  const target = selectedTarget.value;
+  if (target) {
+    const url = hookUtils.getSourceCodeLink(target, selectorConfig);
+    hookUtils.navigateTo(url);
+  }
 }
 
 export function applyCommand() {

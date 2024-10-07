@@ -15,6 +15,7 @@ const { style } = useDraggable(el, {
 });
 
 const targetTypeName = useTargetTypeName();
+const hasSelectedTarget = useHasSelectedTarget();
 </script>
 
 <template>
@@ -50,7 +51,7 @@ const targetTypeName = useTargetTypeName();
           shape="circle"
           size="mini"
           @click="jumpToSourceCode"
-          v-show="useHasSelectedTarget"
+          v-show="hasSelectedTarget"
         >
           <div class="i-mdi-code-braces"></div>
         </a-button>

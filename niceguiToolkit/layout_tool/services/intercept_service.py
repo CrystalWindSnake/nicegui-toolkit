@@ -7,6 +7,7 @@ import inspect
 from pathlib import Path
 from dataclasses import dataclass, field
 from . import utils
+import niceguiToolkit.layout_tool.consts as consts
 
 EXCLUDE_INJECT_NG_CLASSES = ["Query", "QueryElement", "TrackBall"]
 
@@ -50,10 +51,10 @@ class Hooker:
 
         ele._classes.extend(
             [
-                "layout-tool-mark",
-                f"layout-tool-id-{ele.id}",
-                f"layout-tool-type-{type(ele).__name__}",
-                f"layout-tool-file-{vscode_url}",
+                consts.SELECTOR_CLASS_NAME,
+                f"{consts.MARK_ID_PERFIX}{ele.id}",
+                f"{consts.MARK_ELEMENT_TYPE_PERFIX}{type(ele).__name__}",
+                f"{consts.MARK_SOURCE_CODE_PERFIX}{vscode_url}",
             ]
         )
 

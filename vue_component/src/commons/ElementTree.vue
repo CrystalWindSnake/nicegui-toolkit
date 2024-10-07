@@ -10,6 +10,7 @@ import {
   setHoverByCode,
   resetHoverByCode,
 } from "@/hooks/globals";
+import * as hookUtils from "@/hooks/utils";
 
 const props = defineProps<{
   model: TModel;
@@ -50,29 +51,13 @@ function handleMouseLeave(e: MouseEvent) {
   resetHoverByCode();
 }
 
-function getIdFromElement(element: HTMLElement): number | null {
-  if (!element || !element.classList) {
-    return null;
-  }
-
-  const idPrefix = getSelectorConfig().idPrefix;
-
-  for (let className of element.classList) {
-    if (className.startsWith(idPrefix)) {
-      return parseInt(className.slice(idPrefix.length + 1));
-    }
-  }
-
-  return null;
-}
-
 watch(getSelectedTarget(), (target) => {
   if (!target) {
     (el.value as any).selectAll(false);
   }
 
   if (el.value && target) {
-    const key = getIdFromElement(target);
+    const key = hookUtils.getElementId(target, getSelectorConfig());
     if (key == null) {
       throw new Error("Cannot find key for selected element");
     }

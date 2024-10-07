@@ -22,6 +22,7 @@ class TrackBall(Element, component="trackBall.js"):
             "selectors": consts.MARK_SELECTOR,
             "idPrefix": consts.MARK_ID_PERFIX,
             "elementTypePrefix": consts.MARK_ELEMENT_TYPE_PERFIX,
+            "sourceCodePrefix": consts.MARK_SOURCE_CODE_PERFIX,
         }
         self._props["currentTargetContext"] = {"props": {}, "styles": {}}
         self.props("data-ng-toolkit-trackball")

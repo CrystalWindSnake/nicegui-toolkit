@@ -2,6 +2,7 @@ export type TSelectorConfig = {
   selectors: string;
   idPrefix: string;
   elementTypePrefix: string;
+  sourceCodePrefix: string;
 };
 
 export type TTargetContext = {
