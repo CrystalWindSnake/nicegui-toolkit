@@ -45,15 +45,15 @@ def test_hover(browser: BrowserManager, page_path: str):
     @ui.page(page_path)
     def _():
         inject_layout_tool()
-
-        ui.input("test").classes("testid-input")
-        ui.select(["a"]).classes("testid-select")
-        ui.row().classes("testid-row w-[10rem] h-[10rem] outline")
-        ui.column().classes("testid-column w-[10rem] h-[10rem] outline")
-        ui.element("div").classes("testid-element w-[10rem] h-[10rem] outline")
-        ui.date().classes("testid-date")
-        ui.slider(min=0, max=100).classes("testid-slider")
-        ui.button("test").classes("testid-button")
+        with ui.row():
+            ui.input("test").classes("testid-input")
+            ui.select(["a"]).classes("testid-select")
+            ui.row().classes("testid-row w-[10rem] h-[10rem] outline")
+            ui.column().classes("testid-column w-[10rem] h-[10rem] outline")
+            ui.element("div").classes("testid-element w-[10rem] h-[10rem] outline")
+            ui.date().classes("testid-date")
+            ui.slider(min=0, max=100).classes("testid-slider")
+            ui.button("test").classes("testid-button")
 
     testids = [
         "input",
