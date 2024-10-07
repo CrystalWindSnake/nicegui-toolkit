@@ -34,8 +34,8 @@ def get_caller_info(frame: FrameType):
     lineno = frame.f_lineno
 
     frame_position = _utils.get_frame_position(frame)
-    assert frame_position.lineno
-    assert frame_position.end_lineno
+    assert frame_position.lineno is not None
+    assert frame_position.end_lineno is not None
 
     return _create_caller_info(Path(filename), lineno, frame_position)
 
@@ -115,7 +115,7 @@ def clear_cache():
 
 
 class _utils:
-    @lru_cache
+    @lru_cache(typed=True)
     @staticmethod
     def get_token_info(file: str, lineno: int, end_lineno: int):
         lines = _utils._get_lines_from_file(file, lineno, end_lineno)
