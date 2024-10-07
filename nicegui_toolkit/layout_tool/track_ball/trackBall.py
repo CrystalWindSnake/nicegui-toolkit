@@ -8,7 +8,7 @@ from nicegui_toolkit.layout_tool import consts
 import nicegui_toolkit.layout_tool.services.source_code_service as source_code_service
 from nicegui_toolkit.layout_tool.element_tree import get_tree_data
 
-_RESOURCE = Path(__file__).parent / "lib"
+_RESOURCE = Path(__file__).parent / "libs"
 
 
 class TrackBall(Element, component="trackBall.js"):
