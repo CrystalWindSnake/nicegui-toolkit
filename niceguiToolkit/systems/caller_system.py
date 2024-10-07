@@ -117,7 +117,7 @@ def clear_cache():
 class _utils:
     # @lru_cache(typed=True)
     @staticmethod
-    def get_token_info(file: str, lineno: int, end_lineno: int):
+    def get_token_info(file: Union[str, Path], lineno: int, end_lineno: int):
         lines = _utils._get_lines_from_file(file, lineno, end_lineno)
 
         """
@@ -158,7 +158,7 @@ class _utils:
 
         raise ValueError("Cannot get token info from file")
 
-    get_token_info = lru_cache(get_token_info, typed=True)
+    get_token_info = lru_cache(typed=True)(get_token_info)
 
     @lru_cache
     @staticmethod
