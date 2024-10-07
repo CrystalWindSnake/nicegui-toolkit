@@ -5,7 +5,7 @@ from .services.intercept_service import (
 from .services.caller_service import get_caller_file
 from .track_ball.trackBall import TrackBall
 from nicegui import app as ng_app, Client as ng_Client
-from niceguiToolkit.layout_tool import types
+from nicegui_toolkit.layout_tool import types
 
 
 def inject_layout_tool(ide: types._T_IDE = "vscode"):

@@ -6,7 +6,7 @@ from nicegui.element import Element
 
 
 if TYPE_CHECKING:
-    from niceguiToolkit.systems.caller_system import LazyCallerInfo
+    from nicegui_toolkit.systems.caller_system import LazyCallerInfo
 
 
 _SOURCE_CODE_INFO_FLAG = "__source_code_info__"

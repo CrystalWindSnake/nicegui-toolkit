@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Dict, List, Optional, Tuple
 import nicegui as ng_vars
 from dataclasses import dataclass, field
-from niceguiToolkit.layout_tool import consts
+from nicegui_toolkit.layout_tool import consts
 from collections import deque
 
 

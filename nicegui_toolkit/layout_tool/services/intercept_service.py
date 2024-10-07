@@ -1,13 +1,13 @@
 import types
 from typing import List
 import nicegui as ng
-from niceguiToolkit.layout_tool.services import source_code_service
-from niceguiToolkit.systems.caller_system import get_lazy_caller_info, LazyCallerInfo
+from nicegui_toolkit.layout_tool.services import source_code_service
+from nicegui_toolkit.systems.caller_system import get_lazy_caller_info, LazyCallerInfo
 import inspect
 from pathlib import Path
 from dataclasses import dataclass, field
-import niceguiToolkit.layout_tool.consts as consts
-import niceguiToolkit.layout_tool.types as tools_types
+import nicegui_toolkit.layout_tool.consts as consts
+import nicegui_toolkit.layout_tool.types as tools_types
 
 EXCLUDE_INJECT_NG_CLASSES = ["Query", "QueryElement", "TrackBall"]
 

@@ -2,11 +2,11 @@ from pathlib import Path
 from typing import Optional
 import nicegui as ng_vars
 from nicegui.element import Element
-from niceguiToolkit.layout_tool.record_tracker import RecordTracker
-from niceguiToolkit.layout_tool import events
-from niceguiToolkit.layout_tool import consts
-import niceguiToolkit.layout_tool.services.source_code_service as source_code_service
-from niceguiToolkit.layout_tool.element_tree import get_tree_data
+from nicegui_toolkit.layout_tool.record_tracker import RecordTracker
+from nicegui_toolkit.layout_tool import events
+from nicegui_toolkit.layout_tool import consts
+import nicegui_toolkit.layout_tool.services.source_code_service as source_code_service
+from nicegui_toolkit.layout_tool.element_tree import get_tree_data
 
 _RESOURCE = Path(__file__).parent / "lib"
 
