@@ -5,7 +5,7 @@ description = "toolkit for nicegui"
 authors = ["CrystalWindSnake <568166495@qq.com>"]
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/CrystalWindSnake/ex4nicegui"
+repository = "https://github.com/CrystalWindSnake/nicegui-toolkit"
 keywords = ["nicegui", "webui"]
 
 [tool.poetry.dependencies]
