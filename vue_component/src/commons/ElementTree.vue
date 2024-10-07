@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { type TModel } from "./elementTree";
 import {
   setSelectedTarget,
@@ -65,18 +65,56 @@ watch(getSelectedTarget(), (target) => {
     (el.value as any).selectNode(key, true);
   }
 });
+
+const expandTree = ref(true);
+
+const expandIcon = computed(() => {
+  return expandTree.value
+    ? "i-mdi-arrow-collapse-vertical"
+    : "i-mdi-arrow-expand-vertical";
+});
+
+const expandtooltipContent = computed(() => {
+  return expandTree.value ? "Collapse all" : "Expand all";
+});
+
+function handleExpandTree() {
+  expandTree.value = !expandTree.value;
+
+  (el.value as any).expandAll(expandTree.value);
+
+  if (!expandTree.value) {
+    (el.value as any).expandNode(-1, !expandTree.value);
+  }
+}
 </script>
 
 <template>
-  <ATree
-    ref="el"
-    :data="model.treeData"
-    show-line
-    block-node
-    @select="handleSelectNode"
-    @mouseenter.capture.stop="handleMouseEnter"
-    @mouseleave.capture.stop="handleMouseLeave"
-  />
+  <AScrollbar style="height: 500px; overflow: auto">
+    <div class="relative">
+      <ATree
+        ref="el"
+        :data="model.treeData"
+        show-line
+        block-node
+        @select="handleSelectNode"
+        @mouseenter.capture.stop="handleMouseEnter"
+        @mouseleave.capture.stop="handleMouseLeave"
+      />
+
+      <ATooltip
+        :content="expandtooltipContent"
+        popup-container="body"
+        style="z-index: 9999999"
+      >
+        <div
+          class="text-xl absolute top-0 right-5 cursor-pointer"
+          :class="expandIcon"
+          @click="handleExpandTree"
+        ></div>
+      </ATooltip>
+    </div>
+  </AScrollbar>
 </template>
 
 <style scoped>
