@@ -1,7 +1,7 @@
 from typing import Optional
 from nicegui import ui
 from .screen import BrowserManager, PageUtils
-from niceguiToolkit import inject_layout_tool
+from nicegui_toolkit import inject_layout_tool
 
 
 def move_away_panel(page: PageUtils):
