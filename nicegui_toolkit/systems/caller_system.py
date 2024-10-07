@@ -1,11 +1,11 @@
 import itertools
 from pathlib import Path
 import tokenize
-import dis
-from types import CodeType, FrameType
+from types import FrameType
 from typing import List, Union
 from collections import namedtuple
 from functools import lru_cache
+import executing
 
 CallerInfo = namedtuple(
     "CallerInfo", "filename method_name lineno start_col end_lineno end_col"
@@ -31,18 +31,16 @@ def get_caller_info(frame: FrameType):
 
     """
     filename = frame.f_code.co_filename
-    lineno = frame.f_lineno
 
     frame_position = _utils.get_frame_position(frame)
     assert frame_position.lineno is not None
     assert frame_position.end_lineno is not None
 
-    return _create_caller_info(Path(filename), lineno, frame_position)
+    return _create_caller_info(Path(filename), frame_position)
 
 
 def _create_caller_info(
     filename: Path,
-    lineno: int,
     frame_position: _Positions,
 ):
     code_lines, tokens = _utils.get_token_info(
@@ -56,7 +54,12 @@ def _create_caller_info(
     ) = _utils.get_token_position_by_frame_position(code_lines, tokens, frame_position)
 
     return CallerInfo(
-        filename, method_name, lineno, start_col, frame_position.end_lineno, end_col
+        filename,
+        method_name,
+        frame_position.lineno,
+        start_col,
+        frame_position.end_lineno,
+        end_col,
     )
 
 
@@ -76,9 +79,7 @@ class LazyCallerInfo:
     @property
     def caller_info(self):
         if self._caller_info is None:
-            self._caller_info = _create_caller_info(
-                self.filename, self._org_lineno, self._frame_position
-            )
+            self._caller_info = _create_caller_info(self.filename, self._frame_position)
         return self._caller_info
 
     @property
@@ -111,7 +112,6 @@ def get_lazy_caller_info(frame: FrameType):
 
 def clear_cache():
     _utils.get_token_info.cache_clear()
-    _utils.try_get_frame_position.cache_clear()
 
 
 class _utils:
@@ -178,25 +178,19 @@ class _utils:
 
     @staticmethod
     def get_frame_position(frame: FrameType) -> _Positions:
-        return _utils.try_get_frame_position(
-            frame.f_code, id(frame.f_code), frame.f_lasti
-        )  # type: ignore
+        exec_obj = executing.Source.executing(frame)
+        positions = exec_obj.source._asttext_base().get_text_positions(
+            exec_obj.node, True
+        )
 
-    @staticmethod
-    @lru_cache
-    def try_get_frame_position(f_code: CodeType, code_id: int, f_lasti: int):
-        bc_dict = {bc.offset: bc for bc in dis.get_instructions(f_code)}
+        ((lineno, col_offset), (end_lineno, end_col_offset)) = positions
 
-        while _utils.opname(bc_dict, f_lasti) == "CACHE":
-            f_lasti -= 2
-
-        node = _utils.instruction(bc_dict, f_lasti)
-        position = node.positions
-        assert position is not None
-        assert position.lineno is not None
-        assert position.col_offset is not None
-
-        return position
+        return _Positions(
+            lineno=lineno,
+            end_lineno=end_lineno,
+            col_offset=col_offset,
+            end_col_offset=end_col_offset,
+        )
 
     @staticmethod
     def get_token_position_by_frame_position(
@@ -205,15 +199,10 @@ class _utils:
         frame_position: _Positions,
     ):
         for idx, token in enumerate(tokens):
-            # cal token offset byte
-            token_offset_byte = _utils.byte_count(
-                codes[token.end[0] - 1][: token.end[1]]
-            )
-
-            line_no = token.end[0] + frame_position.lineno - 1  # type: ignore
+            line_no = token.end[0] + frame_position.lineno - 1
 
             if (
-                token_offset_byte == frame_position.end_col_offset
+                token.end[1] == frame_position.end_col_offset
                 and line_no == frame_position.end_lineno
             ):  # type: ignore
                 left_parenthesis, target_idx = _utils.find_preceding_left_parenthesis(
@@ -232,23 +221,6 @@ class _utils:
                 )
 
         raise ValueError("Cannot find the token position by frame position")
-
-    @staticmethod
-    def byte_count(text: str, encoding: str = "utf-8") -> int:
-        return len(text.encode(encoding))
-
-    @staticmethod
-    def instruction(bc_dict, index: int) -> dis.Instruction:
-        return bc_dict.get(index, None)
-
-    @staticmethod
-    def opname(bc_dict, index: int) -> str:
-        i = _utils.instruction(bc_dict, index)
-        if i is None:
-            return "CACHE"
-        return i.opname
-
-        # return _utils.instruction(bc_list, index).opname
 
     @staticmethod
     def cal_token_end_col(

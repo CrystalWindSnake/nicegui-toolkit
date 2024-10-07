@@ -12,6 +12,8 @@ keywords = ["nicegui", "webui"]
 [tool.poetry.dependencies]
 python = "^3.8"
 nicegui = "^2.0.0"
+executing = "^2.1.0"
+asttokens = "^2.4.1"
 
 [tool.poetry.group.dev.dependencies]
 nicegui = "*"
