@@ -1,5 +1,4 @@
-# from niceguiToolkit import layout
-from .index import inject_layout_tool
+from .layout_tool import inject_layout_tool
 from .version import __version__
 
 

@@ -4,8 +4,8 @@ import shutil
 
 
 
-EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'niceguiToolkit/track_ball'
-CSS_DEST_DIR_ROOT =Path(__file__).parent.parent.parent / 'niceguiToolkit/track_ball/lib'
+EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'niceguiToolkit/layout_tool/track_ball'
+CSS_DEST_DIR_ROOT =Path(__file__).parent.parent.parent / 'niceguiToolkit/layout_tool/track_ball/lib'
 DIST_ROOT = Path(__file__).parent.parent / 'dist'
 
 

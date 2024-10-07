@@ -1,7 +1,7 @@
 import types
 from typing import List
 import nicegui as ng
-from niceguiToolkit.services import source_code_service
+from niceguiToolkit.layout_tool.services import source_code_service
 from niceguiToolkit.systems.caller_system import get_lazy_caller_info, LazyCallerInfo
 import inspect
 from pathlib import Path

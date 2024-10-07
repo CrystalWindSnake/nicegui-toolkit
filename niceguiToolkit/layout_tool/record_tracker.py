@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Dict, Literal, List
 import nicegui as ng_vars
-from niceguiToolkit.services import source_code_service
+from niceguiToolkit.layout_tool.services import source_code_service
 from collections import defaultdict
 
 TRecordType = Literal["props", "style", "class"]
