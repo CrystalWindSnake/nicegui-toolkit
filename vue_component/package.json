@@ -5,18 +5,30 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test": "vitest",
+    "only build": "vite build",
     "build": "vite build && python scripts/vue_build_file_tran.py",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vueuse/core": "^10.5.0",
-    "vue": "^3.3.4"
+    "@quasar/extras": "^1.16.8",
+    "@vueuse/core": "^10.11.1",
+    "quasar": "^2.17.0",
+    "vue": "^3.5.8"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.2.3",
+    "@arco-design/web-vue": "^2.56.2",
+    "@arco-plugins/vite-vue": "^1.4.5",
+    "@iconify-json/codicon": "^1.2.2",
+    "@iconify-json/mdi": "^1.2.0",
+    "@quasar/vite-plugin": "^1.7.0",
+    "@unocss/preset-icons": "^0.63.3",
+    "@vitejs/plugin-vue": "^4.6.2",
+    "less": "^4.2.0",
     "typescript": "^5.0.2",
     "unocss": "^0.57.1",
     "vite": "^4.4.5",
+    "vitest": "^1.6.0",
     "vue-tsc": "^1.8.5"
   }
 }

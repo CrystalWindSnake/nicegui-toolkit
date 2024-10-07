@@ -4,8 +4,8 @@ import shutil
 
 
 
-EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'niceguiToolkit/libs'
-
+EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'nicegui_toolkit/layout_tool/track_ball'
+CSS_DEST_DIR_ROOT =Path(__file__).parent.parent.parent / 'nicegui_toolkit/layout_tool/track_ball/libs'
 DIST_ROOT = Path(__file__).parent.parent / 'dist'
 
 
@@ -31,7 +31,7 @@ def tran_vue_imports(js_file_name_without_ex:str):
 
         each_as_stms = target.split(",")
 
-        each_const_stms = (as_stem.split("as") for as_stem in each_as_stms)
+        each_const_stms = (as_stem.split(" as ") for as_stem in each_as_stms)
 
         each_const_stms = [
             f"const {as_stem[1].strip()} = Vue.{as_stem[0].strip()}"
@@ -58,13 +58,13 @@ def copy2styls(dist_file, dest_file):
     src = DIST_ROOT / dist_file
     if not src.exists():
         return
-    to_file = EX_DEST_DIR_ROOT / dest_file
+    to_file = CSS_DEST_DIR_ROOT / dest_file
 
     shutil.copy(src, to_file)
 
 cp_name='trackBall'
 tran_vue_imports(cp_name)
-copy2styls(f'{cp_name}/style.css',f'{cp_name}.css')
+copy2styls(f'{cp_name}.css',f'{cp_name}.css')
 
 # for cp in ['TrackBall','Aiming','ClayBox']:
 #     tran_vue_imports(cp)

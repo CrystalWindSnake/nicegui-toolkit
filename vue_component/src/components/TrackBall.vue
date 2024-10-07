@@ -1,46 +1,132 @@
 <script setup lang="ts">
-// import { ref } from "vue";
-
+import MainPanel from "@/panels/MainPanel.vue";
 import Aiming from "./Aiming.vue";
 import Panel from "./Panel.vue";
+import VisHover from "./VisHover.vue";
+import { useTypeNameTag, getComponentExpose } from "./trackBallUtils";
+import * as tbUtils from "./trackBallUtils";
+import * as hookUtils from "@/hooks/utils";
+import { type TElementTreeData } from "@/hooks/types";
 
 import {
-  useHoverVisTarget,
-  useSvgConfigs,
-  hookPageMouseEvent,
-  useTypeNameTag,
-  getComponentExpose,
-} from "./trackBallUtils";
+  type TSelectorConfig,
+  TTargetContext,
+  TSelectedChangeEventArgs,
+  TSetCommand,
+  TResetCommand,
+} from "./types";
+import { onMounted, watch } from "vue";
+import * as globals from "@/hooks/globals";
+import * as targetElementContext from "@/hooks/targetElementContext";
+import { useAiming } from "./Aiming";
 
-import * as tbUtils from "./trackBallUtils";
-import * as utils from "./utils";
-import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
-import { ref, watch } from "vue";
+const props = defineProps<{
+  selectorConfig: TSelectorConfig;
+  currentTargetContext: TTargetContext;
+  resource_path?: string;
+  elementTreeData: TElementTreeData;
+}>();
 
-const props = defineProps<{ selectorConfig: TSelectorConfig }>();
+// emits
 const emit = defineEmits<{
   (event: "hoverChange", args: { id: number | null }): void;
   (event: "selectedChange", args: TSelectedChangeEventArgs): void;
+  (
+    event: "setCommand",
+    args: {
+      id: number;
+      commands: TSetCommand[];
+    }
+  ): void;
+  (
+    event: "resetCommand",
+    args: {
+      id: number;
+      commands: TResetCommand[];
+    }
+  ): void;
+  (
+    event: "jumpSourceCode",
+    args: {
+      id: number;
+    }
+  ): void;
+  (event: "applyCommand"): void;
 }>();
 
-const { viewBox, styles: svgStyles } = useSvgConfigs();
+function emitSetCommnad(commands: TSetCommand[]) {
+  const target = targetElementContext.selectedTarget.value;
+  if (!target) {
+    return;
+  }
+  const id = hookUtils.getElementId(target, props.selectorConfig);
+  if (!id) {
+    throw new Error("not found selected element");
+  }
+  emit("setCommand", { id: id, commands });
+}
 
-const { hoverElement, rectStyles, topLine, rightLine, bottomLine, leftLine } =
-  useHoverVisTarget(props.selectorConfig);
+function emitResetCommnad(commands: TResetCommand[]) {
+  const target = targetElementContext.selectedTarget.value;
+  if (!target) {
+    return;
+  }
+  const id = hookUtils.getElementId(target, props.selectorConfig);
+  if (!id) {
+    throw new Error("not found selected element");
+  }
+  emit("resetCommand", { id: id, commands });
+}
+
+// onMounted
+onMounted(async () => {
+  await tbUtils.createClientStyleLinkTag(props.resource_path);
+});
+
+globals.initGlobals({
+  selectorConfig: props.selectorConfig,
+  elementTreeData: props.elementTreeData,
+  emitSetCommandFn: emitSetCommnad,
+  emitResetCommandFn: emitResetCommnad,
+  emitJumpSourceCodeFn: () => {
+    const target = targetElementContext.selectedTarget.value;
+    if (!target) {
+      return;
+    }
+    const id = hookUtils.getElementId(target, props.selectorConfig);
+    if (!id) {
+      throw new Error("not found selected element");
+    }
+    emit("jumpSourceCode", { id });
+  },
+  emitApplyCommandFn: () => {
+    emit("applyCommand");
+  },
+});
+
+watch(
+  () => props.currentTargetContext,
+  () => {
+    targetElementContext.updateCurrentTargetContext(props.currentTargetContext);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 
 const { typeNameTagStyles, typeName } = useTypeNameTag(
   props.selectorConfig,
-  hoverElement
+  globals.hoverElement
 );
 
-const selectedElement = ref<HTMLElement | null>(null);
-
-hookPageMouseEvent(hoverElement, selectedElement);
+// aiming
+const aimingModel = useAiming();
 
 // events
-watch(hoverElement, (target) => {
+watch(globals.hoverElement, (target) => {
   if (target) {
-    const id = utils.getElementId(target, props.selectorConfig);
+    const id = hookUtils.getElementId(target, props.selectorConfig);
     emit("hoverChange", { id });
     return;
   }
@@ -48,14 +134,14 @@ watch(hoverElement, (target) => {
   emit("hoverChange", { id: null });
 });
 
-watch(selectedElement, (target) => {
+watch(targetElementContext.selectedTarget, (target) => {
   const flexInfo = {
     isFlex: false,
     direction: null,
   } as TSelectedChangeEventArgs["flexInfo"];
 
   if (target) {
-    const id = utils.getElementId(target, props.selectorConfig);
+    const id = hookUtils.getElementId(target, props.selectorConfig);
 
     const parentBox = tbUtils.getBoxParentId(target, props.selectorConfig);
 
@@ -84,66 +170,22 @@ watch(selectedElement, (target) => {
   });
 });
 
-defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
+// Expose
+defineExpose(
+  getComponentExpose(props.selectorConfig, targetElementContext.selectedTarget)
+);
 </script>
 
 <template>
   <Teleport to="body">
-    <svg
-      class="vis-hover"
-      :viewBox="viewBox"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        z-index: 9999999;
-      "
-      :style="svgStyles"
-    >
-      <rect
-        fill="none"
-        stroke="red"
-        stroke-width="1"
-        :style="rectStyles"
-      ></rect>
+    <VisHover></VisHover>
 
-      <line
-        class="top"
-        v-bind="topLine"
-        stroke="red"
-        stroke-dasharray="3 2"
-      ></line>
-      <line
-        class="right"
-        v-bind="rightLine"
-        stroke="red"
-        stroke-dasharray="3 2"
-      ></line>
-      <line
-        class="bottom"
-        v-bind="bottomLine"
-        stroke="red"
-        stroke-dasharray="3 2"
-      ></line>
-      <line
-        class="left"
-        v-bind="leftLine"
-        stroke="red"
-        stroke-dasharray="3 2"
-      ></line>
-    </svg>
+    <Aiming :model="aimingModel" style="z-index: 9999999"></Aiming>
 
-    <Aiming
-      :selected-element="selectedElement"
-      :selectorConfig="props.selectorConfig"
-      style="z-index: 9999999"
-    ></Aiming>
-
-    <Panel style="z-index: 9999999">
-      <slot></slot>
+    <Panel class="non-selectable" style="z-index: 9999999; width: 350px">
+      <slot name="header"></slot>
+      <MainPanel></MainPanel>
+      <slot name="footer"></slot>
     </Panel>
 
     <div
@@ -156,4 +198,8 @@ defineExpose(getComponentExpose(props.selectorConfig, selectedElement));
   </Teleport>
 </template>
 
-<style scoped></style>
+<style>
+.x-unit-select .arco-select-view-suffix {
+  padding-left: 0 !important;
+}
+</style>
