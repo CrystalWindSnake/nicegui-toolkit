@@ -14,7 +14,6 @@ def move_away_panel(page: PageUtils):
 def assert_hover_type_name(page: PageUtils, testid: str, expect_typeName: str):
     target = page.locator(f".testid-{testid}")
 
-    target.scroll_into_view_if_needed()
     target.hover(position={"x": 10, "y": 0})
 
     typeName = page.locator(".vis-type-name").inner_text()
