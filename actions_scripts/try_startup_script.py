@@ -1,4 +1,4 @@
-from niceguiToolkit import inject_layout_tool
+from nicegui_toolkit import inject_layout_tool
 from nicegui import ui, app
 from asyncio import sleep
 
