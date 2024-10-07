@@ -106,3 +106,16 @@ export function navigateTo(url: string) {
 
   document.body.removeChild(a);
 }
+
+export function scrollElementIntoView(element: HTMLElement) {
+  if (!element) {
+    console.error("Element is not provided or is not a valid element.");
+    return;
+  }
+
+  element.scrollIntoView({
+    behavior: "smooth",
+    // block: "center",
+    // inline: "nearest",
+  });
+}

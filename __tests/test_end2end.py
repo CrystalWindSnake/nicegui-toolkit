@@ -1,18 +1,17 @@
 from typing import Optional
 from nicegui import ui
-from .screen import ScreenPage
-from playwright.sync_api import expect, Page
-from niceguiToolkit.layout import inject_layout_tool
+from .screen import BrowserManager, PageUtils
+from niceguiToolkit import inject_layout_tool
 
 
-def move_away_panel(page: Page):
+def move_away_panel(page: PageUtils):
     page.locator(".cursor-move").hover()
     page.mouse.down()
     page.mouse.move(500, 500)
     page.mouse.up()
 
 
-def assert_hover_type_name(page: Page, testid: str, expect_typeName: str):
+def assert_hover_type_name(page: PageUtils, testid: str, expect_typeName: str):
     page.locator(f".testid-{testid}").hover()
 
     typeName = page.locator(".vis-type-name").inner_text()
@@ -20,7 +19,7 @@ def assert_hover_type_name(page: Page, testid: str, expect_typeName: str):
 
 
 def assert_hover_rect(
-    page: Page,
+    page: PageUtils,
 ):
     hover_rect = page.locator("svg.vis-hover > rect").bounding_box()
     assert hover_rect
@@ -28,18 +27,18 @@ def assert_hover_rect(
 
 
 class ElementAssert:
-    def __init__(self, screenPage: ScreenPage) -> None:
-        self._screenPage = screenPage
+    def __init__(self, page: PageUtils) -> None:
+        self._page = page
 
     def assert_element(self, testid: str, type_name: Optional[str] = None):
         type_name = type_name or testid.capitalize()
-        page = self._screenPage
-        page.wait()
-        assert_hover_type_name(page._page, testid, type_name)
-        assert_hover_rect(page._page)
+
+        self._page.wait()
+        assert_hover_type_name(self._page, testid, type_name)
+        assert_hover_rect(self._page)
 
 
-def test_hover(page: ScreenPage, page_path: str):
+def test_hover(browser: BrowserManager, page_path: str):
     @ui.page(page_path)
     def _():
         inject_layout_tool()
@@ -64,9 +63,9 @@ def test_hover(page: ScreenPage, page_path: str):
         "button",
     ]
 
-    page.open(page_path)
+    page = browser.open(page_path)
 
-    move_away_panel(page._page)
+    move_away_panel(page)
 
     ele_assert = ElementAssert(page)
 

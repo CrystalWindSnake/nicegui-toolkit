@@ -24,10 +24,14 @@ export function getSelectedTarget() {
 }
 
 export function setSelectedTarget(elementId: number) {
-  selectedTarget.value = hookUtils.getElementById(
+  const target = hookUtils.getElementById(
     elementId,
     globals.getSelectorConfig()
   );
+
+  selectedTarget.value = target;
+
+  hookUtils.scrollElementIntoView(target);
 }
 
 export function updateTargetElement(element: HTMLElement | null) {
