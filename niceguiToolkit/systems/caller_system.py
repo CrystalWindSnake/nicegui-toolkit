@@ -115,8 +115,8 @@ def clear_cache():
 
 
 class _utils:
-    # @lru_cache(typed=True)
     @staticmethod
+    @lru_cache(typed=True)
     def get_token_info(file: Union[str, Path], lineno: int, end_lineno: int):
         lines = _utils._get_lines_from_file(file, lineno, end_lineno)
 
@@ -158,10 +158,8 @@ class _utils:
 
         raise ValueError("Cannot get token info from file")
 
-    get_token_info = lru_cache(typed=True)(get_token_info)
-
-    @lru_cache
     @staticmethod
+    @lru_cache
     def _get_lines_from_file(
         file_path: Union[str, Path],
         start_line: int,
@@ -184,8 +182,8 @@ class _utils:
             frame.f_code, id(frame.f_code), frame.f_lasti
         )  # type: ignore
 
-    @lru_cache
     @staticmethod
+    @lru_cache
     def try_get_frame_position(f_code: CodeType, code_id: int, f_lasti: int):
         bc_list = list(dis.get_instructions(f_code, show_caches=True))
 
