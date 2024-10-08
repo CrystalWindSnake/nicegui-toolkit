@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import Spacing from "./Spacing/Spacing.vue";
 import Layout from "./Layout/Layout.vue";
 import FlexItem from "./FlexItem/FlexItem.vue";
 import Size from "./Size/Size.vue";
 import { useElementTree } from "@/commons/elementTree";
 import ElementTree from "@/commons/ElementTree.vue";
-import { useTargetContextDesc } from "@/commons/targetContextDesc";
-import TargetContextDesc from "@/commons/TargetContextDesc.vue";
 import { bindSelectTarget } from "@/hooks/propsMapping";
 import { selectedTarget } from "@/hooks/targetElementContext";
+import Code from "@/panels/Code/Code.vue";
 import { t } from "@/hooks/language";
 
 bindSelectTarget(selectedTarget);
 
 const showPanels = computed(() => !!selectedTarget.value);
-
-const targetContextDescModel = useTargetContextDesc();
 
 const elementTreeModel = useElementTree();
 </script>
@@ -48,8 +45,9 @@ const elementTreeModel = useElementTree();
         key="nicegui"
         :title="t('nt.mainPanel.code')"
         class="x-panel-nicegui"
+        :disabled="!showPanels"
       >
-        <TargetContextDesc :model="targetContextDescModel"></TargetContextDesc>
+        <Code> </Code>
       </a-tab-pane>
       <a-tab-pane key="cusStyle" :title="t('nt.mainPanel.cusStyle')">
       </a-tab-pane>

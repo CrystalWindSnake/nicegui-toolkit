@@ -28,7 +28,7 @@ export function t(key: string) {
   // fallback to english if key is not found in current locale
   if (!currentMessage.value.hasOwnProperty(key)) {
     console.warn(`No message found for key ${key} in locale ${locale.value}`);
-    return messageDict.get("en")?.[key] || "";
+    return messageDict.get("en")?.[key] || key.split(".").pop() || "";
   }
 
   return currentMessage.value[key];

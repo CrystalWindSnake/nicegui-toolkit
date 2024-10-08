@@ -10,6 +10,7 @@ export type TTargetContext = {
   styles: Record<string, any>;
   propsCode: string;
   stylesCode: string;
+  classes: string[];
 };
 
 type TFlexInfo = {

@@ -9,6 +9,7 @@ import nicegui_toolkit.layout_tool.services.source_code_service as source_code_s
 from nicegui_toolkit.layout_tool.element_tree import get_tree_data
 import nicegui_toolkit.layout_tool.language as language
 from nicegui_toolkit.layout_tool.types import _T_language_locale
+import nicegui_toolkit.systems.caller_system as caller_system
 
 _RESOURCE = Path(__file__).parent / "libs"
 
@@ -38,6 +39,15 @@ class TrackBall(Element, component="trackBall.js"):
         self._register_resetCommand_event()
         self._register_jump_source_code()
         self._register_apply_command_event()
+        self._register_classes_update_event()
+
+        self._register_init_event()
+
+    def _register_init_event(self):
+        def on_init():
+            caller_system.clear_cache()
+
+        self.on("init", on_init)
 
     def _register_setCommand_event(self):
         def on_command(e):
@@ -60,7 +70,7 @@ class TrackBall(Element, component="trackBall.js"):
                 for key, value in values.items():
                     target._style[key] = value
 
-                    self.record_tracker.add_record(target.id, key, value)
+                    self.record_tracker.add_style(target.id, key, value)
 
             target.update()
             self._update_current_target_context()
@@ -117,7 +127,7 @@ class TrackBall(Element, component="trackBall.js"):
                 elif command.type == "classes":
                     target._classes.remove(name)
 
-                self.record_tracker.remove_record(target.id, name)
+                self.record_tracker.remove_style(target.id, name)
 
             target.update()
             self._update_current_target_context()
@@ -146,6 +156,21 @@ class TrackBall(Element, component="trackBall.js"):
 
         self.on("applyCommand", on_apply_command)
 
+    def _register_classes_update_event(self):
+        def on_classes_update(e):
+            args = e.args
+            target_id = args["targetId"]
+            target = self.get_current_target_element(target_id)
+            assert target is not None, "target should not be None"
+
+            classes = args["classes"]
+            self.record_tracker.add_classes(target.id, classes)
+
+            self._update_current_target_context()
+            target.update()
+
+        self.on("classesUpdate", on_classes_update)
+
     def _update_current_target_context(self):
         target = self.get_current_target_element()
         context = {}
@@ -157,15 +182,17 @@ class TrackBall(Element, component="trackBall.js"):
                 "stylesCode": source_code_service.create_style_code(
                     self.record_tracker.get_style_data(target)
                 ),
+                "classes": _Helper.extract_classes_list(target, self.record_tracker),
             }
 
         self._props["currentTargetContext"] = context
         self.update()
 
-    def get_current_target_element(self):
-        if self._current_target_id is None:
+    def get_current_target_element(self, target_id: Optional[int] = None):
+        target_id = target_id or self._current_target_id
+        if target_id is None:
             return None
-        return ng_vars.ui.context.client.elements[self._current_target_id]
+        return ng_vars.ui.context.client.elements[target_id]
 
     @staticmethod
     def has_in_client():
@@ -173,3 +200,18 @@ class TrackBall(Element, component="trackBall.js"):
             if "data-ng-toolkit-trackball" in element._props:
                 return True
         return False
+
+
+class _Helper:
+    @staticmethod
+    def extract_classes_list(element: Element, tracker: RecordTracker) -> list[str]:
+        record = tracker.records.get(element.id, None)
+        if record and record.classes_command:
+            return record.classes_command.classes
+
+        classes_info = source_code_service.get_classes_info(element)
+
+        if classes_info is None:
+            return []
+
+        return classes_info.add_classes_str.split()
