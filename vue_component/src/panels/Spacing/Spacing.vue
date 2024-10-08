@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SliderBlock from "./SliderBlock.vue";
+import { t } from "@/hooks/language";
 
 const config = {
   horizontalWidthPercent: 22,
@@ -70,7 +71,7 @@ const paddingFilter = (value: number) => value >= 0;
 </script>
 
 <template>
-  <a-collapse-item header="Spacing(间距)" key="spacing">
+  <a-collapse-item :header="t('nt.style.spacing.header')" key="spacing">
     <div class="relative w-full" style="height: 8rem">
       <!-- labels -->
       <p

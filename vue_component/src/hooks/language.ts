@@ -25,8 +25,11 @@ export function addMessage(
 }
 
 export function t(key: string) {
-  //   return computed(() => {
-  //     return currentMessage.value[key];
-  //   });
+  // fallback to english if key is not found in current locale
+  if (!currentMessage.value.hasOwnProperty(key)) {
+    console.warn(`No message found for key ${key} in locale ${locale.value}`);
+    return messageDict.get("en")?.[key] || "";
+  }
+
   return currentMessage.value[key];
 }

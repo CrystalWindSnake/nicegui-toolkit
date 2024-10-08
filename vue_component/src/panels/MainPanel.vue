@@ -10,6 +10,7 @@ import { useTargetContextDesc } from "@/commons/targetContextDesc";
 import TargetContextDesc from "@/commons/TargetContextDesc.vue";
 import { bindSelectTarget } from "@/hooks/propsMapping";
 import { selectedTarget } from "@/hooks/targetElementContext";
+import { t } from "@/hooks/language";
 
 bindSelectTarget(selectedTarget);
 
@@ -23,7 +24,11 @@ const elementTreeModel = useElementTree();
 <template>
   <div class="bg-white/30 backdrop-blur-md">
     <a-tabs default-active-key="element-tree">
-      <a-tab-pane key="style" title="style" :disabled="!showPanels">
+      <a-tab-pane
+        key="style"
+        :title="t('nt.mainPanel.style')"
+        :disabled="!showPanels"
+      >
         <a-collapse accordion>
           <FlexItem></FlexItem>
 
@@ -35,14 +40,19 @@ const elementTreeModel = useElementTree();
         </a-collapse>
       </a-tab-pane>
 
-      <a-tab-pane key="element-tree" title="navigator">
+      <a-tab-pane key="element-tree" :title="t('nt.mainPanel.navigator')">
         <ElementTree :model="elementTreeModel"></ElementTree>
       </a-tab-pane>
 
-      <a-tab-pane key="nicegui" title="nicegui" class="x-panel-nicegui">
+      <a-tab-pane
+        key="nicegui"
+        :title="t('nt.mainPanel.code')"
+        class="x-panel-nicegui"
+      >
         <TargetContextDesc :model="targetContextDescModel"></TargetContextDesc>
       </a-tab-pane>
-      <a-tab-pane key="cusStyle" title="cus style"> </a-tab-pane>
+      <a-tab-pane key="cusStyle" :title="t('nt.mainPanel.cusStyle')">
+      </a-tab-pane>
     </a-tabs>
   </div>
 </template>
