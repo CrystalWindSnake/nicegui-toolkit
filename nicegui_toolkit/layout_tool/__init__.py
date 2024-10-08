@@ -14,6 +14,12 @@ def inject_layout_tool(
     ide: types._T_IDE = "vscode",
     language_locale: Optional[types._T_language_locale] = None,
 ):
+    """Inject layout tool into the current app.
+
+    Args:
+        ide (types._T_IDE, optional):  IDE to use. Defaults to "vscode".
+        language_locale (Optional[types._T_language_locale], optional):  Language locale to use, if not provided, it will be determined by the client's language. Defaults to None.
+    """
     project_path = get_caller_file().parent
     Hooker(
         HookerContext(include_folders=[project_path], IDE=ide)
