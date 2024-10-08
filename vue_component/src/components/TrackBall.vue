@@ -15,6 +15,7 @@ import {
   TSetCommand,
   TResetCommand,
 } from "./types";
+import { TLanguageConfig } from "@/types/language";
 import { onMounted, watch } from "vue";
 import * as globals from "@/hooks/globals";
 import * as targetElementContext from "@/hooks/targetElementContext";
@@ -25,6 +26,7 @@ const props = defineProps<{
   currentTargetContext: TTargetContext;
   resource_path?: string;
   elementTreeData: TElementTreeData;
+  languageConfig: TLanguageConfig;
 }>();
 
 // emits
@@ -85,6 +87,7 @@ onMounted(async () => {
 
 globals.initGlobals({
   selectorConfig: props.selectorConfig,
+  languageConfig: props.languageConfig,
   elementTreeData: props.elementTreeData,
   emitSetCommandFn: emitSetCommnad,
   emitResetCommandFn: emitResetCommnad,

@@ -7,12 +7,14 @@ from nicegui_toolkit.layout_tool import events
 from nicegui_toolkit.layout_tool import consts
 import nicegui_toolkit.layout_tool.services.source_code_service as source_code_service
 from nicegui_toolkit.layout_tool.element_tree import get_tree_data
+import nicegui_toolkit.layout_tool.language as language
+from nicegui_toolkit.layout_tool.types import _T_language_locale
 
 _RESOURCE = Path(__file__).parent / "libs"
 
 
 class TrackBall(Element, component="trackBall.js"):
-    def __init__(self) -> None:
+    def __init__(self, language_locale: _T_language_locale = "en") -> None:
         super().__init__()
 
         self.add_resource(_RESOURCE)
@@ -27,6 +29,7 @@ class TrackBall(Element, component="trackBall.js"):
         self._props["currentTargetContext"] = {"props": {}, "styles": {}}
         self.props("data-ng-toolkit-trackball")
         self._props["elementTreeData"] = get_tree_data()
+        self._props["languageConfig"] = language.get_preset(language_locale)
 
         self.record_tracker = RecordTracker()
 

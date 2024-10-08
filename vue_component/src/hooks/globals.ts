@@ -3,6 +3,7 @@ import {
   TSetCommand,
   TResetCommand,
 } from "@/components/types";
+import { TLanguageConfig } from "@/types/language";
 import { ComputedRef, computed, ref } from "vue";
 import { useElementByPoint, useEventListener, useMouse } from "@vueuse/core";
 import {
@@ -11,6 +12,7 @@ import {
 } from "@/hooks/targetElementContext";
 import { type TElementTreeData } from "@/hooks/types";
 import * as hookUtils from "@/hooks/utils";
+import * as language from "@/hooks/language";
 
 const hoverByCode = ref(null as HTMLElement | null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
@@ -49,6 +51,7 @@ export function getExecutingFlag() {
 
 export function initGlobals(config: {
   selectorConfig: TSelectorConfig;
+  languageConfig: TLanguageConfig;
   elementTreeData: TElementTreeData;
   emitSetCommandFn: (commands: TSetCommand[]) => void;
   emitResetCommandFn: (commands: TResetCommand[]) => void;
@@ -69,6 +72,14 @@ export function initGlobals(config: {
   hookPageMouseEvent(_hoverElement);
 
   hoverElement = _hoverElement;
+
+  language.setLocale(config.languageConfig.locale);
+
+  Object.entries(config.languageConfig.messages).forEach(
+    ([locale, messages]) => {
+      language.addMessage(locale as TLanguageConfig["locale"], messages);
+    }
+  );
 }
 
 export function jumpToSourceCode() {
