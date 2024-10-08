@@ -6,10 +6,11 @@ import MinWidth from "./MinWidth.vue";
 
 import MaxHeight from "./MaxHeight.vue";
 import MinHeight from "./MinHeight.vue";
+import { t } from "@/hooks/language";
 </script>
 
 <template>
-  <a-collapse-item header="Size(大小)" key="size">
+  <a-collapse-item :header="t('nt.style.size.header')" key="size">
     <div class="grid grid-cols-[auto_1fr_auto_1fr] items-center px-2 gap-y-2">
       <Width></Width>
       <Height></Height>

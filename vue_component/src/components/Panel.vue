@@ -7,6 +7,7 @@ import {
   useTargetTypeName,
 } from "@/hooks/targetElementContext";
 import { useCanApplyCommand, applyCommand } from "@/hooks/globals";
+import { t } from "@/hooks/language";
 
 const el = ref<HTMLElement | null>(null);
 const { style } = useDraggable(el, {
@@ -33,7 +34,7 @@ const hasSelectedTarget = useHasSelectedTarget();
         </a-space>
       </div>
 
-      <a-tooltip content="apply changes">
+      <a-tooltip :content="t('nt.apply_command')">
         <a-badge :count="9" dot :dotStyle="{ width: '10px', height: '10px' }">
           <a-button
             shape="circle"
@@ -46,7 +47,7 @@ const hasSelectedTarget = useHasSelectedTarget();
         </a-badge>
       </a-tooltip>
 
-      <a-tooltip content="jump to code">
+      <a-tooltip :content="t('nt.jump2code')">
         <a-button
           shape="circle"
           size="mini"

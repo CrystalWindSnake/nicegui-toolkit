@@ -11,6 +11,7 @@ import {
   resetHoverByCode,
 } from "@/hooks/globals";
 import * as hookUtils from "@/hooks/utils";
+import { t } from "@/hooks/language";
 
 const props = defineProps<{
   model: TModel;
@@ -75,7 +76,7 @@ const expandIcon = computed(() => {
 });
 
 const expandtooltipContent = computed(() => {
-  return expandTree.value ? "Collapse all" : "Expand all";
+  return expandTree.value ? t("tree.collapse_all") : t("tree.expand_all");
 });
 
 function handleExpandTree() {

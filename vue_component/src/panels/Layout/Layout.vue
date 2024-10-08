@@ -4,8 +4,8 @@ import { buildRefGetter } from "@/hooks/targetInfoGetter";
 import { selectedTarget } from "@/hooks/targetElementContext";
 import IconRadio from "@/commons/IconRadio.vue";
 import { useIconRadio } from "@/commons/iconRadio";
-
 import ItemLabel from "@/commons/ItemLabel.vue";
+import { t } from "@/hooks/language";
 
 const getter = buildRefGetter(selectedTarget);
 
@@ -30,8 +30,8 @@ const directionIconRadioModel = useIconRadio({
 // align config
 const alignTitle = computed(() =>
   directionIconRadioModel.value.value === "row"
-    ? "vertical align"
-    : "horizontal align"
+    ? t("nt.style.layout.align-title-byRow")
+    : t("nt.style.layout.align-title-byCol")
 );
 
 const alignOpts = computed(() => {
@@ -71,8 +71,8 @@ const alignIconRadioModel = useIconRadio({
 
 const justifyTitle = computed(() =>
   directionIconRadioModel.value.value === "row"
-    ? "vertical justify"
-    : "horizontal justify"
+    ? t("nt.style.layout.justify-title-byRow")
+    : t("nt.style.layout.justify-title-byCol")
 );
 
 const justifyOpts = computed(() => {
@@ -106,33 +106,35 @@ const justifyIconRadioModel = useIconRadio({
 </script>
 
 <template>
-  <a-collapse-item header="Layout(布局)" key="layout">
+  <a-collapse-item :header="t('nt.style.layout.header')" key="layout">
     <div
       class="grid grid-cols-[minmax(18ch,auto)_auto] gap-y-2 items-center justify-start"
     >
       <!-- display -->
 
-      <ItemLabel keyId="display" label="Display"></ItemLabel>
+      <ItemLabel
+        keyId="display"
+        :label="t('nt.style.layout.display-label')"
+      ></ItemLabel>
       <IconRadio :model="displayIconRadioModel"></IconRadio>
 
       <!-- flexbox setting -->
       <template v-if="flexInfo.isFlex">
         <!-- Direction -->
 
-        <ItemLabel keyId="flex-direction" label="direction"></ItemLabel>
+        <ItemLabel
+          keyId="flex-direction"
+          :label="t('nt.style.layout.direction')"
+        ></ItemLabel>
         <IconRadio :model="directionIconRadioModel"></IconRadio>
 
-        <!-- align -->
-
-        <ItemLabel keyId="align-items" :label="alignTitle"></ItemLabel>
-
-        <IconRadio :model="alignIconRadioModel"></IconRadio>
-
         <!-- justify -->
-
         <ItemLabel keyId="justify-content" :label="justifyTitle"></ItemLabel>
-
         <IconRadio :model="justifyIconRadioModel"></IconRadio>
+
+        <!-- align -->
+        <ItemLabel keyId="align-items" :label="alignTitle"></ItemLabel>
+        <IconRadio :model="alignIconRadioModel"></IconRadio>
       </template>
     </div>
   </a-collapse-item>

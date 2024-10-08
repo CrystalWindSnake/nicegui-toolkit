@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import * as globals from "@/hooks/globals";
 import { buildRefGetter } from "@/hooks/targetInfoGetter";
 import { selectedTarget } from "@/hooks/targetElementContext";
 import ItemLabel from "@/commons/ItemLabel.vue";
-import ListItem from "@/commons/ListItem.vue";
-
 import IconRadio from "@/commons/IconRadio.vue";
 import { useIconRadio } from "@/commons/iconRadio";
+import { t } from "@/hooks/language";
 
 const getter = buildRefGetter(selectedTarget);
 
@@ -16,7 +14,7 @@ const parentFlexInfo = getter.getParentFlexBoxInfo();
 const alignConfigs = computed(() => {
   if (parentFlexInfo.value.direction === "row") {
     return {
-      title: "vertical align",
+      title: t("nt.style.flexitem.title.vertical"),
       start: {
         icon: "vertical_align_top",
         tooltipLabel: "top",
@@ -40,7 +38,7 @@ const alignConfigs = computed(() => {
   }
 
   return {
-    title: "horizontal align",
+    title: t("nt.style.flexitem.title.horizontal"),
     start: {
       icon: "align_horizontal_left",
       tooltipLabel: "left",
@@ -77,7 +75,7 @@ const iconRadioModel = useIconRadio({
 <template>
   <a-collapse-item
     v-if="parentFlexInfo.isFlex"
-    header="FlexItem(Flex子元素)"
+    :header="t('nt.style.flexitem.header')"
     key="flex-item"
   >
     <div
