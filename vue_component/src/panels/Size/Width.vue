@@ -20,9 +20,10 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
 </script>
 
 <template>
-  <ItemLabel key-id="width" label="Width" />
+  <ItemLabel key-id="width" label="Width" class="nt-size-width-label" />
   <InputWithUnitSelector
     :model="inputWithUnitSelectorModel"
+    class="nt-size-width-input"
   ></InputWithUnitSelector>
 </template>
 

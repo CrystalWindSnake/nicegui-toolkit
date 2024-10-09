@@ -11783,13 +11783,15 @@ const Yp = ["px", "%", "rem", "em", "ch", "vw", "vh", {
     });
     return (l, a) => ($(), V(Pe, null, [f(lt, {
       "key-id": "width",
-      label: "Width"
+      label: "Width",
+      class: "nt-size-width-label"
     }), f(Wt, {
-      model: U(n)
+      model: U(n),
+      class: "nt-size-width-input"
     }, null, 8, ["model"])], 64));
   }
 });
-const nh = /* @__PURE__ */ et(th, [["__scopeId", "data-v-bf60f62f"]]), lh = /* @__PURE__ */ z({
+const nh = /* @__PURE__ */ et(th, [["__scopeId", "data-v-01e1e2dc"]]), lh = /* @__PURE__ */ z({
   __name: "Height",
   setup(e) {
     const n = qt({
@@ -11808,13 +11810,15 @@ const nh = /* @__PURE__ */ et(th, [["__scopeId", "data-v-bf60f62f"]]), lh = /* @
     });
     return (l, a) => ($(), V(Pe, null, [f(lt, {
       "key-id": "height",
-      label: "Height"
+      label: "Height",
+      class: "nt-size-height-label"
     }), f(Wt, {
-      model: U(n)
+      model: U(n),
+      class: "nt-size-height-input"
     }, null, 8, ["model"])], 64));
   }
 });
-const oh = /* @__PURE__ */ et(lh, [["__scopeId", "data-v-6ddf53f3"]]), ah = /* @__PURE__ */ z({
+const oh = /* @__PURE__ */ et(lh, [["__scopeId", "data-v-219d1f9b"]]), ah = /* @__PURE__ */ z({
   __name: "MaxWidth",
   setup(e) {
     const n = qt({
@@ -11833,13 +11837,15 @@ const oh = /* @__PURE__ */ et(lh, [["__scopeId", "data-v-6ddf53f3"]]), ah = /* @
     });
     return (l, a) => ($(), V(Pe, null, [f(lt, {
       "key-id": "max-width",
-      label: "Max W"
+      label: "Max W",
+      class: "nt-size-max-width-label"
     }), f(Wt, {
-      model: U(n)
+      model: U(n),
+      class: "nt-size-max-width-input"
     }, null, 8, ["model"])], 64));
   }
 });
-const rh = /* @__PURE__ */ et(ah, [["__scopeId", "data-v-839a5360"]]), ih = /* @__PURE__ */ z({
+const rh = /* @__PURE__ */ et(ah, [["__scopeId", "data-v-539b11de"]]), ih = /* @__PURE__ */ z({
   __name: "MinWidth",
   setup(e) {
     const n = qt({
@@ -11857,13 +11863,15 @@ const rh = /* @__PURE__ */ et(ah, [["__scopeId", "data-v-839a5360"]]), ih = /* @
     });
     return (l, a) => ($(), V(Pe, null, [f(lt, {
       "key-id": "min-width",
-      label: "Min W"
+      label: "Min W",
+      class: "nt-size-min-width-label"
     }), f(Wt, {
-      model: U(n)
+      model: U(n),
+      class: "nt-size-min-width-input"
     }, null, 8, ["model"])], 64));
   }
 });
-const sh = /* @__PURE__ */ et(ih, [["__scopeId", "data-v-01858b83"]]), uh = /* @__PURE__ */ z({
+const sh = /* @__PURE__ */ et(ih, [["__scopeId", "data-v-df273eca"]]), uh = /* @__PURE__ */ z({
   __name: "MaxHeight",
   setup(e) {
     const n = qt({
@@ -11882,13 +11890,15 @@ const sh = /* @__PURE__ */ et(ih, [["__scopeId", "data-v-01858b83"]]), uh = /* @
     });
     return (l, a) => ($(), V(Pe, null, [f(lt, {
       "key-id": "max-height",
-      label: "Max H"
+      label: "Max H",
+      class: "nt-size-max-height-label"
     }), f(Wt, {
-      model: U(n)
+      model: U(n),
+      class: "nt-size-max-height-input"
     }, null, 8, ["model"])], 64));
   }
 });
-const ch = /* @__PURE__ */ et(uh, [["__scopeId", "data-v-3543e0dd"]]), dh = /* @__PURE__ */ z({
+const ch = /* @__PURE__ */ et(uh, [["__scopeId", "data-v-97c693cb"]]), dh = /* @__PURE__ */ z({
   __name: "MinHeight",
   setup(e) {
     const n = qt({
@@ -11906,13 +11916,15 @@ const ch = /* @__PURE__ */ et(uh, [["__scopeId", "data-v-3543e0dd"]]), dh = /* @
     });
     return (l, a) => ($(), V(Pe, null, [f(lt, {
       "key-id": "min-height",
-      label: "Min H"
+      label: "Min H",
+      class: "nt-size-min-height-label"
     }), f(Wt, {
-      model: U(n)
+      model: U(n),
+      class: "nt-size-min-height-input"
     }, null, 8, ["model"])], 64));
   }
 });
-const fh = /* @__PURE__ */ et(dh, [["__scopeId", "data-v-0ba932b2"]]), vh = {
+const fh = /* @__PURE__ */ et(dh, [["__scopeId", "data-v-2eecce31"]]), vh = {
   class: "grid grid-cols-[auto_1fr_auto_1fr] items-center px-2 gap-y-2"
 }, ph = /* @__PURE__ */ z({
   __name: "Size",

@@ -1,17 +1,12 @@
 from typing import Optional
 from nicegui import ui
-from .screen import BrowserManager, PageUtils
+from .screen import BrowserManager
 from nicegui_toolkit import inject_layout_tool
+from .utils import PageActions
+from playwright.sync_api import Page
 
 
-def move_away_panel(page: PageUtils):
-    page.locator(".cursor-move").hover()
-    page.mouse.down()
-    page.mouse.move(500, 500)
-    page.mouse.up()
-
-
-def assert_hover_type_name(page: PageUtils, testid: str, expect_typeName: str):
+def assert_hover_type_name(page: Page, testid: str, expect_typeName: str):
     target = page.locator(f".testid-{testid}")
 
     target.hover(position={"x": 10, "y": 0})
@@ -21,7 +16,7 @@ def assert_hover_type_name(page: PageUtils, testid: str, expect_typeName: str):
 
 
 def assert_hover_rect(
-    page: PageUtils,
+    page: Page,
 ):
     hover_rect = page.locator("svg.vis-hover > rect").bounding_box()
     assert hover_rect
@@ -29,13 +24,13 @@ def assert_hover_rect(
 
 
 class ElementAssert:
-    def __init__(self, page: PageUtils) -> None:
+    def __init__(self, page: Page) -> None:
         self._page = page
 
     def assert_element(self, testid: str, type_name: Optional[str] = None):
         type_name = type_name or testid.capitalize()
 
-        self._page.wait(1000)
+        self._page.wait_for_timeout(1000)
         assert_hover_type_name(self._page, testid, type_name)
         assert_hover_rect(self._page)
 
@@ -43,7 +38,7 @@ class ElementAssert:
 def test_hover(browser: BrowserManager, page_path: str):
     @ui.page(page_path)
     def _():
-        inject_layout_tool()
+        inject_layout_tool(language_locale="en")
         with ui.row():
             ui.input("test").classes("testid-input")
             ui.select(["a"]).classes("testid-select")
@@ -66,8 +61,9 @@ def test_hover(browser: BrowserManager, page_path: str):
     ]
 
     page = browser.open(page_path)
+    actions = PageActions(page)
 
-    move_away_panel(page)
+    actions.move_away_panel()
 
     ele_assert = ElementAssert(page)
 

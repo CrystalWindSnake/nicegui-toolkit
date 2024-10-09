@@ -71,8 +71,6 @@ class Hooker:
 
     @staticmethod
     def inject_style_method(element: ng.ui.element, context: HookerContext):
-        element.__class__.style = None  # type: ignore
-
         def style(self, *args, **kws):
             frame = inspect.currentframe()  # type: ignore
             assert frame is not None
@@ -83,12 +81,10 @@ class Hooker:
             source_code_service.save_style_info(self, info)
             return self._style(*args, **kws)
 
-        setattr(element, "style", types.MethodType(style, element))
+        element.__dict__["style"] = types.MethodType(style, element)
 
     @staticmethod
     def inject_classes_method(element: ng.ui.element, context: HookerContext):
-        element.__class__.classes = None  # type: ignore
-
         def classes(self, add, *args, **kws):
             frame = inspect.currentframe()  # type: ignore
             assert frame is not None
@@ -99,7 +95,7 @@ class Hooker:
             source_code_service.save_classes_info(self, add, info)
             return self._classes(add, *args, **kws)
 
-        setattr(element, "classes", types.MethodType(classes, element))
+        element.__dict__["classes"] = types.MethodType(classes, element)
 
 
 class _Helper:
