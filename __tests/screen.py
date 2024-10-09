@@ -64,7 +64,7 @@ class BrowserManager:
         )
 
         self._page.wait_for_timeout(600)
-        return PageUtils(self._page)
+        return self._page
 
     def close(self):
         self._page.close()

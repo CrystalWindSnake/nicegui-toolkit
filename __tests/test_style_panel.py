@@ -1,0 +1,41 @@
+from nicegui import ui
+from .screen import BrowserManager
+from .utils import PageActions
+from nicegui_toolkit import inject_layout_tool
+from playwright.sync_api import expect
+
+
+def test_style_panel_actives(browser: BrowserManager, page_path: str):
+    @ui.page(page_path)
+    def _():
+        inject_layout_tool(language_locale="en")
+
+        ui.label("Hello World")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+
+    actions.open_style_panel("Hello World")
+
+    expect(page.get_by_text("layout")).to_be_visible()
+
+
+def test_layout_display_value(browser: BrowserManager, page_path: str):
+    @ui.page(page_path)
+    def _():
+        inject_layout_tool(language_locale="en")
+
+        ui.label("Hello World")
+
+        ui.card().classes("test-card w-[100px] h-[100px]")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+
+    actions.open_style_panel("Hello World")
+
+    actions.click_by_text("layout")
+    actions.expect_contains_class(get_by_text="block", class_name="arco-tag-checked")
+
+    actions.click_by_class("test-card")
+    actions.expect_contains_class(get_by_text="flex", class_name="arco-tag-checked")
