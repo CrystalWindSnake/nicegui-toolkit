@@ -21,9 +21,14 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
 </script>
 
 <template>
-  <ItemLabel key-id="max-height" label="Max H" />
+  <ItemLabel
+    key-id="max-height"
+    label="Max H"
+    class="nt-size-max-height-label"
+  />
   <InputWithUnitSelector
     :model="inputWithUnitSelectorModel"
+    class="nt-size-max-height-input"
   ></InputWithUnitSelector>
 </template>
 

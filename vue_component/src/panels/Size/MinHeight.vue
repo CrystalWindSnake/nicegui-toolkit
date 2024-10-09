@@ -20,9 +20,14 @@ const inputWithUnitSelectorModel = useInputWithUnitSelector({
 </script>
 
 <template>
-  <ItemLabel key-id="min-height" label="Min H" />
+  <ItemLabel
+    key-id="min-height"
+    label="Min H"
+    class="nt-size-min-height-label"
+  />
   <InputWithUnitSelector
     :model="inputWithUnitSelectorModel"
+    class="nt-size-min-height-input"
   ></InputWithUnitSelector>
 </template>
 

@@ -39,3 +39,27 @@ def test_layout_display_value(browser: BrowserManager, page_path: str):
 
     actions.click_by_class("test-card")
     actions.expect_contains_class(get_by_text="flex", class_name="arco-tag-checked")
+
+
+def test_set_size_width(browser: BrowserManager, page_path: str):
+    @ui.page(page_path)
+    def _():
+        inject_layout_tool(language_locale="en")
+        ui.label("Hello World")
+        ui.element("input").classes("test-input")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+
+    actions.open_style_panel("Hello World", auto_move_away=False)
+
+    actions.click_by_text("size")
+
+    page.get_by_placeholder("auto").first.fill("500")
+    page.get_by_placeholder("auto").first.press("Enter")
+
+    page.get_by_text("Hello World", exact=True).evaluate(
+        r'(element) => {document.querySelector(".test-input").value = element.getAttribute("style");}'
+    )
+
+    expect(page.locator(".test-input")).to_have_value("width: 500px;")
