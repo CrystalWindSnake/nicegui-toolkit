@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 import nicegui as ng_vars
 from nicegui.element import Element
 from nicegui_toolkit.layout_tool.record_tracker import RecordTracker
@@ -204,7 +204,7 @@ class TrackBall(Element, component="trackBall.js"):
 
 class _Helper:
     @staticmethod
-    def extract_classes_list(element: Element, tracker: RecordTracker) -> list[str]:
+    def extract_classes_list(element: Element, tracker: RecordTracker) -> List[str]:
         record = tracker.records.get(element.id, None)
         if record and record.classes_command:
             return record.classes_command.classes
