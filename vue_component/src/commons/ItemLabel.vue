@@ -2,6 +2,7 @@
 import * as globals from "@/hooks/globals";
 import * as targetElementContext from "@/hooks/targetElementContext";
 import * as consts from "@/consts";
+import { t } from "@/hooks/language";
 
 import { computed } from "vue";
 const props = defineProps<{ keyId: string; label?: string }>();
@@ -31,7 +32,7 @@ const divStyle = computed(() => {
 <template>
   <a-popconfirm
     :popup-container="consts.popupContainer.mainPanelTooltip"
-    content="Do you want to reset this setting?"
+    :content="t('nt.property-reset-confirm')"
     ok-text="Reset"
     cancel-text="No"
     @ok="reset"

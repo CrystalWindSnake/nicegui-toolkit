@@ -40,12 +40,13 @@ const hasSelectedTarget = useHasSelectedTarget();
         </a-space>
       </div>
 
-      <a-tooltip :content="t('nt.apply_command')">
+      <a-tooltip :content="t('nt.apply_command_tooltip')">
         <a-popconfirm
           :popup-container="consts.popupContainer.mainPanelTooltip"
-          content="Do you want to apply the changes to the source code?"
+          :content="t('nt.apply_command_confirm')"
           ok-text="Apply"
           cancel-text="No"
+          position="bottom"
           @ok="applyCommand"
           :style="{ 'z-index': consts.zindex.mainPanelTooltip }"
         >
