@@ -36,3 +36,8 @@ class PageActions:
         expect(self.pw_page.get_by_text(get_by_text, exact=True)).to_have_class(
             re.compile(class_name)
         )
+
+    def expect_class_str_start_with(self, *, get_by_text: str, class_str: str):
+        expect(self.pw_page.get_by_text(get_by_text, exact=True)).to_have_class(
+            re.compile(f"^{class_str}")
+        )
