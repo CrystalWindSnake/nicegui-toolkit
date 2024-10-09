@@ -11,7 +11,7 @@ import { t } from "@/hooks/language";
 import * as consts from "@/consts";
 
 const el = ref<HTMLElement | null>(null);
-const { style } = useDraggable(el, {
+const { style: draggableStyle } = useDraggable(el, {
   initialValue: { x: 40, y: 40 },
   preventDefault: true,
 });
@@ -21,7 +21,12 @@ const hasSelectedTarget = useHasSelectedTarget();
 </script>
 
 <template>
-  <div :style="style" style="position: fixed" layout-tool-panel>
+  <div
+    class="non-selectable w-[350px]"
+    :style="[draggableStyle, { zIndex: consts.zindex.panel }]"
+    style="position: fixed"
+    layout-tool-panel
+  >
     <div
       class="flex bg-[#EDF8BB] row items-center gap-2 text-cyan-500 text-xl px-2"
       style="top: 0; left: 0; z-index: 999; height: 2rem"

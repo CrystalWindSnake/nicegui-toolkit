@@ -7,7 +7,6 @@ import { getComponentExpose } from "./trackBallUtils";
 import * as tbUtils from "./trackBallUtils";
 import * as hookUtils from "@/hooks/utils";
 import { type TElementTreeData } from "@/hooks/types";
-import { zindex } from "@/consts";
 
 import {
   type TSelectorConfig,
@@ -20,7 +19,6 @@ import { TLanguageConfig } from "@/types/language";
 import { onMounted, watch } from "vue";
 import * as globals from "@/hooks/globals";
 import * as targetElementContext from "@/hooks/targetElementContext";
-import { useAiming } from "./Aiming";
 import VisTypeName from "./VisTypeName.vue";
 
 const props = defineProps<{
@@ -127,9 +125,6 @@ watch(
   }
 );
 
-// aiming
-const aimingModel = useAiming();
-
 // events
 watch(globals.hoverElement, (target) => {
   if (target) {
@@ -187,9 +182,9 @@ defineExpose(
   <Teleport to="body">
     <VisHover></VisHover>
 
-    <Aiming :model="aimingModel"></Aiming>
+    <Aiming></Aiming>
 
-    <Panel class="non-selectable w-[350px]" :style="{ zIndex: zindex.panel }">
+    <Panel>
       <slot name="header"></slot>
       <MainPanel></MainPanel>
       <slot name="footer"></slot>

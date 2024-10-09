@@ -1,4 +1,4 @@
-import { computed, reactive, ref, readonly, Ref } from "vue";
+import { computed, reactive, readonly, Ref } from "vue";
 
 import {
   useElementBounding,
@@ -6,18 +6,7 @@ import {
   useMutationObserver,
 } from "@vueuse/core";
 import { selectedTarget } from "@/hooks/targetElementContext";
-
 export type TModel = ReturnType<typeof useAiming>;
-
-// const selectTarget = ref<HTMLElement | null>(null);
-
-// export function updateAimingTarget(target: HTMLElement | null) {
-//   selectTarget.value = target;
-// }
-
-// export function getSelectTarget() {
-//   return readonly(selectTarget) as Readonly<Ref<HTMLElement | null>>;
-// }
 
 export function useAiming() {
   const bounding = reactive(useElementBounding(selectedTarget));
@@ -154,10 +143,6 @@ export function useAiming() {
       r: 0,
     };
   });
-
-  const outTarget = readonly(selectedTarget) as Readonly<
-    Ref<HTMLElement | null>
-  >;
 
   return {
     rectStyles,

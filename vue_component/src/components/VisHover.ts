@@ -3,16 +3,10 @@ import {
   useEventListener,
   useWindowSize,
 } from "@vueuse/core";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive } from "vue";
 import * as globals from "@/hooks/globals";
 
 export type TModel = ReturnType<typeof useVisHover>;
-
-// const hoverElement = ref<HTMLElement | null>(null);
-
-// export function updateHoverTarget(target: HTMLElement | null) {
-//   hoverElement.value = target;
-// }
 
 export function useVisHover() {
   const { width: winWidth, height: winHeight } = useWindowSize();

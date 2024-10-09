@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { TModel } from "./Aiming";
+import { useAiming } from "./Aiming";
 import { useSvgConfigs } from "./utils";
 import { zindex } from "@/consts";
 
-const props = defineProps<{
-  model: TModel;
-}>();
-
 const { viewBox, styles: svgStyles } = useSvgConfigs();
-const { rectStyles, p1, p2, p3, p4, p5, p6, p7, p8 } = props.model;
+const { rectStyles, p1, p2, p3, p4, p5, p6, p7, p8 } = useAiming();
 </script>
 
 <template>
