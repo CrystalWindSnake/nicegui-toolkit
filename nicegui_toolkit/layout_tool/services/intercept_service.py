@@ -107,8 +107,11 @@ class _Helper:
     def is_descendant_of(file_path: Path, folder_path: Path) -> bool:
         directory = os.path.abspath(folder_path)
         file = os.path.abspath(file_path)
-        common_path = os.path.commonpath([directory, file])
-        return common_path == directory
+        try:
+            common_path = os.path.commonpath([directory, file])
+            return common_path == directory
+        except ValueError:
+            return False
 
     @staticmethod
     def is_in_special_folder(file_path: Path) -> bool:
