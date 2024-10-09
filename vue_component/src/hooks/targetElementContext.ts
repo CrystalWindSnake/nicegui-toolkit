@@ -10,11 +10,13 @@ const targetElementContext: {
   styles: Map<string, any>;
   propsCode: Ref<string | null>;
   stylesCode: Ref<string | null>;
+  classes: Ref<string[]>;
 } = {
   props: reactive(new Map()),
   styles: reactive(new Map()),
   propsCode: ref(null),
   stylesCode: ref(null),
+  classes: ref([] as string[]),
 };
 
 const updateFlagMap = new Map<string, Ref<Symbol>>();
@@ -87,6 +89,10 @@ export function updateCurrentTargetContext(context: TUpdateTargetContext) {
 
   if (context.stylesCode !== undefined) {
     targetElementContext.stylesCode.value = context.stylesCode;
+  }
+
+  if (context.classes !== undefined) {
+    targetElementContext.classes.value = context.classes;
   }
 
   triggerAllUpdateFlags();

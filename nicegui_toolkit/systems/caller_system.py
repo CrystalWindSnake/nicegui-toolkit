@@ -112,6 +112,7 @@ def get_lazy_caller_info(frame: FrameType):
 
 def clear_cache():
     _utils.get_token_info.cache_clear()
+    _utils._get_lines_from_file.cache_clear()
 
 
 class _utils:

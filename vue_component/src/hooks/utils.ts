@@ -119,3 +119,27 @@ export function scrollElementIntoView(element: HTMLElement) {
     inline: "nearest",
   });
 }
+
+export function modifyElementClassList(
+  element: HTMLElement,
+  options: {
+    add?: string;
+    remove?: string;
+    change?: {
+      oldClass: string;
+      newClass: string;
+    };
+  }
+) {
+  if (options.add) {
+    element.classList.add(options.add);
+  }
+
+  if (options.remove) {
+    element.classList.remove(options.remove);
+  }
+
+  if (options.change) {
+    element.classList.replace(options.change.oldClass, options.change.newClass);
+  }
+}

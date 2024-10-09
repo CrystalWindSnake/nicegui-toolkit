@@ -45,6 +45,7 @@ class Hooker:
             Hooker._mark_element(self, info, context)
 
             Hooker.inject_style_method(self, context)
+            Hooker.inject_classes_method(self, context)
 
         ng.ui.element.__init__ = wrap_init
 
@@ -70,8 +71,7 @@ class Hooker:
 
     @staticmethod
     def inject_style_method(element: ng.ui.element, context: HookerContext):
-        if not isinstance(element.__class__.style, CustomStyleProperty):
-            element.__class__.style = None  # type: ignore
+        element.__class__.style = None  # type: ignore
 
         def style(self, *args, **kws):
             frame = inspect.currentframe()  # type: ignore
@@ -85,25 +85,21 @@ class Hooker:
 
         setattr(element, "style", types.MethodType(style, element))
 
+    @staticmethod
+    def inject_classes_method(element: ng.ui.element, context: HookerContext):
+        element.__class__.classes = None  # type: ignore
 
-class CustomStyleProperty:
-    def __init__(self, context: HookerContext):
-        self.context = context
-
-    def __get__(self, instance, owner):
-        if instance is None:
-            return self
-        info = source_code_service.get_source_code_info(instance)
-
-        if info is not None:
+        def classes(self, add, *args, **kws):
             frame = inspect.currentframe()  # type: ignore
             assert frame is not None
-            frame = _Helper.get_frame_with_file_name(frame.f_back, self.context)
+            frame = _Helper.get_frame_with_file_name(frame.f_back, context)
             if frame is None:
                 return
             info = get_lazy_caller_info(frame)
-            source_code_service.save_style_info(instance, info)
-        return instance._style
+            source_code_service.save_classes_info(self, add, info)
+            return self._classes(add, *args, **kws)
+
+        setattr(element, "classes", types.MethodType(classes, element))
 
 
 class _Helper:

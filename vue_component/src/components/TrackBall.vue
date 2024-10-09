@@ -31,6 +31,7 @@ const props = defineProps<{
 
 // emits
 const emit = defineEmits<{
+  (event: "init"): void;
   (event: "hoverChange", args: { id: number | null }): void;
   (event: "selectedChange", args: TSelectedChangeEventArgs): void;
   (
@@ -54,6 +55,7 @@ const emit = defineEmits<{
     }
   ): void;
   (event: "applyCommand"): void;
+  (event: "classesUpdate", args: { targetId: number; classes: string[] }): void;
 }>();
 
 function emitSetCommnad(commands: TSetCommand[]) {
@@ -83,6 +85,8 @@ function emitResetCommnad(commands: TResetCommand[]) {
 // onMounted
 onMounted(async () => {
   await tbUtils.createClientStyleLinkTag(props.resource_path);
+
+  emit("init");
 });
 
 globals.initGlobals({
@@ -104,6 +108,9 @@ globals.initGlobals({
   },
   emitApplyCommandFn: () => {
     emit("applyCommand");
+  },
+  emitClassesUpdateFn: (e) => {
+    emit("classesUpdate", e);
   },
 });
 

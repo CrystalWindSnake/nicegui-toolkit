@@ -23,6 +23,7 @@ let emitSetCommandFn: (commands: TSetCommand[]) => void;
 let emitResetCommandFn: (commands: TResetCommand[]) => void;
 let emitJumpSourceCodeFn: () => void;
 let emitApplyCommandFn: () => void;
+let emitClassesUpdateFn: (e: { targetId: number; classes: string[] }) => void;
 let EXECUTING_FLAG = false;
 
 export function getSelectorConfig() {
@@ -57,11 +58,13 @@ export function initGlobals(config: {
   emitResetCommandFn: (commands: TResetCommand[]) => void;
   emitJumpSourceCodeFn: () => void;
   emitApplyCommandFn: () => void;
+  emitClassesUpdateFn: (e: { targetId: number; classes: string[] }) => void;
 }) {
   emitSetCommandFn = config.emitSetCommandFn;
   emitResetCommandFn = config.emitResetCommandFn;
   emitJumpSourceCodeFn = config.emitJumpSourceCodeFn;
   emitApplyCommandFn = config.emitApplyCommandFn;
+  emitClassesUpdateFn = config.emitClassesUpdateFn;
   selectorConfig = config.selectorConfig;
   elementTreeData = config.elementTreeData;
 
@@ -90,6 +93,21 @@ export function jumpToSourceCode() {
     const url = hookUtils.getSourceCodeLink(target, selectorConfig);
     hookUtils.navigateTo(url);
   }
+}
+
+export function updateClasses(options: {
+  targetId?: number;
+  classes: string[];
+}) {
+  const { targetId, classes } = options;
+
+  let id = targetId;
+
+  if (id === undefined && selectedTarget.value) {
+    id = hookUtils.getElementId(selectedTarget.value, selectorConfig)!;
+  }
+
+  emitClassesUpdateFn({ targetId: id!, classes });
 }
 
 export function applyCommand() {
