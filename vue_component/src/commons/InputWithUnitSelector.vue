@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { type TModel } from "./inputWithUnitSelector";
+import * as consts from "@/consts";
 
 // props
 const props = defineProps<{
@@ -47,13 +48,15 @@ function updateSelectValue(value: any) {
       @change="onInputUpdate"
     ></AInput>
     <ASelect
-      popup-container="[layout-tool-panel]"
+      :popup-container="consts.popupContainer.mainPanelTooltip"
       size="mini"
       :options="itemOptions"
       :model-value="selectValue"
       @change="updateSelectValue"
       class="x-unit-select p-0 min-w-[4ch]"
-      :trigger-props="{ contentClass: 'w-[8ch]' }"
+      :trigger-props="{
+        contentClass: 'w-[8ch]',
+      }"
     >
       <template #arrow-icon></template>
     </ASelect>

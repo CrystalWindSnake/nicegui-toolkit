@@ -8,6 +8,7 @@ import {
 } from "@/hooks/targetElementContext";
 import { useCanApplyCommand, applyCommand } from "@/hooks/globals";
 import { t } from "@/hooks/language";
+import * as consts from "@/consts";
 
 const el = ref<HTMLElement | null>(null);
 const { style } = useDraggable(el, {
@@ -35,16 +36,20 @@ const hasSelectedTarget = useHasSelectedTarget();
       </div>
 
       <a-tooltip :content="t('nt.apply_command')">
-        <a-badge :count="9" dot :dotStyle="{ width: '10px', height: '10px' }">
-          <a-button
-            shape="circle"
-            size="mini"
-            @click="applyCommand()"
-            v-show="useCanApplyCommand"
-          >
-            <div class="i-codicon-git-stash-apply text-1xl" />
-          </a-button>
-        </a-badge>
+        <a-popconfirm
+          :popup-container="consts.popupContainer.mainPanelTooltip"
+          content="Do you want to apply the changes to the source code?"
+          ok-text="Apply"
+          cancel-text="No"
+          @ok="applyCommand"
+          :style="{ 'z-index': consts.zindex.mainPanelTooltip }"
+        >
+          <a-badge :count="9" dot :dotStyle="{ width: '10px', height: '10px' }">
+            <a-button shape="circle" size="mini" v-show="useCanApplyCommand">
+              <div class="i-codicon-git-stash-apply text-1xl" />
+            </a-button>
+          </a-badge>
+        </a-popconfirm>
       </a-tooltip>
 
       <a-tooltip :content="t('nt.jump2code')">

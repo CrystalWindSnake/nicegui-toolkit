@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { type TModel } from "./iconRadio";
+import * as consts from "@/consts";
 
 const props = defineProps<{
   model: TModel;
@@ -22,7 +23,8 @@ function onCheck(tagValue: string) {
         :content="option.label"
         v-for="option in options"
         :key="option.value"
-        popup-container="[layout-tool-panel]"
+        :popup-container="consts.popupContainer.mainPanelTooltip"
+        :style="{ 'z-index': consts.zindex.mainPanelTooltip }"
       >
         <AButton
           size="small"

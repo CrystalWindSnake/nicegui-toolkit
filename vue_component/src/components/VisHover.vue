@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useVisHover } from "./VisHover";
 import { useSvgConfigs } from "./utils";
-
-// const props = defineProps<{ model: TModel }>();
+import { zindex } from "@/consts";
 
 const strokeColor = "red";
 
@@ -16,14 +15,8 @@ const { rectStyles, topLine, rightLine, bottomLine, leftLine } = useVisHover();
     :viewBox="viewBox"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
-    style="
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 9999999;
-    "
-    :style="svgStyles"
+    style="position: fixed; top: 0; left: 0; pointer-events: none"
+    :style="[svgStyles, { 'z-index': zindex.visHover }]"
   >
     <rect
       fill="none"

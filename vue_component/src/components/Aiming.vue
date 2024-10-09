@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { TModel } from "./Aiming";
 import { useSvgConfigs } from "./utils";
+import { zindex } from "@/consts";
 
 const props = defineProps<{
   model: TModel;
@@ -16,7 +17,7 @@ const { rectStyles, p1, p2, p3, p4, p5, p6, p7, p8 } = props.model;
     :viewBox="viewBox"
     version="1.1"
     style="position: fixed; top: 0; left: 0; pointer-events: none"
-    :style="svgStyles"
+    :style="[svgStyles, { 'z-index': zindex.aiming }]"
     xmlns="http://www.w3.org/2000/svg"
   >
     <rect

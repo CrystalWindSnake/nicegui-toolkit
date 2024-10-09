@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as globals from "@/hooks/globals";
 import * as targetElementContext from "@/hooks/targetElementContext";
+import * as consts from "@/consts";
 
 import { computed } from "vue";
 const props = defineProps<{ keyId: string; label?: string }>();
@@ -29,11 +30,12 @@ const divStyle = computed(() => {
 
 <template>
   <a-popconfirm
-    popup-container="[layout-tool-panel]"
+    :popup-container="consts.popupContainer.mainPanelTooltip"
     content="Do you want to reset this setting?"
     ok-text="Reset"
     cancel-text="No"
     @ok="reset"
+    :style="{ 'z-index': consts.zindex.mainPanelTooltip }"
   >
     <div class="px-2" :style="divStyle">
       <span
