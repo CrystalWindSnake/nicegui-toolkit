@@ -9,7 +9,7 @@ _preset = {
             "nt.apply_command_tooltip": "Apply Change",
             "nt.apply_command_confirm": "Do you want to apply the changes to the source code?",
             "nt.property-reset-confirm": "Do you want to reset this setting?",
-            "nt.jump2code": "Jump to Code",
+            "nt.jump2code": "locate source code",
             "nt.mainPanel.style": "style",
             "nt.mainPanel.navigator": "navigator",
             "nt.mainPanel.code": "code",

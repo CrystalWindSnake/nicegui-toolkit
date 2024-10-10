@@ -36,7 +36,9 @@ const hasSelectedTarget = useHasSelectedTarget();
           <div class="i-mdi-android-debug-bridge text-2xl" />
           <span class="font-bold">toolkit</span>
 
-          <ATag color="green">{{ targetTypeName }}</ATag>
+          <ATag color="green" v-show="hasSelectedTarget">{{
+            targetTypeName
+          }}</ATag>
         </a-space>
       </div>
 

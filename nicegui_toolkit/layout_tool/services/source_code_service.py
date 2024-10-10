@@ -208,22 +208,3 @@ class _Helper:
     @staticmethod
     def create_classes_method_call(caller_info: LazyCallerInfo, classes_code: str):
         _Helper.create_method_call(caller_info, "classes", classes_code)
-
-    @staticmethod
-    def choose_style_info(
-        infos: List[LazyCallerInfo], source_code_info: LazyCallerInfo
-    ):
-        for info in reversed(infos):
-            if info.lineno == source_code_info.lineno:
-                return info
-        return None
-
-    @staticmethod
-    def choose_classes_info(infos: List[ClassesInfo], source_code_info: LazyCallerInfo):
-        for info in reversed(infos):
-            if info.caller_info.lineno == source_code_info.lineno:
-                return info
-        return None
-
-
-choose_classes_info = _Helper.choose_classes_info
