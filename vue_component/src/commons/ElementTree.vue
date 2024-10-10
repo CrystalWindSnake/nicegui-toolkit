@@ -12,6 +12,7 @@ import {
 } from "@/hooks/globals";
 import * as hookUtils from "@/hooks/utils";
 import { t } from "@/hooks/language";
+import * as consts from "@/consts";
 
 const props = defineProps<{
   model: TModel;
@@ -105,8 +106,8 @@ function handleExpandTree() {
 
       <ATooltip
         :content="expandtooltipContent"
-        popup-container="body"
-        style="z-index: 9999999"
+        :popup-container="consts.popupContainer.mainPanelTooltip"
+        :style="{ 'z-index': consts.zindex.mainPanelTooltip }"
       >
         <div
           class="text-xl absolute top-0 right-5 cursor-pointer"

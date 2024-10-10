@@ -6,8 +6,10 @@ _preset = {
         "en": {
             "tree.collapse_all": "Collapse All",
             "tree.expand_all": "Expand All",
-            "nt.apply_command": "Apply Change",
-            "nt.jump2code": "Jump to Code",
+            "nt.apply_command_tooltip": "Apply Change",
+            "nt.apply_command_confirm": "Do you want to apply the changes to the source code?",
+            "nt.property-reset-confirm": "Do you want to reset this setting?",
+            "nt.jump2code": "locate source code",
             "nt.mainPanel.style": "style",
             "nt.mainPanel.navigator": "navigator",
             "nt.mainPanel.code": "code",
@@ -28,7 +30,9 @@ _preset = {
         "zh": {
             "tree.collapse_all": "全部折叠",
             "tree.expand_all": "全部展开",
-            "nt.apply_command": "应用更改",
+            "nt.apply_command_tooltip": "应用更改",
+            "nt.apply_command_confirm": "是否要应用更改到源代码？",
+            "nt.property-reset-confirm": "是否要重置此设置？",
             "nt.jump2code": "跳转到代码",
             "nt.mainPanel.style": "样式",
             "nt.mainPanel.navigator": "导航",

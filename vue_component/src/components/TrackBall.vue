@@ -3,7 +3,7 @@ import MainPanel from "@/panels/MainPanel.vue";
 import Aiming from "./Aiming.vue";
 import Panel from "./Panel.vue";
 import VisHover from "./VisHover.vue";
-import { useTypeNameTag, getComponentExpose } from "./trackBallUtils";
+import { getComponentExpose } from "./trackBallUtils";
 import * as tbUtils from "./trackBallUtils";
 import * as hookUtils from "@/hooks/utils";
 import { type TElementTreeData } from "@/hooks/types";
@@ -19,7 +19,7 @@ import { TLanguageConfig } from "@/types/language";
 import { onMounted, watch } from "vue";
 import * as globals from "@/hooks/globals";
 import * as targetElementContext from "@/hooks/targetElementContext";
-import { useAiming } from "./Aiming";
+import VisTypeName from "./VisTypeName.vue";
 
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
@@ -125,14 +125,6 @@ watch(
   }
 );
 
-const { typeNameTagStyles, typeName } = useTypeNameTag(
-  props.selectorConfig,
-  globals.hoverElement
-);
-
-// aiming
-const aimingModel = useAiming();
-
 // events
 watch(globals.hoverElement, (target) => {
   if (target) {
@@ -190,21 +182,15 @@ defineExpose(
   <Teleport to="body">
     <VisHover></VisHover>
 
-    <Aiming :model="aimingModel" style="z-index: 9999999"></Aiming>
+    <Aiming></Aiming>
 
-    <Panel class="non-selectable" style="z-index: 9999999; width: 350px">
+    <Panel>
       <slot name="header"></slot>
       <MainPanel></MainPanel>
       <slot name="footer"></slot>
     </Panel>
 
-    <div
-      class="vis-type-name fixed top-0 left-0 pointer-events-none shadow rounded p-1 bg-green-400"
-      :style="typeNameTagStyles"
-      style="z-index: 9999999"
-    >
-      {{ typeName }}
-    </div>
+    <VisTypeName></VisTypeName>
   </Teleport>
 </template>
 
