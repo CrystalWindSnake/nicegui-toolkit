@@ -13,6 +13,7 @@ import {
 import { type TElementTreeData } from "@/hooks/types";
 import * as hookUtils from "@/hooks/utils";
 import * as language from "@/hooks/language";
+import * as recordTracker from "./recordTracker";
 
 const hoverByCode = ref(null as HTMLElement | null);
 export let hoverElement: ComputedRef<HTMLElement | null> = computed(() => null);
@@ -115,7 +116,7 @@ export function applyCommand() {
 }
 
 export function useCanApplyCommand() {
-  return computed(() => true);
+  return recordTracker.hasChanged;
 }
 
 export function sendSetCommand(commands: TSetCommand | TSetCommand[]) {

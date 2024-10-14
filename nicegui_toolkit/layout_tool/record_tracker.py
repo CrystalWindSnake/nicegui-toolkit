@@ -49,6 +49,9 @@ class RecordTracker:
     def __init__(self):
         self.records: defaultdict[_TNG_ELEMENT_ID, Record] = defaultdict(Record)
 
+    def has_changes(self):
+        return any(record.has_changes() for record in self.records.values())
+
     def add_style(
         self,
         ng_element_id: _TNG_ELEMENT_ID,

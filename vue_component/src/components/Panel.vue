@@ -18,6 +18,8 @@ const { style: draggableStyle } = useDraggable(el, {
 
 const targetTypeName = useTargetTypeName();
 const hasSelectedTarget = useHasSelectedTarget();
+
+const canApplyCommand = useCanApplyCommand();
 </script>
 
 <template>
@@ -52,8 +54,14 @@ const hasSelectedTarget = useHasSelectedTarget();
           @ok="applyCommand"
           :style="{ 'z-index': consts.zindex.mainPanelTooltip }"
         >
-          <a-badge :count="9" dot :dotStyle="{ width: '10px', height: '10px' }">
-            <a-button shape="circle" size="mini" v-show="useCanApplyCommand">
+          <a-badge
+            :count="9"
+            dot
+            :dotStyle="{ width: '10px', height: '10px' }"
+            v-show="canApplyCommand"
+            class="nt-apply-command"
+          >
+            <a-button shape="circle" size="mini">
               <div class="i-codicon-git-stash-apply text-1xl" />
             </a-button>
           </a-badge>

@@ -3,6 +3,7 @@ import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 import { useMouse, useWindowSize } from "@vueuse/core";
 import * as hookUtils from "@/hooks/utils";
 import * as targetElementContext from "@/hooks/targetElementContext";
+import * as recordTracker from "@/hooks/recordTracker";
 
 export function useTypeNameTag(
   config: TSelectorConfig,
@@ -116,13 +117,31 @@ export function getComponentExpose(
   config: TSelectorConfig,
   selectedElement: Ref<HTMLElement | null>
 ) {
+  function sendMessage(message: {
+    selectTarget?: { id: number };
+    serverResetCommand?: { propertyName: string };
+    trackRecord?: { hasChanged: boolean };
+  }) {
+    if (message.selectTarget) {
+      onSelectTarget(message.selectTarget.id);
+    }
+
+    if (message.serverResetCommand) {
+      onServerResetCommand(message.serverResetCommand.propertyName);
+    }
+
+    if (message.trackRecord) {
+      onTrackRecord(message.trackRecord);
+    }
+  }
+
   function queryStyle(id: number, styleName: string) {
     return window
       .getComputedStyle(queryTarget(id, config), null)
       .getPropertyValue(styleName);
   }
 
-  function selectTarget(id: number) {
+  function onSelectTarget(id: number) {
     const target = queryTarget(id, config) as HTMLElement;
     selectedElement.value = target;
   }
@@ -132,7 +151,11 @@ export function getComponentExpose(
     targetElementContext.triggerUpdateFlag(propertyName);
   }
 
-  return { queryStyle, selectTarget, onServerResetCommand };
+  function onTrackRecord(info: { hasChanged: boolean }) {
+    recordTracker.setHasChanged(info.hasChanged);
+  }
+
+  return { queryStyle, sendMessage };
 }
 
 export async function createClientStyleLinkTag(resource_path?: string) {
