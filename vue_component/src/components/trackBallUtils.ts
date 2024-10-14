@@ -3,6 +3,7 @@ import { TSelectedChangeEventArgs, type TSelectorConfig } from "./types";
 import { useMouse, useWindowSize } from "@vueuse/core";
 import * as hookUtils from "@/hooks/utils";
 import * as targetElementContext from "@/hooks/targetElementContext";
+import * as recordTracker from "@/hooks/recordTracker";
 
 export function useTypeNameTag(
   config: TSelectorConfig,
@@ -116,13 +117,12 @@ export function getComponentExpose(
   config: TSelectorConfig,
   selectedElement: Ref<HTMLElement | null>
 ) {
-
   function sendMessage(message: {
-    selectTarget?: { id: number },
-    serverResetCommand?: { propertyName: string },
+    selectTarget?: { id: number };
+    serverResetCommand?: { propertyName: string };
+    trackRecord?: { hasChanged: boolean };
   }) {
-
-    if (message.selectTarget) { 
+    if (message.selectTarget) {
       onSelectTarget(message.selectTarget.id);
     }
 
@@ -130,7 +130,10 @@ export function getComponentExpose(
       onServerResetCommand(message.serverResetCommand.propertyName);
     }
 
-   }
+    if (message.trackRecord) {
+      onTrackRecord(message.trackRecord);
+    }
+  }
 
   function queryStyle(id: number, styleName: string) {
     return window
@@ -146,6 +149,10 @@ export function getComponentExpose(
   function onServerResetCommand(propertyName: string) {
     // globals.triggerPropertyUpdate(propertyName);
     targetElementContext.triggerUpdateFlag(propertyName);
+  }
+
+  function onTrackRecord(info: { hasChanged: boolean }) {
+    recordTracker.setHasChanged(info.hasChanged);
   }
 
   return { queryStyle, sendMessage };

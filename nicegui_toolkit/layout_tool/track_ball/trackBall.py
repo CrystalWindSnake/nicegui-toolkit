@@ -43,6 +43,8 @@ class TrackBall(Element, component="trackBall.js"):
 
         self._register_init_event()
 
+        self._send_message_track_record()
+
     def _register_init_event(self):
         def on_init():
             caller_system.clear_cache()
@@ -74,6 +76,7 @@ class TrackBall(Element, component="trackBall.js"):
 
             target.update()
             self._update_current_target_context()
+            self._send_message_track_record()
 
         self.on("setCommand", on_command)
 
@@ -133,6 +136,7 @@ class TrackBall(Element, component="trackBall.js"):
             self._update_current_target_context()
 
             self._send_message_server_reset_command(arg.commands[0].propertyName)
+            self._send_message_track_record()
 
         self.on("resetCommand", on_reset_command)
 
@@ -169,6 +173,7 @@ class TrackBall(Element, component="trackBall.js"):
 
             self._update_current_target_context()
             target.update()
+            self._send_message_track_record()
 
         self.on("classesUpdate", on_classes_update)
 
@@ -200,6 +205,12 @@ class TrackBall(Element, component="trackBall.js"):
 
     def _send_message_server_reset_command(self, property_name: str):
         self._send_message({"serverResetCommand": {"propertyName": property_name}})
+
+    def _send_message_track_record(self):
+        info = {
+            "hasChanged": self.record_tracker.has_changes(),
+        }
+        self._send_message({"trackRecord": info})
 
     @staticmethod
     def has_in_client():
