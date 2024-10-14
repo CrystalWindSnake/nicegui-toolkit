@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 import nicegui as ng_vars
 from nicegui.element import Element
 from nicegui_toolkit.layout_tool.record_tracker import RecordTracker
@@ -131,7 +131,8 @@ class TrackBall(Element, component="trackBall.js"):
 
             target.update()
             self._update_current_target_context()
-            self.run_method("onServerResetCommand", arg.commands[0].propertyName)
+
+            self._send_message_server_reset_command(arg.commands[0].propertyName)
 
         self.on("resetCommand", on_reset_command)
 
@@ -193,6 +194,12 @@ class TrackBall(Element, component="trackBall.js"):
         if target_id is None:
             return None
         return ng_vars.ui.context.client.elements[target_id]
+
+    def _send_message(self, message: Dict):
+        self.run_method("sendMessage", message)
+
+    def _send_message_server_reset_command(self, property_name: str):
+        self._send_message({"serverResetCommand": {"propertyName": property_name}})
 
     @staticmethod
     def has_in_client():
