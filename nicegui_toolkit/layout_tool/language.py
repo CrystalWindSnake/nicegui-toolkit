@@ -26,6 +26,7 @@ _preset = {
             "nt.style.layout.align-title-byCol": "horizontal",
             "nt.style.spacing.header": "spacing",
             "nt.style.size.header": "size",
+            "nt.style.layout.wrap-label": "wrap",
         },
         "zh": {
             "tree.collapse_all": "全部折叠",
@@ -49,6 +50,7 @@ _preset = {
             "nt.style.layout.align-title-byCol": "水平排列",
             "nt.style.spacing.header": "间距",
             "nt.style.size.header": "尺寸",
+            "nt.style.layout.wrap-label": "换行",
         },
     },
 }
