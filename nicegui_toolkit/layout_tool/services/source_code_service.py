@@ -50,6 +50,10 @@ def save_source_code_info(element: Element, info: LazyCallerInfo):
     element.__dict__[_SOURCE_CODE_INFO_FLAG] = info
 
 
+def has_source_code_info(element: Element) -> bool:
+    return _SOURCE_CODE_INFO_FLAG in element.__dict__
+
+
 def get_source_code_info(element: Element) -> LazyCallerInfo:
     return element.__dict__.get(_SOURCE_CODE_INFO_FLAG, None)
 

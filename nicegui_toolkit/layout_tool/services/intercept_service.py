@@ -13,6 +13,8 @@ import os
 
 EXCLUDE_INJECT_NG_CLASSES = ["Query", "QueryElement", "TrackBall"]
 
+_STYLE_INJECT_FLAG = "__ng_inject_style__"
+_CLASS_INJECT_FLAG = "__ng_inject_classes__"
 
 @dataclass
 class HookerContext:
@@ -71,17 +73,20 @@ class Hooker:
 
     @staticmethod
     def inject_style_method(element: ng.ui.element, context: HookerContext):
-        def style(self, *args, **kws):
-            frame = inspect.currentframe()  # type: ignore
-            assert frame is not None
-            frame = _Helper.get_frame_with_file_name(frame.f_back, context)
-            if frame is None:
-                return
-            info = get_lazy_caller_info(frame)
-            source_code_service.save_style_info(self, info)
-            return self._style(*args, **kws)
+        class_obj = element.__class__
+        if _STYLE_INJECT_FLAG in class_obj.__dict__:
+            return
 
-        element.__dict__["style"] = types.MethodType(style, element)
+        org_style = class_obj.style
+
+        def new_style(self):
+            if source_code_service.has_source_code_info(self):
+                return StyleInjector(self, org_style, context)
+            return org_style.__get__(self, class_obj)
+
+        class_obj.style = property(new_style)  # type: ignore
+
+        setattr(class_obj, _STYLE_INJECT_FLAG, None)
 
     @staticmethod
     def inject_classes_method(element: ng.ui.element, context: HookerContext):
@@ -96,6 +101,26 @@ class Hooker:
             return self._classes(add, *args, **kws)
 
         element.__dict__["classes"] = types.MethodType(classes, element)
+
+
+class StyleInjector:
+    def __init__(
+        self, element: ng.ui.element, org_style_property, context: HookerContext
+    ):
+        self.org_style_property = org_style_property
+        self.context = context
+        self.element = element
+        self._class = element.__class__
+
+    def __call__(self, *args, **kws):
+        frame = inspect.currentframe()  # type: ignore
+        assert frame is not None
+        frame = _Helper.get_frame_with_file_name(frame.f_back, self.context)
+        if frame is None:
+            return
+        info = get_lazy_caller_info(frame)
+        source_code_service.save_style_info(self.element, info)
+        return self.org_style_property.__get__(self.element, self._class)(*args, **kws)
 
 
 class _Helper:
