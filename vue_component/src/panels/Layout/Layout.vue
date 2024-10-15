@@ -4,6 +4,8 @@ import { buildRefGetter } from "@/hooks/targetInfoGetter";
 import { selectedTarget } from "@/hooks/targetElementContext";
 import IconRadio from "@/commons/IconRadio.vue";
 import { useIconRadio } from "@/commons/iconRadio";
+import BooleanSwitch from "@/commons/BooleanSwitch.vue";
+import { useBooleanSwitch } from "@/commons/booleanSwitch";
 import ItemLabel from "@/commons/ItemLabel.vue";
 import { t } from "@/hooks/language";
 
@@ -103,6 +105,15 @@ const justifyIconRadioModel = useIconRadio({
   propertyName: "justify-content",
   options: justifyOpts,
 });
+
+// flex-wrap
+const wrapBooleanSwitchModel = useBooleanSwitch({
+  propertyName: "flex-wrap",
+  options: {
+    checkedValue: "wrap",
+    uncheckedValue: "nowrap",
+  },
+});
 </script>
 
 <template>
@@ -127,6 +138,13 @@ const justifyIconRadioModel = useIconRadio({
           :label="t('nt.style.layout.direction')"
         ></ItemLabel>
         <IconRadio :model="directionIconRadioModel"></IconRadio>
+
+        <!-- wrap -->
+        <ItemLabel
+          keyId="flex-wrap"
+          :label="t('nt.style.layout.wrap-label')"
+        ></ItemLabel>
+        <BooleanSwitch :model="wrapBooleanSwitchModel"></BooleanSwitch>
 
         <!-- justify -->
         <ItemLabel keyId="justify-content" :label="justifyTitle"></ItemLabel>
