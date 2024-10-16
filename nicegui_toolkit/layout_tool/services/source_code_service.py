@@ -157,6 +157,10 @@ class Action:
     type: Literal["replace", "add"]
     code: str
 
+    @property
+    def is_multiline(self):
+        return self.start_lineno != self.end_lineno
+
     def to_testing_str(self):
         return f"{self.type} sr:{self.start_lineno} er:{self.end_lineno} sc:{self.start_col} ec:{self.end_col} {self.code}"
 
@@ -168,7 +172,7 @@ class Commit:
 
     def get_actions_sorted(self):
         """Sort by rows from smallest to largest and columns from largest to smallest"""
-        return sorted(self.actions, key=lambda x: (x.start_lineno, -x.start_col))
+        return sorted(self.actions, key=lambda x: (-x.start_lineno, -x.start_col))
 
     def to_testing_str(self):
         return "\n".join(
@@ -232,23 +236,55 @@ class _Helper:
             new_line = None
 
             if action.type == "add":
-                new_line = (
-                    current_line[: action.end_col + 1]
-                    + action.code
-                    + current_line[action.end_col + 1 + len(action.code) :]
+                start_code, end_code = _Helper._get_codes_by_add_action(
+                    lines, action, current_line
                 )
+                new_line = start_code + action.code + end_code
             elif action.type == "replace":
-                new_line = (
-                    current_line[: action.start_col]
-                    + action.code
-                    + current_line[action.end_col :]
+                start_code, end_code = _Helper._get_code_by_replace_action(
+                    lines, action, current_line
                 )
+                new_line = start_code + action.code + end_code
             else:
                 raise ValueError(f"Unknown action type: {action.type}")
 
             lines[action.start_lineno - 1] = new_line
+            _Helper.try_remove_redundant_lines(lines, action)
 
         return lines
+
+    @staticmethod
+    def try_remove_redundant_lines(lines: List[str], action: Action):
+        if not action.is_multiline:
+            return
+
+        start_index = action.start_lineno
+        end_index = action.end_lineno
+
+        del lines[start_index:end_index]
+
+    @staticmethod
+    def _get_codes_by_add_action(lines: List[str], action: Action, current_line: str):
+        start_code = current_line[: action.end_col + 1]
+
+        if action.is_multiline:
+            end_line = lines[action.end_lineno - 1]
+            end_code = end_line[action.end_col :]
+        else:
+            end_code = current_line[action.end_col + 1 + len(action.code) :]
+        return start_code, end_code
+
+    @staticmethod
+    def _get_code_by_replace_action(
+        lines: List[str], action: Action, current_line: str
+    ):
+        start_code = current_line[: action.start_col]
+        if action.is_multiline:
+            end_line = lines[action.end_lineno - 1]
+            end_code = end_line[action.end_col :]
+        else:
+            end_code = current_line[action.end_col :]
+        return start_code, end_code
 
     @staticmethod
     def create_method_call(caller_info: LazyCallerInfo, method_name: str, code: str):

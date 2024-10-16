@@ -1,0 +1,5 @@
+from nicegui import ui
+
+
+def create_view():
+    ui.label("foo").style("font-size:2rem; color:red; align-self:center;").classes("x1 y1")
