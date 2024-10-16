@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Literal, Optional
 import subprocess
 from nicegui.element import Element
 from dataclasses import dataclass
@@ -50,6 +50,10 @@ def save_source_code_info(element: Element, info: LazyCallerInfo):
     element.__dict__[_SOURCE_CODE_INFO_FLAG] = info
 
 
+def has_source_code_info(element: Element) -> bool:
+    return _SOURCE_CODE_INFO_FLAG in element.__dict__
+
+
 def get_source_code_info(element: Element) -> LazyCallerInfo:
     return element.__dict__.get(_SOURCE_CODE_INFO_FLAG, None)
 
@@ -58,10 +62,7 @@ def save_style_info(element: Element, caller_info: LazyCallerInfo):
     if _STYLE_INFO_FLAG in element.__dict__:
         return
 
-    sourc_code_info = get_source_code_info(element)
-
-    if sourc_code_info.lineno == caller_info.lineno:
-        element.__dict__[_STYLE_INFO_FLAG] = caller_info
+    element.__dict__[_STYLE_INFO_FLAG] = caller_info
 
 
 def get_style_info(element: Element) -> Optional[LazyCallerInfo]:
@@ -80,131 +81,101 @@ def save_classes_info(
     if _CLASSES_INFO_FLAG in element.__dict__:
         return
 
-    sourc_code_info = get_source_code_info(element)
-
-    if sourc_code_info.lineno == caller_info.lineno:
-        element.__dict__[_CLASSES_INFO_FLAG] = ClassesInfo(add_classes_str, caller_info)
+    element.__dict__[_CLASSES_INFO_FLAG] = ClassesInfo(add_classes_str, caller_info)
 
 
 def get_classes_info(element: Element) -> Optional[ClassesInfo]:
     return element.__dict__.get(_CLASSES_INFO_FLAG, None)
 
 
-def apply_style_code(element: Element, style_data: Dict[str, str]):
-    caller_info = get_source_code_info(element)
-    if caller_info is None:
-        return
-
-    style_info = get_style_info(element)
-
-    if not style_info:
-        if style_data:
-            _Helper.create_style_method_call(
-                caller_info,
-                f'"{create_style_code(style_data)}"',
-            )
-
-    else:
-        _Helper.replace_code(
-            style_info.filename,
-            style_info.lineno,
-            style_info.end_lineno,
-            style_info.start_col,
-            style_info.end_col,
-            f'"{create_style_code(style_data)}"',
-        )
+def create_file_code(commit: Commit):
+    return "".join(_Helper.replace_code_with_commit(commit))
 
 
-def apply_classes_code(element: Element, classes: List[str]):
-    caller_info = get_source_code_info(element)
-    if caller_info is None:
-        return
+@dataclass
+class Action:
+    start_lineno: int
+    end_lineno: int
+    start_col: int
+    end_col: int
+    type: Literal["replace", "add"]
+    code: str
 
-    classes_info = get_classes_info(element)
-    classes_code = " ".join(classes)
+    @property
+    def is_multiline(self):
+        return self.start_lineno != self.end_lineno
 
-    if not classes_info:
-        _Helper.create_classes_method_call(
-            caller_info,
-            f'"{classes_code}"',
-        )
-    else:
-        classes_caller = classes_info.caller_info
-        _Helper.replace_code(
-            classes_caller.filename,
-            classes_caller.lineno,
-            classes_caller.end_lineno,
-            classes_caller.start_col,
-            classes_caller.end_col,
-            f'"{classes_code}"',
-        )
+
+@dataclass
+class Commit:
+    file: Path
+    actions: List[Action]
+
+    def get_actions_sorted(self):
+        """Sort by rows from smallest to largest and columns from largest to smallest"""
+        return sorted(self.actions, key=lambda x: (-x.start_lineno, -x.start_col))
 
 
 class _Helper:
     @staticmethod
-    def replace_code(
-        file: Path,
-        start_lineno: int,
-        end_lineno: int,
-        start_col: int,
-        end_col: int,
-        new_code: str,
-    ):
-        with open(file, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-
-        is_multiline_code = start_lineno != end_lineno
-
-        new_lines = []
-        for i, line in enumerate(lines):
-            if i < start_lineno - 1:
-                new_lines.append(line)
-            elif i == start_lineno - 1:
-                if is_multiline_code:
-                    new_lines.append(line[:start_col] + "\n")
-                else:
-                    new_lines.append(line[:start_col] + new_code + line[end_col:])
-            elif i < end_lineno - 1:
-                pass
-            elif i == end_lineno - 1:
-                if is_multiline_code:
-                    new_lines.append(new_code + "\n")
-                new_lines.append(line[end_col:])
-            else:
-                new_lines.append(line)
-
-        with open(file, "w", encoding="utf-8") as f:
-            f.writelines(new_lines)
-
-        print(f"Code replaced in {file}")
-
-    @staticmethod
-    def create_method_call(caller_info: LazyCallerInfo, method_name: str, code: str):
-        file = caller_info.filename
-        end_lineno = caller_info.end_lineno
-        end_col = caller_info.end_col + 1
+    def replace_code_with_commit(commit: Commit):
+        file = commit.file
+        actions = commit.get_actions_sorted()
 
         with open(file, "r", encoding="utf-8") as f:
             lines = f.readlines()
 
-        new_lines = []
-        for i, line in enumerate(lines):
-            if i < end_lineno - 1:
-                new_lines.append(line)
-            elif i == end_lineno - 1:
-                new_lines.append(
-                    line[:end_col] + f".{method_name}({code})" + line[end_col:]
+        for action in actions:
+            current_line = lines[action.start_lineno - 1]
+            new_line = None
+
+            if action.type == "add":
+                start_code, end_code = _Helper._get_codes_by_add_action(
+                    lines, action, current_line
                 )
+                new_line = start_code + action.code + end_code
+            elif action.type == "replace":
+                start_code, end_code = _Helper._get_code_by_replace_action(
+                    lines, action, current_line
+                )
+                new_line = start_code + action.code + end_code
             else:
-                new_lines.append(line)
+                raise ValueError(f"Unknown action type: {action.type}")
 
-        with open(file, "w", encoding="utf-8") as f:
-            f.writelines(new_lines)
+            lines[action.start_lineno - 1] = new_line
+            _Helper.try_remove_redundant_lines(lines, action)
 
-    @staticmethod
-    def create_style_method_call(caller_info: LazyCallerInfo, style_code: str):
-        _Helper.create_method_call(caller_info, "style", style_code)
+        return lines
 
     @staticmethod
-    def create_classes_method_call(caller_info: LazyCallerInfo, classes_code: str):
-        _Helper.create_method_call(caller_info, "classes", classes_code)
+    def try_remove_redundant_lines(lines: List[str], action: Action):
+        if not action.is_multiline:
+            return
+
+        start_index = action.start_lineno
+        end_index = action.end_lineno
+
+        del lines[start_index:end_index]
+
+    @staticmethod
+    def _get_codes_by_add_action(lines: List[str], action: Action, current_line: str):
+        start_code = current_line[: action.end_col + 1]
+
+        if action.is_multiline:
+            end_line = lines[action.end_lineno - 1]
+            end_code = end_line[action.end_col :]
+        else:
+            end_code = current_line[action.end_col + 1 + len(action.code) :]
+        return start_code, end_code
+
+    @staticmethod
+    def _get_code_by_replace_action(
+        lines: List[str], action: Action, current_line: str
+    ):
+        start_code = current_line[: action.start_col]
+        if action.is_multiline:
+            end_line = lines[action.end_lineno - 1]
+            end_code = end_line[action.end_col :]
+        else:
+            end_code = current_line[action.end_col :]
+        return start_code, end_code

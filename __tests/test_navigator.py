@@ -38,7 +38,7 @@ class ElementAssert:
 def test_hover(browser: BrowserManager, page_path: str):
     @ui.page(page_path)
     def _():
-        inject_layout_tool(language_locale="en")
+        inject_layout_tool(language_locale="en", is_testing=True)
         with ui.row():
             ui.input("test").classes("testid-input")
             ui.select(["a"]).classes("testid-select")

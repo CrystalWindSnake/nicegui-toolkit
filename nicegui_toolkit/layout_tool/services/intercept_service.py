@@ -1,4 +1,3 @@
-import types
 from typing import List
 import nicegui as ng
 from nicegui_toolkit.layout_tool.services import source_code_service
@@ -9,9 +8,13 @@ from dataclasses import dataclass, field
 import nicegui_toolkit.layout_tool.consts as consts
 import nicegui_toolkit.layout_tool.types as tools_types
 import os
+from collections import UserList
 
 
 EXCLUDE_INJECT_NG_CLASSES = ["Query", "QueryElement", "TrackBall"]
+
+_STYLE_INJECT_FLAG = "__ng_inject_style__"
+_CLASS_INJECT_FLAG = "__ng_inject_classes__"
 
 
 @dataclass
@@ -71,31 +74,79 @@ class Hooker:
 
     @staticmethod
     def inject_style_method(element: ng.ui.element, context: HookerContext):
-        def style(self, *args, **kws):
-            frame = inspect.currentframe()  # type: ignore
-            assert frame is not None
-            frame = _Helper.get_frame_with_file_name(frame.f_back, context)
-            if frame is None:
-                return
-            info = get_lazy_caller_info(frame)
-            source_code_service.save_style_info(self, info)
-            return self._style(*args, **kws)
+        class_obj = element.__class__
+        if _STYLE_INJECT_FLAG in class_obj.__dict__:
+            return
 
-        element.__dict__["style"] = types.MethodType(style, element)
+        org_style = class_obj.style
+
+        def new_style(self):
+            if source_code_service.has_source_code_info(self):
+                return StyleInjector(self, org_style, context)
+            return org_style.__get__(self, class_obj)
+
+        class_obj.style = property(new_style)  # type: ignore
+
+        setattr(class_obj, _STYLE_INJECT_FLAG, None)
 
     @staticmethod
     def inject_classes_method(element: ng.ui.element, context: HookerContext):
-        def classes(self, add, *args, **kws):
-            frame = inspect.currentframe()  # type: ignore
-            assert frame is not None
-            frame = _Helper.get_frame_with_file_name(frame.f_back, context)
-            if frame is None:
-                return
-            info = get_lazy_caller_info(frame)
-            source_code_service.save_classes_info(self, add, info)
-            return self._classes(add, *args, **kws)
+        class_obj = element.__class__
+        if _CLASS_INJECT_FLAG in class_obj.__dict__:
+            return
 
-        element.__dict__["classes"] = types.MethodType(classes, element)
+        org_classes = class_obj.classes
+
+        def new_classes(self):
+            if source_code_service.has_source_code_info(self):
+                return ClassesInjector(self, org_classes, context)
+            return org_classes.__get__(self, class_obj)
+
+        class_obj.classes = property(new_classes)  # type: ignore
+
+        setattr(class_obj, _STYLE_INJECT_FLAG, None)
+
+
+class StyleInjector:
+    def __init__(
+        self, element: ng.ui.element, org_style_property, context: HookerContext
+    ):
+        self.org_style_property = org_style_property
+        self.context = context
+        self.element = element
+        self._class = element.__class__
+
+    def __call__(self, *args, **kws):
+        frame = inspect.currentframe()  # type: ignore
+        assert frame is not None
+        frame = _Helper.get_frame_with_file_name(frame.f_back, self.context)
+        if frame is None:
+            return
+        info = get_lazy_caller_info(frame)
+        source_code_service.save_style_info(self.element, info)
+        return self.element._style(*args, **kws)
+
+
+class ClassesInjector(UserList):
+    def __init__(
+        self, element: ng.ui.element, org_classes_property, context: HookerContext
+    ):
+        super().__init__(element._classes)
+        self.org_classes_property = org_classes_property
+        self.context = context
+        self.element = element
+        self._class = element.__class__
+
+    def __call__(self, add, *args, **kws):
+        frame = inspect.currentframe()  # type: ignore
+        assert frame is not None
+        frame = _Helper.get_frame_with_file_name(frame.f_back, self.context)
+        if frame is None:
+            return
+        info = get_lazy_caller_info(frame)
+        source_code_service.save_classes_info(self.element, add, info)
+
+        return self.element._classes(add, *args, **kws)
 
 
 class _Helper:

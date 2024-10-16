@@ -51,13 +51,15 @@ function handleAdd(value: string) {
       <div class="flex flex-wrap gap-4">
         <EditableTag
           v-for="(classVal, index) in classes"
+          :key="classVal + index"
           :tagKey="index"
           :value="classVal"
           @value-change="(e) => handleEdit(e.key as number, e.oldValue, e.newValue)"
           @remove="(e) => handleRemove(e.key as number)"
         />
 
-        <AddableTag @add="(e) => handleAdd(e.value)"> </AddableTag>
+        <AddableTag class="nt-classes-add-tag" @add="(e) => handleAdd(e.value)">
+        </AddableTag>
       </div>
     </Block>
   </div>

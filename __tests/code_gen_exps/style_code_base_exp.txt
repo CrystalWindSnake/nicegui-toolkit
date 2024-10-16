@@ -1,0 +1,12 @@
+from nicegui import ui
+
+
+def create_view():
+    ui.label("foo").style("align-self:center;")
+
+    table = (
+        ui.label("bar long text with spaces").style("align-self:center;")
+        .props('p1 p2="xx"')
+        .classes("w-full h-[50vh]")
+        # .style("color:black")
+    )

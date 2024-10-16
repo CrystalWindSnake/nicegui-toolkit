@@ -13,6 +13,7 @@ from nicegui_toolkit.systems import fastapi_system
 def inject_layout_tool(
     ide: types._T_IDE = "vscode",
     language_locale: Optional[types._T_language_locale] = None,
+    **kwargs,
 ):
     """Inject layout tool into the current app.
 
@@ -25,6 +26,8 @@ def inject_layout_tool(
         HookerContext(include_folders=[project_path], IDE=ide)
     ).hook_ui_element_method()
 
+    is_testing = kwargs.get("is_testing", False)
+
     @ng_app.on_connect
     async def on_connect(client: ng_Client):
         nonlocal language_locale
@@ -36,4 +39,4 @@ def inject_layout_tool(
                     if fastapi_system.is_zh_client_language(client.request)
                     else "en"
                 )
-            TrackBall(language_locale=language_locale or "en")
+            TrackBall(language_locale=language_locale or "en", is_testing=is_testing)

@@ -15,8 +15,14 @@ _RESOURCE = Path(__file__).parent / "libs"
 
 
 class TrackBall(Element, component="trackBall.js"):
-    def __init__(self, language_locale: _T_language_locale = "en") -> None:
+    def __init__(
+        self,
+        language_locale: _T_language_locale = "en",
+        is_testing=False,
+    ) -> None:
         super().__init__()
+
+        self._is_testing = is_testing
 
         self.add_resource(_RESOURCE)
         self._current_target_id: Optional[int] = None
@@ -40,10 +46,10 @@ class TrackBall(Element, component="trackBall.js"):
         self._register_jump_source_code()
         self._register_apply_command_event()
         self._register_classes_update_event()
-
         self._register_init_event()
 
         self._send_message_track_record()
+        self._send_message_testing(is_testing=self._is_testing)
 
     def _register_init_event(self):
         def on_init():
@@ -157,7 +163,13 @@ class TrackBall(Element, component="trackBall.js"):
     def _register_apply_command_event(self):
         def on_apply_command(e):
             args = e.args
-            self.record_tracker.apply_records()
+
+            if self._is_testing:
+                self._send_message_testing(
+                    content=self.record_tracker.get_testing_content()
+                )
+            else:
+                self.record_tracker.apply_records()
 
         self.on("applyCommand", on_apply_command)
 
@@ -211,6 +223,16 @@ class TrackBall(Element, component="trackBall.js"):
             "hasChanged": self.record_tracker.has_changes(),
         }
         self._send_message({"trackRecord": info})
+
+    def _send_message_testing(
+        self, is_testing: Optional[bool] = None, content: Optional[str] = None
+    ):
+        info = {}
+        if is_testing is not None:
+            info["isTesting"] = is_testing
+        if content is not None:
+            info["content"] = content
+        self._send_message({"testing": info})
 
     @staticmethod
     def has_in_client():

@@ -7,7 +7,7 @@ from .utils import PageActions
 def test_element_classes(browser: BrowserManager, page_path: str):
     @ui.page(page_path)
     def _():
-        inject_layout_tool(language_locale="en")
+        inject_layout_tool(language_locale="en", is_testing=True)
         ui.label("test")
 
     page = browser.open(page_path)

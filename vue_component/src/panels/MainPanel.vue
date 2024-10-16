@@ -10,6 +10,8 @@ import { bindSelectTarget } from "@/hooks/propsMapping";
 import { selectedTarget } from "@/hooks/targetElementContext";
 import Code from "@/panels/Code/Code.vue";
 import { t } from "@/hooks/language";
+import { isTesting } from "@/hooks/testingContent";
+import TestingContent from "./TestingContent.vue";
 
 bindSelectTarget(selectedTarget);
 
@@ -47,9 +49,15 @@ const elementTreeModel = useElementTree();
         class="x-panel-nicegui"
         :disabled="!showPanels"
       >
-        <Code> </Code>
+        <Code></Code>
       </a-tab-pane>
       <a-tab-pane key="cusStyle" :title="t('nt.mainPanel.cusStyle')">
+      </a-tab-pane>
+
+      <a-tab-pane key="testing" title="testing" v-if="isTesting">
+        <AScrollbar style="max-height: 500px; overflow: auto">
+          <TestingContent></TestingContent>
+        </AScrollbar>
       </a-tab-pane>
     </a-tabs>
   </div>
