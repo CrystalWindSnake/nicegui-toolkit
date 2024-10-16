@@ -4,6 +4,7 @@ import { useMouse, useWindowSize } from "@vueuse/core";
 import * as hookUtils from "@/hooks/utils";
 import * as targetElementContext from "@/hooks/targetElementContext";
 import * as recordTracker from "@/hooks/recordTracker";
+import * as testingContent from "@/hooks/testingContent";
 
 export function useTypeNameTag(
   config: TSelectorConfig,
@@ -121,6 +122,7 @@ export function getComponentExpose(
     selectTarget?: { id: number };
     serverResetCommand?: { propertyName: string };
     trackRecord?: { hasChanged: boolean };
+    testing?: { isTesting?: boolean; content?: string };
   }) {
     if (message.selectTarget) {
       onSelectTarget(message.selectTarget.id);
@@ -132,6 +134,10 @@ export function getComponentExpose(
 
     if (message.trackRecord) {
       onTrackRecord(message.trackRecord);
+    }
+
+    if (message.testing) {
+      onTesting(message.testing);
     }
   }
 
@@ -153,6 +159,16 @@ export function getComponentExpose(
 
   function onTrackRecord(info: { hasChanged: boolean }) {
     recordTracker.setHasChanged(info.hasChanged);
+  }
+
+  function onTesting(info: { isTesting?: boolean; content?: string }) {
+    if (info.isTesting !== undefined) {
+      testingContent.isTesting.value = info.isTesting;
+    }
+
+    if (info.content !== undefined) {
+      testingContent.content.value = info.content;
+    }
   }
 
   return { queryStyle, sendMessage };

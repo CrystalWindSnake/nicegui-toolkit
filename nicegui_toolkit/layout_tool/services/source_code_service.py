@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Literal, Optional
 import subprocess
 from nicegui.element import Element
 from dataclasses import dataclass
@@ -144,6 +144,41 @@ def apply_classes_code(element: Element, classes: List[str]):
         )
 
 
+def create_file_code(commit: Commit):
+    return "".join(_Helper.replace_code_with_commit(commit))
+
+
+@dataclass
+class Action:
+    start_lineno: int
+    end_lineno: int
+    start_col: int
+    end_col: int
+    type: Literal["replace", "add"]
+    code: str
+
+    def to_testing_str(self):
+        return f"{self.type} sr:{self.start_lineno} er:{self.end_lineno} sc:{self.start_col} ec:{self.end_col} {self.code}"
+
+
+@dataclass
+class Commit:
+    file: Path
+    actions: List[Action]
+
+    def get_actions_sorted(self):
+        """Sort by rows from smallest to largest and columns from largest to smallest"""
+        return sorted(self.actions, key=lambda x: (x.start_lineno, -x.start_col))
+
+    def to_testing_str(self):
+        return "\n".join(
+            [
+                f"\t{self.file.name}",
+                *[f"\t\t{action.to_testing_str()}" for action in self.actions],
+            ]
+        )
+
+
 class _Helper:
     @staticmethod
     def replace_code(
@@ -177,10 +212,43 @@ class _Helper:
             else:
                 new_lines.append(line)
 
-        with open(file, "w", encoding="utf-8") as f:
-            f.writelines(new_lines)
+        return new_lines
 
-        print(f"Code replaced in {file}")
+        # with open(file, "w", encoding="utf-8") as f:
+        #     f.writelines(new_lines)
+
+        # print(f"Code replaced in {file}")
+
+    @staticmethod
+    def replace_code_with_commit(commit: Commit):
+        file = commit.file
+        actions = commit.get_actions_sorted()
+
+        with open(file, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        for action in actions:
+            current_line = lines[action.start_lineno - 1]
+            new_line = None
+
+            if action.type == "add":
+                new_line = (
+                    current_line[: action.end_col + 1]
+                    + action.code
+                    + current_line[action.end_col + 1 + len(action.code) :]
+                )
+            elif action.type == "replace":
+                new_line = (
+                    current_line[: action.start_col]
+                    + action.code
+                    + current_line[action.end_col :]
+                )
+            else:
+                raise ValueError(f"Unknown action type: {action.type}")
+
+            lines[action.start_lineno - 1] = new_line
+
+        return lines
 
     @staticmethod
     def create_method_call(caller_info: LazyCallerInfo, method_name: str, code: str):
@@ -202,13 +270,54 @@ class _Helper:
             else:
                 new_lines.append(line)
 
-        with open(file, "w", encoding="utf-8") as f:
-            f.writelines(new_lines)
+        return new_lines
+
+        # with open(file, "w", encoding="utf-8") as f:
+        #     f.writelines(new_lines)
+
+    @staticmethod
+    def create_method_call_with_commit(commit: Commit, method_name: str):
+        file = commit.file
+        actions = commit.get_actions_sorted()
+
+        with open(file, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+
+        new_lines = []
+        for i, line in enumerate(lines):
+            for action in actions:
+                if i >= action.start_lineno - 1 and i <= action.end_lineno - 1:
+                    if action.type == "replace":
+                        if i == action.start_lineno - 1:
+                            new_lines.append(
+                                line[: action.start_col]
+                                + f".{method_name}({action.code})"
+                            )
+                        elif i == action.end_lineno - 1:
+                            new_lines.append(
+                                f".{method_name}({action.code})"
+                                + line[action.end_col :]
+                            )
+                        else:
+                            new_lines.append(f".{method_name}({action.code})")
+                    elif action.type == "add":
+                        if i == action.start_lineno - 1:
+                            new_lines.append(
+                                line[: action.start_col]
+                                + f".{method_name}({action.code})"
+                                + line[action.start_col :]
+                            )
+                        else:
+                            new_lines.append(line)
+                    else:
+                        raise ValueError(f"Unknown action type: {action.type}")
+            else:
+                new_lines.append(line)
 
     @staticmethod
     def create_style_method_call(caller_info: LazyCallerInfo, style_code: str):
-        _Helper.create_method_call(caller_info, "style", style_code)
+        return _Helper.create_method_call(caller_info, "style", style_code)
 
     @staticmethod
     def create_classes_method_call(caller_info: LazyCallerInfo, classes_code: str):
-        _Helper.create_method_call(caller_info, "classes", classes_code)
+        return _Helper.create_method_call(caller_info, "classes", classes_code)

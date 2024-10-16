@@ -2,11 +2,15 @@ from pathlib import Path
 from playwright.sync_api import Page, expect
 import re
 
-DATA_ROOT = Path("__tests/data")
+DATA_ROOT = Path("__tests/code_gen_exps")
 
 
 def get_data_file(file: str):
     return DATA_ROOT / file
+
+
+def get_code_gen_exp_str(file: str):
+    return get_data_file(file).read_text(encoding="utf-8")
 
 
 class PageActions:
@@ -41,3 +45,13 @@ class PageActions:
         expect(self.pw_page.get_by_text(get_by_text, exact=True)).to_have_class(
             re.compile(f"^{class_str}")
         )
+
+    def click_apply_command_and_confirm(self):
+        self.pw_page.locator(".nt-apply-command").first.click()
+        self.pw_page.get_by_role("button", name="Apply").click()
+
+    def click_options_button(self, text: str, nth_button_box, nth_button: int):
+        box = self.pw_page.locator(".grid", has_text=text)
+        box.locator("css = >*").nth(nth_button_box).locator("button").nth(
+            nth_button
+        ).click()
