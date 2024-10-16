@@ -2,42 +2,43 @@
 
 <div align="center">
 
-English| [简体中文](./README.zh-CN.md)
+简体中文| [English](./README.md)
 
 </div>
 
-toolkit for [NiceGUI](https://github.com/zauberzeug/nicegui)
+[NiceGUI](https://github.com/zauberzeug/nicegui) 工具集，提供布局开发工具、代码生成工具等。
 
-## 📦 Install
+
+## 📦 安装
 
 ```
 pip install niceguiToolkit -U
 ```
 
-## layout development tool
+## 布局开发工具
 
-Visual Style Settings
-
+所见即所得的布局工具
 ![layout development tool](./asset/layout_dev_tool.gif)
 
-Code Generation
+生成样式代码到源文件
 ![code generation](./asset/code_gen.gif)
 
 
-- [x] Jump to source code
-- [x] Visual layout style settings
-- [x] Generate code to source files
-- [ ] generate props settings for each component
-- [ ] Support for tailwindcss
-- [ ] Custom settings
+
+- [x] 跳转到源码
+- [x] 可视化布局设置
+- [x] 生成源码文件代码
+- [ ] 为每个组件生成props设置
+- [ ] 支持 tailwindcss
+- [ ] 自定义设置
 
 
-In your program's entry file, call the `inject_layout_tool` method
+在程序入口文件中调用 `inject_layout_tool` 方法
 ```python
 from nicegui import ui
 from nicegui_toolkit import inject_layout_tool
 
-# make sure to call this method before creating any UI components
+# 确保在创建任何 ui 组件之前调用
 inject_layout_tool()
 
 
@@ -55,7 +56,7 @@ ui.run()
 
 ```
 
-If you are using PyCharm:
+如果您使用 PyCharm:
 ```python
 from nicegui import ui
 from nicegui_toolkit import inject_layout_tool
