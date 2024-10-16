@@ -142,6 +142,9 @@ class _Helper:
             else:
                 raise ValueError(f"Unknown action type: {action.type}")
 
+            if not new_line.endswith("\n"):
+                new_line += "\n"
+
             lines[action.start_lineno - 1] = new_line
             _Helper.try_remove_redundant_lines(lines, action)
 
