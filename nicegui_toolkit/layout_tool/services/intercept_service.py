@@ -124,7 +124,7 @@ class StyleInjector:
             return
         info = get_lazy_caller_info(frame)
         source_code_service.save_style_info(self.element, info)
-        return self.element._classes(*args, **kws)
+        return self.element._style(*args, **kws)
 
 
 class ClassesInjector(UserList):
