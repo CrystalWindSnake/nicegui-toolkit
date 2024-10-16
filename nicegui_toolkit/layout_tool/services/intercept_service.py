@@ -131,7 +131,7 @@ class ClassesInjector(UserList):
     def __init__(
         self, element: ng.ui.element, org_classes_property, context: HookerContext
     ):
-        super().__init__(org_classes_property.__get__(element, element.__class__))
+        super().__init__(self.element._classes)
         self.org_classes_property = org_classes_property
         self.context = context
         self.element = element
