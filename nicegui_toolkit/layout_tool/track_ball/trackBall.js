@@ -12468,11 +12468,13 @@ const Lr = /* @__PURE__ */ et(Vh, [["render", Dh]]), Ah = /* @__PURE__ */ I({
       class: "text-lg mb-2 text-gray-400"
     }, "classes", -1)), f(Lr, null, {
       default: Z(() => [A("div", Rh, [($(!0), V(xe, null, St(t.value, (i, s) => ($(), X(jh, {
+        key: i + s,
         tagKey: s,
         value: i,
         onValueChange: a[0] || (a[0] = (u) => n(u.key, u.oldValue, u.newValue)),
         onRemove: a[1] || (a[1] = (u) => l(u.key))
-      }, null, 8, ["tagKey", "value"]))), 256)), f(Kh, {
+      }, null, 8, ["tagKey", "value"]))), 128)), f(Kh, {
+        class: "nt-classes-add-tag",
         onAdd: a[2] || (a[2] = (i) => o(i.value))
       })])]),
       _: 1

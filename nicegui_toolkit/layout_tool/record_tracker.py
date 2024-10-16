@@ -127,10 +127,14 @@ class _Helper:
                 self.target = ng_vars.context.client.elements.get(self.element_id, None)
                 assert self.target is not None
                 self.style_info = source_code_service.get_style_info(self.target)
+                self.classes_info = source_code_service.get_classes_info(self.target)
                 self.caller_info = source_code_service.get_source_code_info(self.target)
 
             def has_style_apply(self):
                 return len(self.record.style_commands) > 0
+
+            def has_classes_apply(self):
+                return self.record.classes_command is not None
 
             def get_style_code(self):
                 assert self.target is not None
@@ -139,34 +143,68 @@ class _Helper:
                 )
                 style_code = source_code_service.create_style_code(style_data)
 
-                if self.apply_type() == "add":
+                if self.style_apply_type() == "add":
                     return f'.style("{style_code}")'
                 else:
                     return f'"{style_code}"'
 
-            def apply_type(self):
+            def get_classes_code(self):
+                assert self.record.classes_command is not None
+
+                classes_code = " ".join(self.record.classes_command.classes)
+                if self.classes_apply_type() == "add":
+                    return f'.classes("{classes_code}")'
+                else:
+                    return f'"{classes_code}"'
+
+            def style_apply_type(self):
                 if self.style_info is not None:
                     return "replace"
                 return "add"
 
-            def get_start_lineno(self):
+            def classes_apply_type(self):
+                if self.classes_info is not None:
+                    return "replace"
+                return "add"
+
+            def get_style_start_lineno(self):
                 if self.style_info is not None:
                     return self.style_info.lineno
                 return self.caller_info.lineno
 
-            def get_end_lineno(self):
+            def get_style_end_lineno(self):
                 if self.style_info is not None:
                     return self.style_info.end_lineno
                 return self.caller_info.end_lineno
 
-            def get_start_col(self):
+            def get_style_start_col(self):
                 if self.style_info is not None:
                     return self.style_info.start_col
                 return self.caller_info.start_col
 
-            def get_end_col(self):
+            def get_style_end_col(self):
                 if self.style_info is not None:
                     return self.style_info.end_col
+                return self.caller_info.end_col
+
+            def get_classes_start_lineno(self):
+                if self.classes_info is not None:
+                    return self.classes_info.caller_info.lineno
+                return self.caller_info.lineno
+
+            def get_classes_end_lineno(self):
+                if self.classes_info is not None:
+                    return self.classes_info.caller_info.end_lineno
+                return self.caller_info.end_lineno
+
+            def get_classes_start_col(self):
+                if self.classes_info is not None:
+                    return self.classes_info.caller_info.start_col
+                return self.caller_info.start_col
+
+            def get_classes_end_col(self):
+                if self.classes_info is not None:
+                    return self.classes_info.caller_info.end_col
                 return self.caller_info.end_col
 
         models = [
@@ -184,12 +222,24 @@ class _Helper:
                 if model.has_style_apply():
                     actions.append(
                         source_code_service.Action(
-                            model.get_start_lineno(),
-                            model.get_end_lineno(),
-                            model.get_start_col(),
-                            model.get_end_col(),
-                            model.apply_type(),
+                            model.get_style_start_lineno(),
+                            model.get_style_end_lineno(),
+                            model.get_style_start_col(),
+                            model.get_style_end_col(),
+                            model.style_apply_type(),
                             code=model.get_style_code(),
+                        )
+                    )
+
+                if model.has_classes_apply():
+                    actions.append(
+                        source_code_service.Action(
+                            model.get_classes_start_lineno(),
+                            model.get_classes_end_lineno(),
+                            model.get_classes_start_col(),
+                            model.get_classes_end_col(),
+                            model.classes_apply_type(),
+                            code=model.get_classes_code(),
                         )
                     )
 

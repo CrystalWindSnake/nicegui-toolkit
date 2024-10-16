@@ -55,3 +55,8 @@ class PageActions:
         box.locator("css = >*").nth(nth_button_box).locator("button").nth(
             nth_button
         ).click()
+
+    def add_new_classes_and_confirm(self, new_classes: str):
+        self.click_by_class("nt-classes-add-tag")
+        self.pw_page.locator(".nt-classes-add-tag input").type(new_classes)
+        self.pw_page.keyboard.press("Enter")

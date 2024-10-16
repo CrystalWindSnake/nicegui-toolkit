@@ -62,10 +62,7 @@ def save_style_info(element: Element, caller_info: LazyCallerInfo):
     if _STYLE_INFO_FLAG in element.__dict__:
         return
 
-    sourc_code_info = get_source_code_info(element)
-
-    if sourc_code_info.lineno == caller_info.lineno:
-        element.__dict__[_STYLE_INFO_FLAG] = caller_info
+    element.__dict__[_STYLE_INFO_FLAG] = caller_info
 
 
 def get_style_info(element: Element) -> Optional[LazyCallerInfo]:
@@ -84,10 +81,7 @@ def save_classes_info(
     if _CLASSES_INFO_FLAG in element.__dict__:
         return
 
-    sourc_code_info = get_source_code_info(element)
-
-    if sourc_code_info.lineno == caller_info.lineno:
-        element.__dict__[_CLASSES_INFO_FLAG] = ClassesInfo(add_classes_str, caller_info)
+    element.__dict__[_CLASSES_INFO_FLAG] = ClassesInfo(add_classes_str, caller_info)
 
 
 def get_classes_info(element: Element) -> Optional[ClassesInfo]:

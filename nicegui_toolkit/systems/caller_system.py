@@ -49,6 +49,7 @@ def _create_caller_info(
 
     (
         method_name,
+        fixed_lineno,
         start_col,
         end_col,
     ) = _utils.get_token_position_by_frame_position(code_lines, tokens, frame_position)
@@ -56,7 +57,7 @@ def _create_caller_info(
     return CallerInfo(
         filename,
         method_name,
-        frame_position.lineno,
+        fixed_lineno,
         start_col,
         frame_position.end_lineno,
         end_col,
@@ -214,8 +215,13 @@ class _utils:
                     left_parenthesis is not None and target_idx is not None
                 ), "Cannot find the left parenthesis"
 
+                method_token = tokens[target_idx - 1]
+                method_name = method_token.string
+                method_line_no = method_token.end[0] + frame_position.lineno - 1
+
                 return (
-                    tokens[target_idx - 1].string,
+                    method_name,
+                    method_line_no,
                     left_parenthesis.start[1]
                     + 1,  # add 1 for method call like `.style(`
                     token.end[1] - 1,
