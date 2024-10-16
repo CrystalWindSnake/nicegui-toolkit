@@ -3,6 +3,7 @@ from typing import Dict, Literal, List, Optional
 import nicegui as ng_vars
 from nicegui_toolkit.layout_tool.services import source_code_service
 from collections import defaultdict
+import nicegui_toolkit.systems.file_system as file_system
 
 TRecordType = Literal["props", "style", "class"]
 _TNG_ELEMENT_ID = int
@@ -68,16 +69,10 @@ class RecordTracker:
         record.classes_command.classes = classes
 
     def apply_records(self):
-        for element_id, record in self.records.items():
-            target = ng_vars.context.client.elements.get(element_id, None)
-            if target is not None:
-                style_data = _Helper.create_style_data(target, record.style_commands)
-                source_code_service.apply_style_code(target, style_data)
-
-                if record.classes_command is not None:
-                    source_code_service.apply_classes_code(
-                        target, record.classes_command.classes
-                    )
+        commits = _Helper.generate_commits(self)
+        for commit in commits:
+            code = source_code_service.create_file_code(commit)
+            file_system.str_to_file(commit.file, code)
 
     def remove_style(self, ng_element_id: _TNG_ELEMENT_ID, property_name: str):
         record = self.records[ng_element_id]
@@ -200,66 +195,3 @@ class _Helper:
 
             commit = source_code_service.Commit(filename, actions)
             yield commit
-
-    @staticmethod
-    def create_style_code_for_testing(tracker: RecordTracker) -> str:
-        from dataclasses import dataclass
-        from itertools import groupby
-
-        @dataclass
-        class Model:
-            element_id: int
-            record: Record
-
-            def __post_init__(self):
-                self.target = ng_vars.context.client.elements.get(self.element_id, None)
-                assert self.target is not None
-                self.style_info = source_code_service.get_style_info(self.target)
-                self.caller_info = source_code_service.get_source_code_info(self.target)
-
-            def get_style_code(self):
-                assert self.target is not None
-                style_data = _Helper.create_style_data(
-                    self.target, self.record.style_commands
-                )
-                return source_code_service.create_style_code(style_data)
-
-            def apply_type(self):
-                if self.style_info is not None:
-                    return "replace"
-                return "add"
-
-            def get_lineno(self):
-                if self.style_info is not None:
-                    return self.style_info.lineno
-                return self.caller_info.lineno
-
-            def get_start_col(self):
-                if self.style_info is not None:
-                    return self.style_info.start_col
-                return self.caller_info.start_col
-
-        models = [
-            Model(element_id, record) for element_id, record in tracker.records.items()
-        ]
-
-        models_sorted = groupby(
-            sorted(models, key=lambda x: x.caller_info.filename),
-            lambda x: x.caller_info.filename,
-        )
-
-        lines = []
-
-        for filename, models_in_file in models_sorted:
-            lines.append(filename.name)
-            # 按文件行号排序
-            models_in_file_sorted = sorted(
-                models_in_file,
-                key=lambda x: (x.get_lineno(), x.get_start_col()),
-            )
-            for model in models_in_file_sorted:
-                lines.append(
-                    f"\t type:{model.apply_type()} r:{model.get_lineno()} col:{model.get_start_col()} code:{model.get_style_code()}"
-                )
-
-        return "\n".join(lines)
