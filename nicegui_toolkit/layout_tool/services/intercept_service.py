@@ -148,6 +148,30 @@ class ClassesInjector(UserList):
 
         return self.element._classes(add, *args, **kws)
 
+    def append(self, item) -> None:
+        super().append(item)
+        self.element._classes.append(item)
+
+    def extend(self, items) -> None:
+        super().extend(items)
+        self.element._classes.extend(items)
+
+    def insert(self, index, item) -> None:
+        super().insert(index, item)
+        self.element._classes.insert(index, item)
+
+    def remove(self, item) -> None:
+        super().remove(item)
+        self.element._classes.remove(item)
+
+    def pop(self, index=-1) -> None:
+        super().pop(index)
+        self.element._classes.pop(index)
+
+    def clear(self) -> None:
+        super().clear()
+        self.element._classes.clear()
+
 
 class _Helper:
     @staticmethod
