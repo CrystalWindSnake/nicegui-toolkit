@@ -1,6 +1,5 @@
 from nicegui import ui
 from .screen import BrowserManager
-from nicegui_toolkit import inject_layout_tool
 from .utils import PageActions
 from playwright.sync_api import expect
 
@@ -23,7 +22,6 @@ def test_element_classes(browser: BrowserManager, page_path: str):
 def test_element_hidden(browser: BrowserManager, page_path: str):
     @ui.page(page_path)
     def _():
-        inject_layout_tool(language_locale="en", is_testing=True)
         ui.label("hello").set_visibility(False)
 
     page = browser.open(page_path)
