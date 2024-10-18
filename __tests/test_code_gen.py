@@ -1,5 +1,4 @@
 from nicegui import ui
-from nicegui_toolkit import inject_layout_tool
 from .screen import BrowserManager
 from .utils import PageActions, get_code_gen_exp_str
 from playwright.sync_api import expect
@@ -22,7 +21,6 @@ class TestStyleCodeGen:
     def test_base(self, browser: BrowserManager, page_path: str):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             style_code_base.create_view()
 
         page = browser.open(page_path)
@@ -47,7 +45,6 @@ class TestStyleCodeGen:
     def test_existing_styles(self, browser: BrowserManager, page_path: str):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             style_code_existing.create_view()
 
         page = browser.open(page_path)
@@ -68,7 +65,6 @@ class TestStyleCodeGen:
     def test_with_style_variable(self, browser: BrowserManager, page_path: str):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             style_code_with_var.create_view()
 
         page = browser.open(page_path)
@@ -88,7 +84,6 @@ class TestStyleCodeGen:
     def test_with_multi_lines(self, browser: BrowserManager, page_path: str):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             style_code_with_multi_lines.create_view()
 
         page = browser.open(page_path)
@@ -110,7 +105,6 @@ class TestClassesCodeGen:
     def test_base(self, browser: BrowserManager, page_path: str):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             classes_code_base.create_view()
 
         page = browser.open(page_path)
@@ -133,7 +127,6 @@ class TestClassesCodeGen:
     def test_existing_classes(self, browser: BrowserManager, page_path: str):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             classes_code_existing.create_view()
 
         page = browser.open(page_path)
@@ -158,7 +151,6 @@ class TestClassesCodeGen:
     ):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             classes_code_multi_calls_same_element.create_view()
 
         page = browser.open(page_path)
@@ -181,7 +173,6 @@ class TestClassesCodeGen:
     def test_with_multi_lines(self, browser: BrowserManager, page_path: str):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             classes_code_with_multi_lines.create_view()
 
         page = browser.open(page_path)
@@ -204,7 +195,6 @@ class TestClassesCodeGen:
     def test_base_multiple_element_calls(self, browser: BrowserManager, page_path: str):
         @ui.page(page_path)
         def _():
-            inject_layout_tool(language_locale="en", is_testing=True)
             classes_code_multi_element_calls.create_view()
 
         page = browser.open(page_path)

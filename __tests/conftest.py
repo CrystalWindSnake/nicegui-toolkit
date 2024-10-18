@@ -6,6 +6,7 @@ from nicegui.page import page as ui_page
 from nicegui import Client, binding, app
 from nicegui.elements import plotly, pyplot
 import os
+from nicegui_toolkit import inject_layout_tool
 
 HEADLESS = "GITHUB_ACTION" in os.environ
 
@@ -32,6 +33,12 @@ def reset_globals(request: pytest.FixtureRequest):
     Client.auto_index_client = Client(ui_page("/"), request=None).__enter__()  # pylint: disable=unnecessary-dunder-call
     app.get("/")(Client.auto_index_client.build_response)
     binding.reset()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_session():
+    inject_layout_tool(language_locale="en", is_testing=True)
+    yield
 
 
 @pytest.fixture(scope="session")
