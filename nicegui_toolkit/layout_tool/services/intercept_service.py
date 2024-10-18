@@ -83,7 +83,7 @@ class Hooker:
         def new_style(self):
             if source_code_service.has_source_code_info(self):
                 return StyleInjector(self, org_style, context)
-            return org_style.__get__(self, class_obj)
+            return self._style
 
         class_obj.style = property(new_style)  # type: ignore
 
@@ -100,7 +100,7 @@ class Hooker:
         def new_classes(self):
             if source_code_service.has_source_code_info(self):
                 return ClassesInjector(self, org_classes, context)
-            return org_classes.__get__(self, class_obj)
+            return self._classes
 
         class_obj.classes = property(new_classes)  # type: ignore
 
