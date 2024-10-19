@@ -37,27 +37,25 @@ const handleEditWithEnter = () => {
 </script>
 
 <template>
-  <div class="w-fit relative">
+  <div class="w-fit relative flex items-center">
     <a-input
       v-show="showInput"
       ref="inputRef"
-      class="w-[120%] absolute top-0 left-0 h-full"
+      class="w-[10ch] absolute top-0 left-0 h-full"
       size="mini"
       v-model.trim="inputVal"
       @keyup.enter="handleEditWithEnter"
       @blur="handleEdit"
     />
-    <a-tag
-      class="cursor-pointer"
+    <div
+      class="cursor-pointer bg-gray-200 hover:bg-gray-300 rounded-full p-1"
       :style="{
         visibility: showInput ? 'hidden' : 'visible',
       }"
       @click="handleEditMode"
     >
-      <template #icon>
-        <icon-plus />
-      </template>
-    </a-tag>
+      <div class="i-mdi-plus"></div>
+    </div>
   </div>
 </template>
 
