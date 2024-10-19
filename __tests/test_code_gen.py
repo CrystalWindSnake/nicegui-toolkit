@@ -13,6 +13,7 @@ from .code_gen_exps import (
     classes_code_multi_element_calls,
     classes_code_with_multi_lines,
     classes_code_multi_calls_same_element,
+    classes_code_insert_in_middle,
 )
 import pytest
 
@@ -218,4 +219,24 @@ class TestClassesCodeGen:
         actions.click_by_text("testing")
 
         exp_code = get_code_gen_exp_str("classes_code_multi_element_calls_exp.txt")
+        expect(page.locator("css= .nt-testing-content")).to_contain_text(exp_code)
+
+    def test_insert_in_middle(self, browser: BrowserManager, page_path: str):
+        @ui.page(page_path)
+        def _():
+            classes_code_insert_in_middle.create_view()
+
+        page = browser.open(page_path)
+        actions = PageActions(page)
+
+        actions.move_away_panel()
+
+        actions.click_by_text("foo")
+        actions.click_by_text("code")
+        actions.add_new_classes_and_confirm("w-full")
+
+        actions.click_apply_command_and_confirm()
+        actions.click_by_text("testing")
+
+        exp_code = get_code_gen_exp_str("classes_code_insert_in_middle_exp.txt")
         expect(page.locator("css= .nt-testing-content")).to_contain_text(exp_code)
