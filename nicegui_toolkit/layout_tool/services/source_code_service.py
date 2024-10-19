@@ -168,7 +168,7 @@ class _Helper:
             end_line = lines[action.end_lineno - 1]
             end_code = end_line[action.end_col :]
         else:
-            end_code = current_line[action.end_col + 1 + len(action.code) :]
+            end_code = current_line[action.end_col + 1 :]
         return start_code, end_code
 
     @staticmethod
