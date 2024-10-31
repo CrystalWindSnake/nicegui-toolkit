@@ -91,3 +91,37 @@ def test_list_suggesions_for_adding_classes(browser: BrowserManager, page_path: 
     tw_actions.adding_new_class("h-fu")
 
     actions.expect_exists_equal_text("h-full", ignore_case=False)
+
+
+def test_list_suggesions_search_by_word(browser: BrowserManager, page_path: str):
+    @ui.page(page_path)
+    def _():
+        ui.label("Hello World")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+    tw_actions = actions.tailwind_classes()
+
+    actions.click_by_text("Hello World")
+
+    tw_actions.goto_code_panel()
+    tw_actions.adding_new_class("width")
+
+    actions.expect_exists_equal_text("w-0", ignore_case=False)
+
+
+def test_list_suggesions_search_by_zh_word(browser: BrowserManager, page_path: str):
+    @ui.page(page_path)
+    def _():
+        ui.label("Hello World")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+    tw_actions = actions.tailwind_classes()
+
+    actions.click_by_text("Hello World")
+
+    tw_actions.goto_code_panel()
+    tw_actions.adding_new_class("宽度")
+
+    actions.expect_exists_equal_text("w-0", ignore_case=False)
