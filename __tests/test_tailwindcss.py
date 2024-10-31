@@ -1,7 +1,6 @@
 from nicegui import ui
 from .screen import BrowserManager
 from .utils import PageActions
-from playwright.sync_api import expect
 
 
 def test_add_classes(browser: BrowserManager, page_path: str):
