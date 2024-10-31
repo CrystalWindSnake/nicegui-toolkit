@@ -1,0 +1,168 @@
+<script setup lang="ts">
+import { nextTick, ref } from "vue";
+import * as server from "@/shared/server";
+import * as consts from "@/consts";
+import { modifyElementClassList } from "@/hooks/utils";
+import { getSelectedTarget } from "@/hooks/targetElementContext";
+
+import { watchDebounced } from "@vueuse/core";
+import AInput from "@arco-design/web-vue/es/input";
+import ADropdown from "@arco-design/web-vue/es/dropdown";
+
+const props = withDefaults(defineProps<{ clearValueWhenConfirm?: boolean }>(), {
+  clearValueWhenConfirm: true,
+});
+
+const visible = ref(false);
+
+const emits = defineEmits<{
+  (event: "confirm", item: string): void;
+}>();
+
+const promptOptions = ref([] as string[]);
+const optionPanelVisible = ref(false);
+const root = ref<HTMLDivElement>();
+const dropdownRef = ref<HTMLDivElement>();
+const inputRef = ref<InstanceType<typeof AInput>>();
+const inputVal = defineModel("inputVal", { default: "" });
+
+const serverQuery = server.createQuery("twSearch", (result) => {
+  promptOptions.value = result;
+});
+
+watchDebounced(
+  inputVal,
+  (input) => {
+    serverQuery.query({ query: input });
+
+    // if (input !== "w-full") {
+    //   promptOptions.value = ["w-full", "w-1"];
+    // }
+  },
+  { debounce: 600 }
+);
+
+const methods = {
+  show() {
+    visible.value = true;
+    nextTick(() => {
+      inputRef.value?.focus();
+    });
+  },
+  hide() {
+    visible.value = false;
+  },
+};
+
+document.addEventListener(
+  "click",
+  (event: MouseEvent) => {
+    if (!visible.value) {
+      return;
+    }
+
+    const target = event.target as HTMLElement;
+    const isDropdown = dropdownRef.value?.contains(target);
+
+    const isOutside = !root.value?.contains(target) && !isDropdown;
+
+    if (!isOutside) {
+      return;
+    }
+
+    handleEdit(inputVal.value);
+  },
+  {
+    capture: true,
+  }
+);
+
+const handleEdit = (value?: string) => {
+  if (!value) {
+    return;
+  }
+  emits("confirm", value);
+
+  if (props.clearValueWhenConfirm) {
+    inputVal.value = "";
+    tempClassStore = "";
+  }
+
+  methods.hide();
+};
+
+const handleEditWithEnter = () => {
+  handleEdit(inputVal.value);
+};
+
+function handlePromptBoardSelect(item?: string | any) {
+  if (item !== undefined) {
+    inputVal.value = item;
+  }
+
+  optionPanelVisible.value = false;
+  handleEdit(item === undefined ? inputVal.value : item);
+}
+
+function handleFocus() {
+  optionPanelVisible.value = true;
+}
+
+let tempClassStore = inputVal.value;
+
+function handleItemMouseEnter(item: string) {
+  if (tempClassStore && tempClassStore !== item) {
+    modifyElementClassList(getSelectedTarget().value!, {
+      change: { oldClass: tempClassStore, newClass: item },
+    });
+  } else {
+    modifyElementClassList(getSelectedTarget().value!, {
+      add: item,
+    });
+  }
+
+  tempClassStore = item;
+}
+
+defineExpose(methods);
+</script>
+
+<template>
+  <div ref="root">
+    <a-dropdown
+      @select="handlePromptBoardSelect"
+      :popup-visible="optionPanelVisible"
+      position="bottom"
+      auto-fit-position
+      trigger="contextMenu"
+      :hide-on-select="false"
+      :popup-container="consts.popupContainer.trackBallPanel"
+      :style="{
+        zindex: consts.zindex.panel,
+      }"
+    >
+      <a-input
+        ref="inputRef"
+        v-show="visible"
+        class="w-[10ch] absolute top-0 left-0 h-full"
+        size="mini"
+        v-model.trim="inputVal"
+        @keyup.enter="handleEditWithEnter"
+        @focus="handleFocus"
+      />
+
+      <template #content>
+        <div ref="dropdownRef">
+          <a-doption
+            v-for="item in promptOptions"
+            :key="item"
+            @mouseenter="handleItemMouseEnter(item)"
+            >{{ item }}</a-doption
+          >
+        </div>
+      </template>
+    </a-dropdown>
+  </div>
+</template>
+
+<style scoped></style>

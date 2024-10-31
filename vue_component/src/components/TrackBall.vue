@@ -21,6 +21,9 @@ import * as globals from "@/hooks/globals";
 import * as targetElementContext from "@/hooks/targetElementContext";
 import VisTypeName from "./VisTypeName.vue";
 
+import * as AppEmits from "@/shared/emits";
+import * as server from "@/shared/server";
+
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
   currentTargetContext: TTargetContext;
@@ -30,33 +33,8 @@ const props = defineProps<{
 }>();
 
 // emits
-const emit = defineEmits<{
-  (event: "init"): void;
-  (event: "hoverChange", args: { id: number | null }): void;
-  (event: "selectedChange", args: TSelectedChangeEventArgs): void;
-  (
-    event: "setCommand",
-    args: {
-      id: number;
-      commands: TSetCommand[];
-    }
-  ): void;
-  (
-    event: "resetCommand",
-    args: {
-      id: number;
-      commands: TResetCommand[];
-    }
-  ): void;
-  (
-    event: "jumpSourceCode",
-    args: {
-      id: number;
-    }
-  ): void;
-  (event: "applyCommand"): void;
-  (event: "classesUpdate", args: { targetId: number; classes: string[] }): void;
-}>();
+const emit = defineEmits() as AppEmits.TAppEmits;
+AppEmits.init(emit);
 
 function emitSetCommnad(commands: TSetCommand[]) {
   const target = targetElementContext.selectedTarget.value;
@@ -173,9 +151,15 @@ watch(targetElementContext.selectedTarget, (target) => {
 });
 
 // Expose
-defineExpose(
-  getComponentExpose(props.selectorConfig, targetElementContext.selectedTarget)
-);
+defineExpose({
+  ...getComponentExpose(
+    props.selectorConfig,
+    targetElementContext.selectedTarget
+  ),
+  twSearch: (id: number, classes: string[]) => {
+    server.handleServerResponse(id, classes);
+  },
+});
 </script>
 
 <template>
