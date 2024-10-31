@@ -4,9 +4,8 @@ import {
   getSelectedTarget,
 } from "@/hooks/targetElementContext";
 
-import EditableTag from "@/commons/EditableTag.vue";
-import AddableTag from "@/commons/AddableTag.vue";
-import Block from "./Block.vue";
+import EditableTag from "./EditableTag.vue";
+import AddableTag from "./AddableTag.vue";
 import { updateClasses } from "@/hooks/globals";
 import { modifyElementClassList } from "@/hooks/utils";
 import { computed } from "vue";
@@ -44,24 +43,18 @@ function handleAdd(value: string) {
 </script>
 
 <template>
-  <div>
-    <div class="text-lg mb-2 text-gray-400">classes</div>
+  <div class="flex flex-wrap gap-4">
+    <EditableTag
+      v-for="(classVal, index) in classes"
+      :key="classVal + index"
+      :tagKey="index"
+      :value="classVal"
+      @value-change="(e) => handleEdit(e.key as number, e.oldValue, e.newValue)"
+      @remove="(e) => handleRemove(e.key as number)"
+    />
 
-    <Block>
-      <div class="flex flex-wrap gap-4">
-        <EditableTag
-          v-for="(classVal, index) in classes"
-          :key="classVal + index"
-          :tagKey="index"
-          :value="classVal"
-          @value-change="(e) => handleEdit(e.key as number, e.oldValue, e.newValue)"
-          @remove="(e) => handleRemove(e.key as number)"
-        />
-
-        <AddableTag class="nt-classes-add-tag" @add="(e) => handleAdd(e.value)">
-        </AddableTag>
-      </div>
-    </Block>
+    <AddableTag class="nt-classes-add-tag" @add="(e) => handleAdd(e.value)">
+    </AddableTag>
   </div>
 </template>
 

@@ -10,6 +10,7 @@ from nicegui_toolkit.layout_tool.element_tree import get_tree_data
 import nicegui_toolkit.layout_tool.language as language
 from nicegui_toolkit.layout_tool.types import _T_language_locale
 import nicegui_toolkit.systems.caller_system as caller_system
+import nicegui_toolkit.layout_tool.tailwindcss as tailwindcss
 
 _RESOURCE = Path(__file__).parent / "libs"
 
@@ -47,6 +48,7 @@ class TrackBall(Element, component="trackBall.js"):
         self._register_apply_command_event()
         self._register_classes_update_event()
         self._register_init_event()
+        self._register_server_query()
 
         self._send_message_track_record()
         self._send_message_testing(is_testing=self._is_testing)
@@ -56,6 +58,17 @@ class TrackBall(Element, component="trackBall.js"):
             caller_system.clear_cache()
 
         self.on("init", on_init)
+
+    def _register_server_query(self):
+        def on_server_query(e):
+            id = e.args["handlerId"]
+            method = e.args["method"]
+            query_content = e.args["params"]["query"]
+
+            result = tailwindcss.search_by_full_text(query_content)
+            self.run_method(method, id, result)
+
+        self.on("serverQuery", on_server_query)
 
     def _register_setCommand_event(self):
         def on_command(e):

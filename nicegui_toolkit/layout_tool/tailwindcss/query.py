@@ -2,6 +2,7 @@ import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
 from functools import lru_cache
+from typing import List
 
 DB_FILE = Path(__file__).parent / "tailwindcss.db"
 
@@ -11,7 +12,11 @@ def get_db():
     return SQLiteQuery(DB_FILE)
 
 
-def search_by_full_text(input: str):
+def search_by_full_text(input: str) -> List[str]:
+    input = input.strip()
+    if not input:
+        return []
+
     query_item_sql = """
     SELECT record
     FROM item
@@ -32,7 +37,7 @@ def search_by_full_text(input: str):
     ORDER BY dft.rank
     """
 
-    fts_results = get_db().execute_query(search_fts_sql, (input,))
+    fts_results = get_db().execute_query(search_fts_sql, (f'"{input}"',))
     if fts_results:
         return [row[0] for row in fts_results]
 
@@ -59,7 +64,3 @@ class SQLiteQuery:
             else:
                 cursor.execute(query)
             return cursor.fetchall()
-
-
-if __name__ == "__main__":
-    print(search_by_full_text("宽度"))

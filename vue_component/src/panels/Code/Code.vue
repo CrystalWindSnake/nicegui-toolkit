@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useTargetContextDesc } from "./targetContextDesc";
 import TargetContextDesc from "./TargetContextDesc.vue";
-import ClassesList from "./ClassesList.vue";
+
+import ClassesListEditorArea from "@/components/classesList/EditorArea.vue";
+
+// import ClassesList from "./ClassesList.vue";
 // const props = defineProps<{ component: TComponent }>()
 
 const targetContextDescModel = useTargetContextDesc();
@@ -9,7 +12,14 @@ const targetContextDescModel = useTargetContextDesc();
 
 <template>
   <div class="flex flex-col gap-2">
-    <ClassesList></ClassesList>
+    <div>
+      <div class="text-lg mb-2 text-gray-400">classes</div>
+
+      <Block>
+        <ClassesListEditorArea></ClassesListEditorArea>
+      </Block>
+    </div>
+
     <TargetContextDesc :model="targetContextDescModel"></TargetContextDesc>
   </div>
 </template>

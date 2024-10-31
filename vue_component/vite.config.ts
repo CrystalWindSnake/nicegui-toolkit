@@ -47,6 +47,7 @@ export default defineConfig({
   build: {
     // outDir: `dist/${componentName}`,
     cssCodeSplit: false,
+    // sourcemap: "inline",
 
     lib: {
       // Could also be a dictionary or array of multiple entry points
