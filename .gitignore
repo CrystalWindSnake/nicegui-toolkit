@@ -164,3 +164,4 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 **/tailwindcss.db
+nicegui_toolkit/layout_tool/**/trackBall.js
