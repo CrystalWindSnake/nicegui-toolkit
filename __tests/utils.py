@@ -25,6 +25,7 @@ def escape_equal_text(text: str, ignore_case=True):
 class PageActions:
     _APPLY_COMMAND_CLASS = "nt-apply-command"
     _TW_CLASS_ADD_TAG_CLASS = "nt-classes-add-tag"
+    _TW_OPTIONS_PANEL_CLASS = "nt-tw-options-panel"
 
     def __init__(self, page: Page):
         self.pw_page = page
@@ -45,7 +46,7 @@ class PageActions:
         self.click_by_text(first_target_text)
         self.click_by_text("style")
 
-    def click_by_text(self, text: str, delay=600, ignore_case=True):
+    def click_by_text(self, text: str, delay=600, ignore_case=False):
         self.pw_page.get_by_text(escape_equal_text(text, ignore_case)).click(
             delay=delay
         )
@@ -53,18 +54,23 @@ class PageActions:
     def click_by_class(self, class_name: str, delay=600):
         self.pw_page.locator(f"css= .{class_name}").click(delay=delay)
 
-    def expect_exists_equal_text(self, text: str, ignore_case=True):
+    def expect_exists_equal_text(self, text: str, ignore_case=False):
         expect(
             self.pw_page.get_by_text(escape_equal_text(text, ignore_case))
         ).to_be_visible()
 
-    def expect_not_exists_equal_text(self, text: str, ignore_case=True):
+    def expect_not_exists_equal_text(self, text: str, ignore_case=False):
         expect(
             self.pw_page.get_by_text(escape_equal_text(text, ignore_case))
         ).not_to_be_visible()
 
     def expect_contains_class(self, *, get_by_text: str, class_name: str):
         expect(self.pw_page.get_by_text(get_by_text, exact=True)).to_have_class(
+            re.compile(escape_text(class_name))
+        )
+
+    def expect_not_contains_class(self, *, get_by_text: str, class_name: str):
+        expect(self.pw_page.get_by_text(get_by_text, exact=True)).not_to_have_class(
             re.compile(escape_text(class_name))
         )
 
@@ -100,6 +106,12 @@ class PageActions:
         self.pw_page.locator(f".{self._TW_CLASS_ADD_TAG_CLASS} input").type(new_classes)
         self.pw_page.keyboard.press("Enter")
 
+    def hover_by_text(self, text: str):
+        escaped_text = escape_equal_text(text, ignore_case=False)
+        element_locator = self.pw_page.get_by_text(escaped_text)
+        expect(element_locator).to_be_visible()
+        element_locator.hover(position={"x": 10, "y": 10})
+
 
 class TailwindClassesActions:
     def __init__(self, page_actions: PageActions):
@@ -129,3 +141,8 @@ class TailwindClassesActions:
 
     def click_new_class_tag(self):
         self._page_actions.click_by_class(self._page_actions._TW_CLASS_ADD_TAG_CLASS)
+
+    def wait_for_options_panel_hidden(self):
+        self._page.wait_for_selector(
+            f"css= .{self._page_actions._TW_OPTIONS_PANEL_CLASS}", state="hidden"
+        )

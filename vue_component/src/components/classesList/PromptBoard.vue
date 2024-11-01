@@ -15,6 +15,9 @@ const props = withDefaults(defineProps<{ clearValueWhenConfirm?: boolean }>(), {
 
 const visible = ref(false);
 
+// set to true when show
+let isConfirm = false;
+
 const emits = defineEmits<{
   (event: "confirm", item?: string): void;
 }>();
@@ -44,6 +47,7 @@ const methods = {
     nextTick(() => {
       inputRef.value?.focus();
     });
+    isConfirm = false;
   },
   hide() {
     visible.value = false;
@@ -75,6 +79,7 @@ document.addEventListener(
 
 const handleEdit = (value?: string) => {
   emits("confirm", value);
+  isConfirm = true;
 
   if (props.clearValueWhenConfirm) {
     inputVal.value = "";
@@ -104,24 +109,28 @@ function handleFocus() {
 let tempClassStore = inputVal.value;
 
 function handleItemMouseEnter(item: string) {
-  if (tempClassStore && tempClassStore !== item) {
-    modifyElementClassList(getSelectedTarget().value!, {
-      change: { oldClass: tempClassStore, newClass: item },
-    });
-  } else {
-    modifyElementClassList(getSelectedTarget().value!, {
-      add: item,
-    });
-  }
+  modifyElementClassList(getSelectedTarget().value!, {
+    add: item,
+  });
 
   tempClassStore = item;
+}
+
+function handleItemMouseLeave(item: string) {
+  if (isConfirm) {
+    return;
+  }
+
+  modifyElementClassList(getSelectedTarget().value!, {
+    remove: item,
+  });
 }
 
 defineExpose(methods);
 </script>
 
 <template>
-  <div ref="root">
+  <div class="nt-tw-options-panel" ref="root">
     <a-dropdown
       @select="handlePromptBoardSelect"
       :popup-visible="optionPanelVisible"
@@ -150,6 +159,7 @@ defineExpose(methods);
             v-for="item in promptOptions"
             :key="item"
             @mouseenter="handleItemMouseEnter(item)"
+            @mouseleave="handleItemMouseLeave(item)"
             >{{ item }}</a-doption
           >
         </div>
