@@ -21,7 +21,54 @@ def test_add_classes(browser: BrowserManager, page_path: str):
     actions.expect_contains_class(get_by_text="Hello World", class_name="w-full")
 
 
-def test_edit_classes_click_and_quit(browser: BrowserManager, page_path: str):
+def test_add_classes_click_and_quit_with_changes(
+    browser: BrowserManager, page_path: str
+):
+    @ui.page(page_path)
+    def _():
+        ui.label("Hello World")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+    tw_actions = actions.tailwind_classes()
+
+    actions.click_by_text("Hello World")
+
+    tw_actions.goto_code_panel()
+    tw_actions.adding_new_class("w-[50vw]")
+
+    actions.click_by_text("classes")
+
+    actions.expect_exists_equal_text("w-[50vw]", ignore_case=False)
+    actions.expect_contains_class(get_by_text="Hello World", class_name="w-[50vw]")
+
+    actions.expect_apply_command_button_visible()
+
+
+def test_add_classes_click_and_quit_with_no_changes(
+    browser: BrowserManager, page_path: str
+):
+    @ui.page(page_path)
+    def _():
+        ui.label("Hello World")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+    tw_actions = actions.tailwind_classes()
+
+    actions.click_by_text("Hello World")
+
+    tw_actions.goto_code_panel()
+    tw_actions.click_new_class_tag()
+
+    actions.click_by_text("classes")
+
+    actions.expect_apply_command_button_not_visible()
+
+
+def test_edit_classes_click_and_quit_with_no_changes(
+    browser: BrowserManager, page_path: str
+):
     @ui.page(page_path)
     def _():
         ui.label("Hello World").classes("w-full")
@@ -39,6 +86,30 @@ def test_edit_classes_click_and_quit(browser: BrowserManager, page_path: str):
 
     actions.click_by_text("classes")
     actions.expect_exists_equal_text("w-full", ignore_case=False)
+
+    actions.expect_apply_command_button_not_visible()
+
+
+def test_edit_classes_click_and_quit_with_changes(
+    browser: BrowserManager, page_path: str
+):
+    @ui.page(page_path)
+    def _():
+        ui.label("Hello World").classes("w-full")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+    tw_actions = actions.tailwind_classes()
+
+    actions.click_by_text("Hello World")
+
+    tw_actions.goto_code_panel()
+    tw_actions.editing_class("w-full", "w-[50vw]")
+
+    actions.click_by_text("classes")
+    actions.expect_exists_equal_text("w-[50vw]", ignore_case=False)
+
+    actions.expect_apply_command_button_visible()
 
 
 def test_edit_classes(browser: BrowserManager, page_path: str):

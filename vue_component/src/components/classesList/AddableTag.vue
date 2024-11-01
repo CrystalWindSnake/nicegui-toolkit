@@ -22,9 +22,11 @@ const methods = {
   },
 };
 
-function handlePromptBoardSelect(item: string) {
-  emits("add", { value: item });
+function handlePromptBoardSelect(item?: string) {
   methods.hidePromptBoard();
+  if (item) {
+    emits("add", { value: item });
+  }
 }
 </script>
 
