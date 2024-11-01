@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "niceguiToolkit"
 packages = [{include = "nicegui_toolkit"}]
-version = "0.2.4"
+version = "0.3.0"
 description = "toolkit for nicegui"
 authors = ["CrystalWindSnake <568166495@qq.com>"]
 readme = "README.md"
