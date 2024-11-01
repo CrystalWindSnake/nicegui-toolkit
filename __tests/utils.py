@@ -100,6 +100,12 @@ class PageActions:
         self.pw_page.locator(f".{self._TW_CLASS_ADD_TAG_CLASS} input").type(new_classes)
         self.pw_page.keyboard.press("Enter")
 
+    def hover_by_text(self, text: str):
+        escaped_text = escape_equal_text(text, ignore_case=True)
+        element_locator = self.pw_page.get_by_text(escaped_text)
+        expect(element_locator).to_be_visible()
+        element_locator.hover(position={"x": 10, "y": 10})
+
 
 class TailwindClassesActions:
     def __init__(self, page_actions: PageActions):

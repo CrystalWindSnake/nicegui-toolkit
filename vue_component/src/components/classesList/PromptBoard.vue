@@ -104,17 +104,17 @@ function handleFocus() {
 let tempClassStore = inputVal.value;
 
 function handleItemMouseEnter(item: string) {
-  if (tempClassStore && tempClassStore !== item) {
-    modifyElementClassList(getSelectedTarget().value!, {
-      change: { oldClass: tempClassStore, newClass: item },
-    });
-  } else {
-    modifyElementClassList(getSelectedTarget().value!, {
-      add: item,
-    });
-  }
+  modifyElementClassList(getSelectedTarget().value!, {
+    add: item,
+  });
 
   tempClassStore = item;
+}
+
+function handleItemMouseLeave(item: string) {
+  modifyElementClassList(getSelectedTarget().value!, {
+    remove: item,
+  });
 }
 
 defineExpose(methods);
@@ -150,6 +150,7 @@ defineExpose(methods);
             v-for="item in promptOptions"
             :key="item"
             @mouseenter="handleItemMouseEnter(item)"
+            @mouseleave="handleItemMouseLeave(item)"
             >{{ item }}</a-doption
           >
         </div>

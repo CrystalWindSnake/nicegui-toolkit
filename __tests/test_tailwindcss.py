@@ -196,3 +196,27 @@ def test_list_suggesions_search_by_zh_word(browser: BrowserManager, page_path: s
     tw_actions.adding_new_class("宽度")
 
     actions.expect_exists_equal_text("w-0", ignore_case=False)
+
+
+def test_list_suggesions_for_hover_leave(browser: BrowserManager, page_path: str):
+    @ui.page(page_path)
+    def _():
+        ui.label("Hello World")
+
+    page = browser.open(page_path)
+    actions = PageActions(page)
+    tw_actions = actions.tailwind_classes()
+
+    actions.click_by_text("Hello World")
+
+    tw_actions.goto_code_panel()
+    tw_actions.adding_new_class("w-")
+
+    actions.expect_exists_equal_text("w-0", ignore_case=False)
+    actions.hover_by_text("w-0")
+
+    page.mouse.click(500, 500)
+
+    actions.expect_not_exists_equal_text("w-0", ignore_case=False)
+    actions.expect_exists_equal_text("w-", ignore_case=False)
+    actions.expect_contains_class(get_by_text="Hello World", class_name="w-")
