@@ -23,13 +23,17 @@ pip install niceguiToolkit -U
 生成样式代码到源文件
 ![code generation](./asset/code_gen.gif)
 
-
+Tailwindcss 自动补全支持(支持中文搜索)
+![tailwindcss auto completion support](./asset/tailwindcss_auto_completion.gif)
 
 - [x] 跳转到源码
 - [x] 可视化布局设置
 - [x] 生成源码文件代码
+- [x] 支持 tailwindcss
+  - [x] 自动补全提示
+  - [x] 全文搜索(中英文)
+  - [x] 可预览，在候选时，界面实时显示效果
 - [ ] 为每个组件生成props设置
-- [ ] 支持 tailwindcss
 - [ ] 自定义设置
 
 

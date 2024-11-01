@@ -23,12 +23,17 @@ Visual Style Settings
 Code Generation
 ![code generation](./asset/code_gen.gif)
 
+Tailwindcss auto completion support
+![tailwindcss auto completion support](./asset/tailwindcss_auto_completion.gif)
 
 - [x] Jump to source code
 - [x] Visual layout style settings
 - [x] Generate code to source files
+- [x] Support for tailwindcss
+  - [x] Auto-completion suggestions
+  - [x] Full-text search
+  - [x] Preview available; the interface displays the real-time effect when candidates are selected
 - [ ] generate props settings for each component
-- [ ] Support for tailwindcss
 - [ ] Custom settings
 
 
