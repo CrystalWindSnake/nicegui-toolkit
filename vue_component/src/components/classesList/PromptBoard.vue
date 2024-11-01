@@ -15,6 +15,9 @@ const props = withDefaults(defineProps<{ clearValueWhenConfirm?: boolean }>(), {
 
 const visible = ref(false);
 
+// set to true when show
+let isConfirm = false;
+
 const emits = defineEmits<{
   (event: "confirm", item?: string): void;
 }>();
@@ -44,6 +47,7 @@ const methods = {
     nextTick(() => {
       inputRef.value?.focus();
     });
+    isConfirm = false;
   },
   hide() {
     visible.value = false;
@@ -75,6 +79,7 @@ document.addEventListener(
 
 const handleEdit = (value?: string) => {
   emits("confirm", value);
+  isConfirm = true;
 
   if (props.clearValueWhenConfirm) {
     inputVal.value = "";
@@ -112,6 +117,10 @@ function handleItemMouseEnter(item: string) {
 }
 
 function handleItemMouseLeave(item: string) {
+  if (isConfirm) {
+    return;
+  }
+
   modifyElementClassList(getSelectedTarget().value!, {
     remove: item,
   });
@@ -121,7 +130,7 @@ defineExpose(methods);
 </script>
 
 <template>
-  <div ref="root">
+  <div class="nt-tw-options-panel" ref="root">
     <a-dropdown
       @select="handlePromptBoardSelect"
       :popup-visible="optionPanelVisible"
