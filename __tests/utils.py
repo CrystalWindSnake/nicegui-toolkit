@@ -23,6 +23,9 @@ def escape_equal_text(text: str, ignore_case=True):
 
 
 class PageActions:
+    _APPLY_COMMAND_CLASS = "nt-apply-command"
+    _TW_CLASS_ADD_TAG_CLASS = "nt-classes-add-tag"
+
     def __init__(self, page: Page):
         self.pw_page = page
 
@@ -70,6 +73,18 @@ class PageActions:
             re.compile(f"^{escape_text(class_str)}")
         )
 
+    def expect_has_element_by_class(self, class_name: str):
+        expect(self.pw_page.locator(f"css= .{class_name}")).to_be_visible()
+
+    def expect_not_has_element_by_class(self, class_name: str):
+        expect(self.pw_page.locator(f"css= .{class_name}")).not_to_be_visible()
+
+    def expect_apply_command_button_visible(self):
+        self.expect_has_element_by_class(self._APPLY_COMMAND_CLASS)
+
+    def expect_apply_command_button_not_visible(self):
+        self.expect_not_has_element_by_class(self._APPLY_COMMAND_CLASS)
+
     def click_apply_command_and_confirm(self):
         self.pw_page.locator(".nt-apply-command").first.click()
         self.pw_page.get_by_role("button", name="Apply").click()
@@ -81,8 +96,8 @@ class PageActions:
         ).click()
 
     def add_new_classes_and_confirm(self, new_classes: str):
-        self.click_by_class("nt-classes-add-tag")
-        self.pw_page.locator(".nt-classes-add-tag input").type(new_classes)
+        self.click_by_class(self._TW_CLASS_ADD_TAG_CLASS)
+        self.pw_page.locator(f".{self._TW_CLASS_ADD_TAG_CLASS} input").type(new_classes)
         self.pw_page.keyboard.press("Enter")
 
 
@@ -109,5 +124,8 @@ class TailwindClassesActions:
         self._page.keyboard.press("Enter")
 
     def adding_new_class(self, new_class_name: str):
-        self._page_actions.click_by_class("nt-classes-add-tag")
+        self._page_actions.click_by_class(self._page_actions._TW_CLASS_ADD_TAG_CLASS)
         self._page.keyboard.type(new_class_name)
+
+    def click_new_class_tag(self):
+        self._page_actions.click_by_class(self._page_actions._TW_CLASS_ADD_TAG_CLASS)

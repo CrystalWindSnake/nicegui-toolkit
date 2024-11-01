@@ -23,9 +23,12 @@ export function createQuery(method: string, handler: (data: any) => void) {
 }
 
 export function handleServerResponse(handlerId: number, data: any) {
+  handlerId = parseInt(handlerId as any);
   const handler = handlers.get(handlerId);
+
   if (handler) {
     handler(data);
+    return;
   }
 
   throw new Error(`No handler found for id ${handlerId}`);

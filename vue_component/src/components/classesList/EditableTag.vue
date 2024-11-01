@@ -40,15 +40,16 @@ const handleRemove = () => {
   emits("remove", { key: props.tagKey });
 };
 
-function handlePromptBoardSelect(item: string) {
+function handlePromptBoardSelect(item?: string) {
   methods.hidePromptBoard();
-  emits("valueChange", {
-    key: props.tagKey,
-    oldValue: inputValPrev,
-    newValue: item,
-  });
-
-  inputValPrev = item;
+  if (item && item !== inputValPrev) {
+    emits("valueChange", {
+      key: props.tagKey,
+      oldValue: inputValPrev,
+      newValue: item,
+    });
+    inputValPrev = item;
+  }
 }
 </script>
 

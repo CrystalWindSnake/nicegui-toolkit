@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<{ clearValueWhenConfirm?: boolean }>(), {
 const visible = ref(false);
 
 const emits = defineEmits<{
-  (event: "confirm", item: string): void;
+  (event: "confirm", item?: string): void;
 }>();
 
 const promptOptions = ref([] as string[]);
@@ -34,10 +34,6 @@ watchDebounced(
   inputVal,
   (input) => {
     serverQuery.query({ query: input });
-
-    // if (input !== "w-full") {
-    //   promptOptions.value = ["w-full", "w-1"];
-    // }
   },
   { debounce: 600 }
 );
@@ -78,9 +74,6 @@ document.addEventListener(
 );
 
 const handleEdit = (value?: string) => {
-  if (!value) {
-    return;
-  }
   emits("confirm", value);
 
   if (props.clearValueWhenConfirm) {

@@ -12948,8 +12948,13 @@ function Em(e, t) {
   };
 }
 function Om(e, t) {
+  e = parseInt(e);
   const n = Yr.get(e);
-  throw n && n(t), new Error(`No handler found for id ${e}`);
+  if (n) {
+    n(t);
+    return;
+  }
+  throw new Error(`No handler found for id ${e}`);
 }
 const Xr = /* @__PURE__ */ B({
   __name: "PromptBoard",
@@ -13000,7 +13005,7 @@ const Xr = /* @__PURE__ */ B({
       capture: !0
     });
     const _ = (m) => {
-      m && (r("confirm", m), o.clearValueWhenConfirm && (p.value = "", P = ""), h.hide());
+      r("confirm", m), o.clearValueWhenConfirm && (p.value = "", P = ""), h.hide();
     }, C = () => {
       _(p.value);
     };
@@ -13094,11 +13099,11 @@ const Xr = /* @__PURE__ */ B({
       });
     };
     function c(p) {
-      i.hidePromptBoard(), o("valueChange", {
+      i.hidePromptBoard(), p && p !== s && (o("valueChange", {
         key: n.tagKey,
         oldValue: s,
         newValue: p
-      }), s = p;
+      }), s = p);
     }
     return (p, v) => {
       const h = Zn;
@@ -13143,9 +13148,9 @@ const Xr = /* @__PURE__ */ B({
       }
     };
     function a(i) {
-      l("add", {
+      r.hidePromptBoard(), i && l("add", {
         value: i
-      }), r.hidePromptBoard();
+      });
     }
     return (i, s) => ($(), N("div", xm, [f(Xr, {
       ref_key: "promptBoard",
