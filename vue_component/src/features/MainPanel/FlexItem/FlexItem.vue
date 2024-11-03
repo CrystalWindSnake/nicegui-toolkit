@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { buildRefGetter } from "@/hooks/targetInfoGetter";
+import { buildRefGetter } from "@/shared/targetInfoGetter";
 import { selectedTarget } from "@/shared/targetElementContext";
 import ItemLabel from "@/commons/ItemLabel.vue";
 import IconRadio from "@/commons/IconRadio.vue";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAiming } from "./aiming";
-import { useSvgConfigs } from "@/features/utils";
+import { useSvgConfigs } from "@/shared/utils";
 import { zindex } from "@/shared/consts";
 
 const { viewBox, styles: svgStyles } = useSvgConfigs();

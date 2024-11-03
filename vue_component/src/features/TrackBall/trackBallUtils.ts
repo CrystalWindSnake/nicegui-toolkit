@@ -11,6 +11,7 @@ import { initConfigs } from "@/shared/configs";
 import * as AppEmits from "@/shared/emits";
 import * as hoverElement from "@/shared/hoverElement";
 import * as language from "@/shared/language";
+import * as server from "@/shared/server";
 
 export function initTrackBall(options: {
   config: TSelectorConfig;
@@ -190,7 +191,11 @@ export function getComponentExpose(
     }
   }
 
-  return { queryStyle, sendMessage };
+  function tailwindSearch(id: number, classes: string[]) {
+    server.handleServerResponse(id, classes);
+  }
+
+  return { queryStyle, sendMessage, tailwindSearch };
 }
 
 export async function createClientStyleLinkTag(resource_path?: string) {

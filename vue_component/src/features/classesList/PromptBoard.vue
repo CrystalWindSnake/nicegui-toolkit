@@ -29,9 +29,12 @@ const dropdownRef = ref<HTMLDivElement>();
 const inputRef = ref<InstanceType<typeof AInput>>();
 const inputVal = defineModel("inputVal", { default: "" });
 
-const serverQuery = server.createQuery("twSearch", (result) => {
-  promptOptions.value = result;
-});
+const serverQuery = server.createQuery(
+  consts.serverQueryMethods.tailwindSearch,
+  (result) => {
+    promptOptions.value = result;
+  }
+);
 
 watchDebounced(
   inputVal,

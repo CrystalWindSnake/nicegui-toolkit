@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MainPanel from "@/features/panels/MainPanel.vue";
+import MainPanel from "@/features/MainPanel/MainPanel.vue";
 import Aiming from "@/features/Aiming/Aiming.vue";
 import Panel from "@/features/Panel.vue";
 import VisHover from "@/features/VisHover/VisHover.vue";
@@ -19,7 +19,6 @@ import * as targetElementContext from "@/shared/targetElementContext";
 import VisTypeName from "@/features/VisTypeName.vue";
 
 import * as AppEmits from "@/shared/emits";
-import * as server from "@/shared/server";
 import { useHoverElement } from "@/shared/hoverElement";
 
 const props = defineProps<{
@@ -110,9 +109,6 @@ defineExpose({
     props.selectorConfig,
     targetElementContext.selectedTarget
   ),
-  twSearch: (id: number, classes: string[]) => {
-    server.handleServerResponse(id, classes);
-  },
 });
 </script>
 

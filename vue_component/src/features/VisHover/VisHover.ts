@@ -4,7 +4,6 @@ import {
   useWindowSize,
 } from "@vueuse/core";
 import { computed, reactive } from "vue";
-// import * as globals from "@/hooks/globals";
 import { useHoverElement } from "@/shared/hoverElement";
 
 export type TModel = ReturnType<typeof useVisHover>;

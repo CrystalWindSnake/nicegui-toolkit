@@ -10,3 +10,7 @@ export const popupContainer = {
   mainPanelTooltip: "body",
   trackBallPanel: ".layout-tool-panel",
 };
+
+export const serverQueryMethods = {
+  tailwindSearch: "tailwindSearch",
+};

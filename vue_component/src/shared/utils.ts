@@ -1,5 +1,6 @@
-import { MaybeRefOrGetter, isRef, ref, toValue } from "vue";
+import { MaybeRefOrGetter, isRef, ref, toValue, computed } from "vue";
 import { type TSelectorConfig } from "./types";
+import { useWindowSize } from "@vueuse/core";
 
 export function makeRef<T>(value: MaybeRefOrGetter<T>) {
   if (isRef(value)) {
@@ -18,6 +19,24 @@ export function getWindowSize() {
   return {
     width: window.innerWidth,
     height: window.innerHeight,
+  };
+}
+
+export function useSvgConfigs() {
+  const { width: winWidth, height: winHeight } = useWindowSize();
+
+  const viewBox = computed(() => `0 0 ${winWidth.value} ${winHeight.value}`);
+
+  const styles = computed(() => {
+    return {
+      width: winWidth.value,
+      height: winHeight.value,
+    };
+  });
+
+  return {
+    viewBox,
+    styles,
   };
 }
 

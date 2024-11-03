@@ -1,4 +1,4 @@
-import { getInitValue } from "@/hooks/propsMapping";
+import { getInitValue } from "@/shared/propsMapping";
 import { computed } from "vue";
 import { TSetCommand } from "@/shared/types";
 import * as emits from "@/shared/emits";

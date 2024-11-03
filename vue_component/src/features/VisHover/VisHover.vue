@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useVisHover } from "./VisHover";
-import { useSvgConfigs } from "@/features/utils";
+import { useSvgConfigs } from "@/shared/utils";
 import { zindex } from "@/shared/consts";
 
 const strokeColor = "red";

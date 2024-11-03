@@ -1,5 +1,5 @@
 import { Ref, watch, ref } from "vue";
-import { buildRefGetter } from "@/hooks/targetInfoGetter";
+import { buildRefGetter } from "@/shared/targetInfoGetter";
 
 const refMapping = new Map<string, Ref<any>>();
 
