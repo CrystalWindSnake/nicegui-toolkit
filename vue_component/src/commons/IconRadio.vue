@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type TModel } from "./iconRadio";
-import * as consts from "@/consts";
+import * as consts from "@/shared/consts";
 
 const props = defineProps<{
   model: TModel;

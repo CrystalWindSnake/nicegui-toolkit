@@ -5,6 +5,8 @@ import * as path from "path";
 
 import { vitePluginForArco } from "@arco-plugins/vite-vue";
 
+const niceguiResourcesJs = "../../static/utils/resources.js";
+
 function createIgnoreModulePlugin(ignoredModules: string[]): Plugin {
   return {
     name: "ignore-module-plugin",
@@ -34,7 +36,7 @@ export default defineConfig({
       style: "css",
     }),
     Unocss(),
-    createIgnoreModulePlugin(["../../static/utils/resources.js"]),
+    createIgnoreModulePlugin([niceguiResourcesJs]),
   ],
   define: {
     "process.env": {},
@@ -51,7 +53,7 @@ export default defineConfig({
 
     lib: {
       // Could also be a dictionary or array of multiple entry points
-      entry: `src/components/index.ts`,
+      entry: `src/index.ts`,
       formats: ["es"],
       // name: 'TrackBall',
       // the proper extensions will be added
@@ -62,7 +64,7 @@ export default defineConfig({
       // },
     },
     rollupOptions: {
-      external: ["vue", "../../static/utils/resources.js"],
+      external: ["vue", niceguiResourcesJs],
       output: {
         globals: {
           vue: "Vue",

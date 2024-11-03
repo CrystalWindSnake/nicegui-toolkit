@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import * as globals from "@/hooks/globals";
-import * as targetElementContext from "@/hooks/targetElementContext";
-import * as consts from "@/consts";
-import { t } from "@/hooks/language";
+import * as emits from "@/shared/emits";
+import * as targetElementContext from "@/shared/targetElementContext";
+import * as consts from "@/shared/consts";
+import { t } from "@/shared/language";
 
 import { computed } from "vue";
 const props = defineProps<{ keyId: string; label?: string }>();
@@ -16,7 +16,7 @@ const label = computed(() => props.label ?? props.keyId);
 const hasChanged = targetElementContext.useHasChanged(props.keyId);
 
 function reset() {
-  globals.sendResetCommnad(props.keyId);
+  emits.resetCommand(props.keyId);
   emit("reset");
 }
 

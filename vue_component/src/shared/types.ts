@@ -34,3 +34,11 @@ export type TResetCommand = {
   propertyName: string;
   type: "style" | "props" | "classes";
 };
+
+type TElementTreeItem = {
+  key: string | number;
+  title: string;
+  children?: TElementTreeItem[];
+};
+
+export type TElementTreeData = TElementTreeItem[];
