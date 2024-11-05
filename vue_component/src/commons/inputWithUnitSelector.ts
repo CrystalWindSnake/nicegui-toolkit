@@ -1,7 +1,7 @@
 import { ref, computed, Ref, watch } from "vue";
-import * as utils from "@/hooks/utils";
-import * as globals from "@/hooks/globals";
-import { getTargetContext, useUpdateFlag } from "@/hooks/targetElementContext";
+import * as utils from "@/shared/utils";
+import * as emits from "@/shared/emits";
+import { getTargetContext, useUpdateFlag } from "@/shared/targetElementContext";
 
 type TItemOption = { label: string; value: string };
 type TOption = string | TItemOption;
@@ -103,7 +103,7 @@ export function useInputWithUnitSelector(settings: {
       newValue = `${number}${unit}`;
     }
 
-    globals.sendSetCommand({
+    emits.setCommand({
       propertyName: settings.propertyName,
       values: { [settings.propertyName]: newValue },
     });

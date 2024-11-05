@@ -1,7 +1,7 @@
 import { MaybeRef, ref, watch } from "vue";
-import * as utils from "@/hooks/utils";
-import * as globals from "@/hooks/globals";
-import { useUpdateFlag, selectedTarget } from "@/hooks/targetElementContext";
+import * as emits from "@/shared/emits";
+import * as utils from "@/shared/utils";
+import { useUpdateFlag, selectedTarget } from "@/shared/targetElementContext";
 
 type TOption = {
   checkedValue: string;
@@ -37,7 +37,7 @@ export function useBooleanSwitch(settings: {
   );
 
   function userEdited() {
-    globals.sendSetCommand({
+    emits.setCommand({
       propertyName: settings.propertyName,
       values: { [settings.propertyName]: resultValue.value },
     });

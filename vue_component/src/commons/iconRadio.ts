@@ -1,7 +1,7 @@
-import { MaybeRef, ref, computed, watch, toValue, Ref } from "vue";
-import * as utils from "@/hooks/utils";
-import * as globals from "@/hooks/globals";
-import { useUpdateFlag, selectedTarget } from "@/hooks/targetElementContext";
+import { MaybeRef, ref, computed, watch, toValue } from "vue";
+import * as utils from "@/shared/utils";
+import * as emits from "@/shared/emits";
+import { useUpdateFlag, selectedTarget } from "@/shared/targetElementContext";
 
 type TOption = {
   label?: string;
@@ -52,7 +52,7 @@ export function useIconRadio(settings: {
   );
 
   function userEdited() {
-    globals.sendSetCommand({
+    emits.setCommand({
       propertyName: settings.propertyName,
       values: { [settings.propertyName]: resultValue.value },
     });

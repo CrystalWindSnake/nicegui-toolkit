@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { type TModel } from "./inputWithUnitSelector";
-import * as consts from "@/consts";
+import * as consts from "@/shared/consts";
 
 // props
 const props = defineProps<{
