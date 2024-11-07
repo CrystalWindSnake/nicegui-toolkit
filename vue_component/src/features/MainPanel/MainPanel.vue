@@ -51,8 +51,8 @@ const elementTreeModel = useElementTree();
       >
         <Code></Code>
       </a-tab-pane>
-      <a-tab-pane key="cusStyle" :title="t('nt.mainPanel.cusStyle')">
-      </a-tab-pane>
+      <!-- <a-tab-pane key="cusStyle" :title="t('nt.mainPanel.cusStyle')">
+      </a-tab-pane> -->
 
       <a-tab-pane key="testing" title="testing" v-if="isTesting">
         <AScrollbar style="max-height: 500px; overflow: auto">
