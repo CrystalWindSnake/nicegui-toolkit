@@ -21,7 +21,7 @@ const Vl = Vue.toRef
 const ye = Vue.toRefs
 const f = Vue.createVNode
 const ie = Vue.mergeProps
-const ze = Vue.createTextVNode
+const Ie = Vue.createTextVNode
 const qe = Vue.nextTick
 const bt = Vue.provide
 const Oe = Vue.Fragment
@@ -1610,7 +1610,7 @@ var Ps = Object.defineProperty, Wl = Object.getOwnPropertySymbols, Bs = Object.p
         }]
       }, [!!e.maxLength && e.showWordLimit && f("span", {
         class: `${s}-word-limit`
-      }, [A.value, ze("/"), q.value]), (T = n.suffix) == null ? void 0 : T.call(n), !!h.value && f(_l, {
+      }, [A.value, Ie("/"), q.value]), (T = n.suffix) == null ? void 0 : T.call(n), !!h.value && f(_l, {
         type: h.value
       }, null)])]);
     };
@@ -4189,12 +4189,12 @@ function vc(e, t, n, o, l, r) {
       disabled: e.disabled,
       "uninject-group-context": ""
     }, {
-      default: F(() => [H(e.$slots, "default", {}, () => [ze(xe(e.label), 1)])]),
+      default: F(() => [H(e.$slots, "default", {}, () => [Ie(xe(e.label), 1)])]),
       _: 3
     }, 8, ["class", "model-value", "disabled"])) : (C(), N("span", {
       key: 2,
       class: V(`${e.prefixCls}-content`)
-    }, [H(e.$slots, "default", {}, () => [ze(xe(e.label), 1)])], 2)), e.$slots.suffix ? (C(), N("span", {
+    }, [H(e.$slots, "default", {}, () => [Ie(xe(e.label), 1)])], 2)), e.$slots.suffix ? (C(), N("span", {
       key: 3,
       class: V(`${e.prefixCls}-suffix`)
     }, [H(e.$slots, "suffix")], 2)) : pe("v-if", !0)]),
@@ -4800,9 +4800,9 @@ function Vc(e, t, n, o, l, r) {
   }, {
     content: F(() => [D("div", {
       class: V(`${e.prefixCls}-title`)
-    }, [H(e.$slots, "title", {}, () => [ze(xe(e.title), 1)])], 2), D("div", {
+    }, [H(e.$slots, "title", {}, () => [Ie(xe(e.title), 1)])], 2), D("div", {
       class: V(`${e.prefixCls}-content`)
-    }, [H(e.$slots, "content", {}, () => [ze(xe(e.content), 1)])], 2)]),
+    }, [H(e.$slots, "content", {}, () => [Ie(xe(e.content), 1)])], 2)]),
     default: F(() => [H(e.$slots, "default")]),
     _: 3
   }, 8, ["class", "trigger", "position", "popup-visible", "content-class", "content-style", "arrow-class", "arrow-style", "popup-container", "onPopupVisibleChange"]);
@@ -5327,7 +5327,7 @@ const id = P({
 function sd(e, t, n, o, l, r) {
   return C(), N(Oe, null, [D("li", {
     class: V(`${e.prefixCls}-title`)
-  }, [H(e.$slots, "title", {}, () => [ze(xe(e.title), 1)])], 2), H(e.$slots, "default")], 64);
+  }, [H(e.$slots, "title", {}, () => [Ie(xe(e.title), 1)])], 2), H(e.$slots, "default")], 64);
 }
 var Oo = /* @__PURE__ */ oe(id, [["render", sd]]);
 const ud = P({
@@ -6494,7 +6494,7 @@ const zd = P({
 function Vd(e, t, n, o, l, r) {
   return C(), N(Oe, null, [D("li", {
     class: V(`${e.prefixCls}-title`)
-  }, [H(e.$slots, "label", {}, () => [ze(xe(e.label), 1)])], 2), H(e.$slots, "default")], 64);
+  }, [H(e.$slots, "label", {}, () => [Ie(xe(e.label), 1)])], 2), H(e.$slots, "default")], 64);
 }
 var xn = /* @__PURE__ */ oe(zd, [["render", Vd]]);
 const $a = typeof window > "u" ? global : window;
@@ -7693,7 +7693,7 @@ function xf(e, t, n, o, l, r) {
     role: "tooltip",
     onPopupVisibleChange: e.handlePopupVisibleChange
   }, {
-    content: F(() => [H(e.$slots, "content", {}, () => [ze(xe(e.content), 1)])]),
+    content: F(() => [H(e.$slots, "content", {}, () => [Ie(xe(e.content), 1)])]),
     default: F(() => [H(e.$slots, "default")]),
     _: 3
   }, 8, ["class", "position", "popup-visible", "content-class", "content-style", "arrow-class", "arrow-style", "popup-container", "onPopupVisibleChange"]);
@@ -7924,14 +7924,14 @@ function jf(e, t, n, o, l, r) {
       key: 3
     })) : pe("v-if", !0)])], 2), D("span", {
       class: V(`${e.prefixCls}-content`)
-    }, [H(e.$slots, "content", {}, () => [ze(xe(e.content), 1)])], 2)], 2), D("div", {
+    }, [H(e.$slots, "content", {}, () => [Ie(xe(e.content), 1)])], 2)], 2), D("div", {
       class: V(`${e.prefixCls}-footer`)
     }, [f(c, ie({
       size: "mini"
     }, e.cancelButtonProps, {
       onClick: e.handleCancel
     }), {
-      default: F(() => [ze(xe(e.cancelText || e.t("popconfirm.cancelText")), 1)]),
+      default: F(() => [Ie(xe(e.cancelText || e.t("popconfirm.cancelText")), 1)]),
       _: 1
     }, 16, ["onClick"]), f(c, ie({
       type: "primary",
@@ -7940,7 +7940,7 @@ function jf(e, t, n, o, l, r) {
       loading: e.mergedOkLoading,
       onClick: e.handleOk
     }), {
-      default: F(() => [ze(xe(e.okText || e.t("popconfirm.okText")), 1)]),
+      default: F(() => [Ie(xe(e.okText || e.t("popconfirm.okText")), 1)]),
       _: 1
     }, 16, ["loading", "onClick"])], 2)]),
     default: F(() => [H(e.$slots, "default")]),
@@ -8205,15 +8205,15 @@ function Rf(e, t, n, o, l, r) {
     class: V(`${e.prefixCls}-text-holder`)
   }, [e.computedCheck ? H(e.$slots, "checked", {
     key: 0
-  }, () => [ze(xe(e.checkedText), 1)]) : H(e.$slots, "unchecked", {
+  }, () => [Ie(xe(e.checkedText), 1)]) : H(e.$slots, "unchecked", {
     key: 1
-  }, () => [ze(xe(e.uncheckedText), 1)])], 2), D("span", {
+  }, () => [Ie(xe(e.uncheckedText), 1)])], 2), D("span", {
     class: V(`${e.prefixCls}-text`)
   }, [e.computedCheck ? H(e.$slots, "checked", {
     key: 0
-  }, () => [ze(xe(e.checkedText), 1)]) : H(e.$slots, "unchecked", {
+  }, () => [Ie(xe(e.checkedText), 1)]) : H(e.$slots, "unchecked", {
     key: 1
-  }, () => [ze(xe(e.uncheckedText), 1)])], 2)], 64)) : pe("v-if", !0)], 46, Kf);
+  }, () => [Ie(xe(e.uncheckedText), 1)])], 2)], 64)) : pe("v-if", !0)], 46, Kf);
 }
 var Ho = /* @__PURE__ */ oe(Ff, [["render", Rf]]);
 const Hf = Object.assign(Ho, {
@@ -9536,7 +9536,7 @@ function Ap(e, t, n, o, l, r) {
     key: 1
   }, [pe(" 标题，treeTitle 优先级高于节点的 title "), H(e.$slots, "title", {
     title: e.title
-  }, () => [ze(xe(e.title), 1)])], 2112)), e.draggable ? (C(), N("span", {
+  }, () => [Ie(xe(e.title), 1)])], 2112)), e.draggable ? (C(), N("span", {
     key: 2,
     class: V([`${e.prefixCls}-icon`, `${e.prefixCls}-drag-icon`])
   }, [pe(" 拖拽图标 "), e.$slots["drag-icon"] ? H(e.$slots, "drag-icon", el(ie({
@@ -10599,7 +10599,7 @@ function yv(e, t, n, o, l, r) {
   }, e.copyTooltipProps)), {
     content: F(() => [H(e.$slots, "copy-tooltip", {
       copied: e.isCopied
-    }, () => [ze(xe(e.isCopied ? e.t("typography.copied") : e.t("typography.copy")), 1)])]),
+    }, () => [Ie(xe(e.isCopied ? e.t("typography.copied") : e.t("typography.copy")), 1)])]),
     default: F(() => [D("span", {
       class: V({
         [`${e.prefixCls}-operation-copied`]: e.isCopied,
@@ -10620,7 +10620,7 @@ function yv(e, t, n, o, l, r) {
     onClick: t[2] || (t[2] = at((...c) => e.onExpandClick && e.onExpandClick(...c), ["stop"]))
   }, [H(e.$slots, "expand-node", {
     expanded: e.expanded
-  }, () => [ze(xe(e.expanded ? e.t("typography.collapse") : e.t("typography.expand")), 1)])], 2)) : pe("v-if", !0)], 64);
+  }, () => [Ie(xe(e.expanded ? e.t("typography.collapse") : e.t("typography.expand")), 1)])], 2)) : pe("v-if", !0)], 64);
 }
 var ja = /* @__PURE__ */ oe(mv, [["render", yv]]);
 let Le;
@@ -11903,7 +11903,7 @@ function $h(e) {
 function Ch(e, t) {
   Il.set(e, t);
 }
-function Ie(e) {
+function ze(e) {
   var t;
   return Ra.value.hasOwnProperty(e) ? Ra.value[e] : (console.warn(`No message found for key ${e} in locale ${An.value}`), ((t = Il.get("en")) == null ? void 0 : t[e]) || e.split(".").pop() || "");
 }
@@ -11948,7 +11948,7 @@ const kh = {
     return (r, a) => {
       const i = St;
       return C(), J(i, {
-        header: R(Ie)("nt.style.spacing.header"),
+        header: R(ze)("nt.style.spacing.header"),
         key: "spacing"
       }, {
         default: F(() => [D("div", kh, [D("p", {
@@ -12115,7 +12115,7 @@ const ut = {
         color: "green",
         onCheck: (h) => a(v.value)
       }, {
-        default: F(() => [ze(xe(v.label), 1)]),
+        default: F(() => [Ie(xe(v.label), 1)]),
         _: 2
       }, 1032, ["checked", "onCheck"]))), 128))]);
     };
@@ -12226,7 +12226,7 @@ const nt = /* @__PURE__ */ P({
       const c = Pr;
       return C(), J(c, {
         "popup-container": Zt.mainPanelTooltip,
-        content: R(Ie)("nt.property-reset-confirm"),
+        content: R(ze)("nt.property-reset-confirm"),
         "ok-text": "Reset",
         "cancel-text": "No",
         onOk: a,
@@ -12269,7 +12269,7 @@ const nt = /* @__PURE__ */ P({
         label: "Vertical",
         icon: "i-mdi-arrow-down-thin"
       }]
-    }), r = d(() => l.value.value === "row" ? Ie("nt.style.layout.align-title-byRow") : Ie("nt.style.layout.align-title-byCol")), a = d(() => l.value.value === "row" ? [{
+    }), r = d(() => l.value.value === "row" ? ze("nt.style.layout.align-title-byRow") : ze("nt.style.layout.align-title-byCol")), a = d(() => l.value.value === "row" ? [{
       value: "start",
       icon: "i-mdi-align-vertical-top",
       tooltip: "top"
@@ -12296,7 +12296,7 @@ const nt = /* @__PURE__ */ P({
     }]), i = an({
       propertyName: "align-items",
       options: a
-    }), s = d(() => l.value.value === "row" ? Ie("nt.style.layout.justify-title-byRow") : Ie("nt.style.layout.justify-title-byCol")), u = d(() => l.value.value === "row" ? [{
+    }), s = d(() => l.value.value === "row" ? ze("nt.style.layout.justify-title-byRow") : ze("nt.style.layout.justify-title-byCol")), u = d(() => l.value.value === "row" ? [{
       value: "start",
       icon: "i-mdi-align-horizontal-left",
       tooltip: "left"
@@ -12333,24 +12333,24 @@ const nt = /* @__PURE__ */ P({
     return (v, h) => {
       const _ = St;
       return C(), J(_, {
-        header: R(Ie)("nt.style.layout.header"),
+        header: R(ze)("nt.style.layout.header"),
         key: "layout"
       }, {
         default: F(() => [D("div", Bh, [f(nt, {
           keyId: "display",
-          label: R(Ie)("nt.style.layout.display-label")
+          label: R(ze)("nt.style.layout.display-label")
         }, null, 8, ["label"]), f(ln, {
           model: R(n)
         }, null, 8, ["model"]), R(o).isFlex ? (C(), N(Oe, {
           key: 0
         }, [f(nt, {
           keyId: "flex-direction",
-          label: R(Ie)("nt.style.layout.direction")
+          label: R(ze)("nt.style.layout.direction")
         }, null, 8, ["label"]), f(ln, {
           model: R(l)
         }, null, 8, ["model"]), f(nt, {
           keyId: "flex-wrap",
-          label: R(Ie)("nt.style.layout.wrap-label")
+          label: R(ze)("nt.style.layout.wrap-label")
         }, null, 8, ["label"]), f(Oh, {
           model: R(p)
         }, null, 8, ["model"]), f(nt, {
@@ -12375,7 +12375,7 @@ const Th = /* @__PURE__ */ et(xh, [["__scopeId", "data-v-c9b8652d"]]), Ih = {
   __name: "FlexItem",
   setup(e) {
     const n = Yn(we).getParentFlexBoxInfo(), o = d(() => n.value.direction === "row" ? {
-      title: Ie("nt.style.flexitem.title.vertical"),
+      title: ze("nt.style.flexitem.title.vertical"),
       start: {
         icon: "vertical_align_top",
         tooltipLabel: "top"
@@ -12393,7 +12393,7 @@ const Th = /* @__PURE__ */ et(xh, [["__scopeId", "data-v-c9b8652d"]]), Ih = {
         tooltipLabel: "stretch"
       }
     } : {
-      title: Ie("nt.style.flexitem.title.horizontal"),
+      title: ze("nt.style.flexitem.title.horizontal"),
       start: {
         icon: "align_horizontal_left",
         tooltipLabel: "left"
@@ -12429,7 +12429,7 @@ const Th = /* @__PURE__ */ et(xh, [["__scopeId", "data-v-c9b8652d"]]), Ih = {
     return (r, a) => {
       const i = St;
       return R(n).isFlex ? (C(), J(i, {
-        header: R(Ie)("nt.style.flexitem.header"),
+        header: R(ze)("nt.style.flexitem.header"),
         key: "flex-item"
       }, {
         default: F(() => [D("div", Ih, [f(nt, {
@@ -12770,7 +12770,7 @@ const em = /* @__PURE__ */ et(Qh, [["__scopeId", "data-v-ce4a9fb1"]]), tm = {
     return (t, n) => {
       const o = St;
       return C(), J(o, {
-        header: R(Ie)("nt.style.size.header"),
+        header: R(ze)("nt.style.size.header"),
         key: "size"
       }, {
         default: F(() => [D("div", tm, [f(Hh), f(qh), f(Yh), f(em), f(Uh), f(Jh)])]),
@@ -12834,7 +12834,7 @@ const um = {
         t.value.selectNode(c, !0);
       }
     });
-    const r = y(!0), a = d(() => r.value ? "i-mdi-arrow-collapse-vertical" : "i-mdi-arrow-expand-vertical"), i = d(() => r.value ? Ie("tree.collapse_all") : Ie("tree.expand_all"));
+    const r = y(!0), a = d(() => r.value ? "i-mdi-arrow-collapse-vertical" : "i-mdi-arrow-expand-vertical"), i = d(() => r.value ? ze("tree.collapse_all") : ze("tree.expand_all"));
     function s() {
       r.value = !r.value, t.value.expandAll(r.value), r.value || t.value.expandNode(-1, !r.value);
     }
@@ -12906,7 +12906,7 @@ const mm = /* @__PURE__ */ et(pm, [["render", hm]]), ym = /* @__PURE__ */ P({
             popupContainer: ".x-panel-nicegui"
           }
         }, {
-          default: F(() => [ze(xe(R(n)), 1)]),
+          default: F(() => [Ie(xe(R(n)), 1)]),
           _: 1
         })]),
         _: 1
@@ -13041,7 +13041,7 @@ const Gr = /* @__PURE__ */ P({
           onMouseenter: (A) => b(M),
           onMouseleave: (A) => k(M)
         }, {
-          default: F(() => [ze(xe(M), 1)]),
+          default: F(() => [Ie(xe(M), 1)]),
           _: 2
         }, 1032, ["onMouseenter", "onMouseleave"]))), 128))], 512)]),
         default: F(() => [ht(f(R(kl), {
@@ -13115,7 +13115,7 @@ const Gr = /* @__PURE__ */ P({
         onClick: i.showPromptBoard,
         onClose: u
       }, {
-        default: F(() => [ze(xe(a.value), 1)]),
+        default: F(() => [Ie(xe(a.value), 1)]),
         _: 1
       }, 8, ["style", "onClick"])]);
     };
@@ -13241,7 +13241,7 @@ const Gr = /* @__PURE__ */ P({
       }, {
         default: F(() => [f(a, {
           key: "style",
-          title: R(Ie)("nt.mainPanel.style"),
+          title: R(ze)("nt.mainPanel.style"),
           disabled: !t.value
         }, {
           default: F(() => [f(r, {
@@ -13253,7 +13253,7 @@ const Gr = /* @__PURE__ */ P({
           _: 1
         }, 8, ["title", "disabled"]), f(a, {
           key: "element-tree",
-          title: R(Ie)("nt.mainPanel.navigator")
+          title: R(ze)("nt.mainPanel.navigator")
         }, {
           default: F(() => [f(dm, {
             model: R(n)
@@ -13261,16 +13261,13 @@ const Gr = /* @__PURE__ */ P({
           _: 1
         }, 8, ["title"]), f(a, {
           key: "nicegui",
-          title: R(Ie)("nt.mainPanel.code"),
+          title: R(ze)("nt.mainPanel.code"),
           class: "x-panel-nicegui",
           disabled: !t.value
         }, {
           default: F(() => [f(Pm)]),
           _: 1
-        }, 8, ["title", "disabled"]), f(a, {
-          key: "cusStyle",
-          title: R(Ie)("nt.mainPanel.cusStyle")
-        }, null, 8, ["title"]), R(Ur) ? (C(), J(a, {
+        }, 8, ["title", "disabled"]), R(Ur) ? (C(), J(a, {
           key: "testing",
           title: "testing"
         }, {
@@ -13290,7 +13287,7 @@ const Gr = /* @__PURE__ */ P({
     };
   }
 });
-const zm = /* @__PURE__ */ et(Im, [["__scopeId", "data-v-082e2d44"]]);
+const zm = /* @__PURE__ */ et(Im, [["__scopeId", "data-v-dff155cd"]]);
 function Vm() {
   const e = Pe(Lr(we));
   Nr(we, () => {
@@ -13493,16 +13490,16 @@ const jm = {
         }, "toolkit", -1)), ht(f(u, {
           color: "green"
         }, {
-          default: F(() => [ze(xe(R(o)), 1)]),
+          default: F(() => [Ie(xe(R(o)), 1)]),
           _: 1
         }, 512), [[mt, R(l)]])]),
         _: 1
       })], 512), f(_, {
-        content: R(Ie)("nt.apply_command_tooltip")
+        content: R(ze)("nt.apply_command_tooltip")
       }, {
         default: F(() => [f(h, {
           "popup-container": Zt.mainPanelTooltip,
-          content: R(Ie)("nt.apply_command_confirm"),
+          content: R(ze)("nt.apply_command_confirm"),
           "ok-text": "Apply",
           "cancel-text": "No",
           position: "bottom",
@@ -13535,7 +13532,7 @@ const jm = {
         }, 8, ["popup-container", "content", "onOk", "style"])]),
         _: 1
       }, 8, ["content"]), f(_, {
-        content: R(Ie)("nt.jump2code")
+        content: R(ze)("nt.jump2code")
       }, {
         default: F(() => [ht(f(p, {
           shape: "circle",
