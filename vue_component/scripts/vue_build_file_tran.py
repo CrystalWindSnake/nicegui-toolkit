@@ -61,8 +61,6 @@ def tran_vue_imports(js_file_name_without_ex: str):
 
 def copy2styls(dist_file, dest_file):
     src = DIST_ROOT / dist_file
-    if not src.exists():
-        return
     to_file = CSS_DEST_DIR_ROOT / dest_file
 
     if not CSS_DEST_DIR_ROOT.exists():
