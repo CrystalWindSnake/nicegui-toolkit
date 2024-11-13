@@ -39,4 +39,4 @@ def inject_layout_tool(
                     if fastapi_system.is_zh_client_language(client.request)
                     else "en"
                 )
-            TrackBall(language_locale=language_locale or "en", is_testing=is_testing)
+            TrackBall(language_locale=language_locale or "auto", is_testing=is_testing)

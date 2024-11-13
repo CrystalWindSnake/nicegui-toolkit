@@ -14,6 +14,10 @@ const currentMessage = computed(() => {
 });
 
 export function setLocale(localeValue: TLocale) {
+  if (localeValue === "auto") {
+    localeValue = getNavigatorLanguage();
+  }
+
   locale.value = localeValue;
 }
 
@@ -32,4 +36,15 @@ export function t(key: string) {
   }
 
   return currentMessage.value[key];
+}
+
+function getNavigatorLanguage() {
+  const browserLanguage = navigator.language;
+
+  // 如果包含 zh 或 CN 等字眼，则认为是中文，否则为英文
+  if (browserLanguage.includes("zh") || browserLanguage.includes("CN")) {
+    return "zh";
+  }
+
+  return "en";
 }
