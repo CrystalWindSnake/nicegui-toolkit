@@ -9,6 +9,12 @@ license = "MIT"
 repository = "https://github.com/CrystalWindSnake/nicegui-toolkit"
 keywords = ["nicegui", "webui"]
 
+include = [
+    "nicegui_toolkit/layout_tool/track_ball/trackBall.js",
+    "nicegui_toolkit/layout_tool/track_ball/libs/trackBall.css",
+]
+
+
 [tool.poetry.dependencies]
 python = "^3.8"
 nicegui = "^2.0.0"

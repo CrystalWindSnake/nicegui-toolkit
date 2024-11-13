@@ -5,7 +5,13 @@ tasks:
     - cls
     - pytest -v __tests 
 
+  build-vue-component:
+    dir: vue_component
+    cmds:
+      - pnpm run build
+
   dist: 
+    - task: build-vue-component
     - poetry build
 
   rel: 
