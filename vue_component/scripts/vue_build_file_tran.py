@@ -2,7 +2,6 @@ from pathlib import Path
 import re
 import shutil
 
-print("file path: ", Path(__file__).resolve())
 
 EX_DEST_DIR_ROOT = (
     Path(__file__).parent.parent.parent / "nicegui_toolkit/layout_tool/track_ball"
@@ -11,6 +10,8 @@ CSS_DEST_DIR_ROOT = (
     Path(__file__).parent.parent.parent / "nicegui_toolkit/layout_tool/track_ball/libs"
 ).resolve()
 DIST_ROOT = (Path(__file__).parent.parent / "dist").resolve()
+
+print("paths: ", EX_DEST_DIR_ROOT, CSS_DEST_DIR_ROOT, DIST_ROOT)
 
 
 RE_import_stm = re.compile(r"""import(.+)from\s+["|']vue["|']""")
