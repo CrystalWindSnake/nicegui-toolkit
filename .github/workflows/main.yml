@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'npm'
       - name: install dependencies
         run: npm ci
         working-directory: vue_component
