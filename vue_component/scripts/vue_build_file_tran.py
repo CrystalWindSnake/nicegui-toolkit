@@ -16,6 +16,12 @@ CSS_DEST_DIR_ROOT = (
 DIST_ROOT = THIS_FILE_ROOT.parent / "dist"
 
 
+print(f"{DIST_ROOT=}")
+
+for file in DIST_ROOT.glob("*"):
+    print(f"file: {file}")
+
+
 RE_import_stm = re.compile(r"""import(.+)from\s+["|']vue["|']""")
 
 
