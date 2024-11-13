@@ -21,10 +21,10 @@ jobs:
           node-version: '16'
       - name: install dependencies
         run: npm ci
-        working-directory: vue_component
+        working-directory: ./vue_component
       - name: build vue component
         run: npm run build
-        working-directory: vue_component
+        working-directory: ./vue_component
       - name: set up Poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
@@ -56,10 +56,10 @@ jobs:
           cache: 'npm'
       - name: install dependencies
         run: npm ci
-        working-directory: vue_component
+        working-directory: ./vue_component
       - name: build vue component
         run: npm run build
-        working-directory: vue_component
+        working-directory: ./vue_component
       - name: set up Poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
