@@ -166,5 +166,5 @@ cython_debug/
 # **/tailwindcss.db
 # nicegui_toolkit/layout_tool/**/trackBall.js
 tools/tailwindcss/files/*
-nicegui_toolkit/layout_tool/track_ball\trackBall.js
-nicegui_toolkit/layout_tool/track_ball\libs\trackBall.css
+nicegui_toolkit/layout_tool/track_ball/trackBall.js
+nicegui_toolkit/layout_tool/track_ball/libs/trackBall.css
