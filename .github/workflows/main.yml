@@ -21,10 +21,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Install pnpm
+        run: npm install -g pnpm
       - name: install dependencies
-        run: npm ci
+        run: pnpm install
       - name: build vue component
-        run: npm run build
+        run: pnpm run build
       - name: back to root directory
         run: cd..
       - name: set up Poetry
