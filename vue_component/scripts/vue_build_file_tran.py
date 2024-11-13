@@ -3,15 +3,17 @@ import re
 import shutil
 
 
+THIS_FILE_ROOT = Path(__file__).parent.resolve()
+
 EX_DEST_DIR_ROOT = (
-    Path(__file__).parent.parent.parent / "nicegui_toolkit/layout_tool/track_ball"
+    THIS_FILE_ROOT.parent.parent / "nicegui_toolkit/layout_tool/track_ball"
 ).resolve()
 CSS_DEST_DIR_ROOT = (
-    Path(__file__).parent.parent.parent / "nicegui_toolkit/layout_tool/track_ball/libs"
+    THIS_FILE_ROOT.parent.parent / "nicegui_toolkit/layout_tool/track_ball/libs"
 ).resolve()
-DIST_ROOT = (Path(__file__).parent.parent / "dist").resolve()
+DIST_ROOT = (THIS_FILE_ROOT.parent / "dist").resolve()
 
-print("paths: ", Path(__file__), Path(__file__).parent.parent.parent)
+print("paths: ", EX_DEST_DIR_ROOT, CSS_DEST_DIR_ROOT, DIST_ROOT)
 
 
 RE_import_stm = re.compile(r"""import(.+)from\s+["|']vue["|']""")
