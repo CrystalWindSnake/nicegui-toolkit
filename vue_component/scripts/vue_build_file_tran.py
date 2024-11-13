@@ -2,6 +2,7 @@ from pathlib import Path
 import re
 import shutil
 
+print("file path: ", Path(__file__).resolve())
 
 EX_DEST_DIR_ROOT = (
     Path(__file__).parent.parent.parent / "nicegui_toolkit/layout_tool/track_ball"
