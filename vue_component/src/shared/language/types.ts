@@ -1,4 +1,4 @@
-export type TLocale = "en" | "zh";
+export type TLocale = "en" | "zh" | "auto";
 
 export type TLanguageConfig = {
   locale: TLocale;
