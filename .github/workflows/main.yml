@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: '3.8'
       - name: build vue component
-        uses: ../actions/build-vue-component
+        uses: ./.github/actions/build-vue-component
       - name: set up Poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
@@ -42,7 +42,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: build vue component
-        uses: ../actions/build-vue-component
+        uses: ./.github/build-vue-component
       - name: set up Poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
