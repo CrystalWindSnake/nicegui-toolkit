@@ -15,16 +15,18 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.8'
+      - name: Navigate to vue_component directory
+        run: cd vue_component
       - name: set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
       - name: install dependencies
         run: npm ci
-        working-directory: ./vue_component
       - name: build vue component
         run: npm run build
-        working-directory: ./vue_component
+      - name: back to root directory
+        run: cd..
       - name: set up Poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
