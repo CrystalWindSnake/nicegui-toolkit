@@ -3,23 +3,26 @@ import re
 import shutil
 
 
-
-EX_DEST_DIR_ROOT = Path(__file__).parent.parent.parent / 'nicegui_toolkit/layout_tool/track_ball'
-CSS_DEST_DIR_ROOT =Path(__file__).parent.parent.parent / 'nicegui_toolkit/layout_tool/track_ball/libs'
-DIST_ROOT = Path(__file__).parent.parent / 'dist'
+EX_DEST_DIR_ROOT = (
+    Path(__file__).parent.parent.parent / "nicegui_toolkit/layout_tool/track_ball"
+).resolve()
+CSS_DEST_DIR_ROOT = (
+    Path(__file__).parent.parent.parent / "nicegui_toolkit/layout_tool/track_ball/libs"
+).resolve()
+DIST_ROOT = (Path(__file__).parent.parent / "dist").resolve()
 
 
 RE_import_stm = re.compile(r"""import(.+)from\s+["|']vue["|']""")
 
 
-def tran_vue_imports(js_file_name_without_ex:str):
+def tran_vue_imports(js_file_name_without_ex: str):
     """把vite生成的js组件文件中的 improt {getCurrentScope as kL,..} from 'vue'
     转换成
     const kL = Vue.getCurrentScope
     ...
     """
 
-    js_file_name = f'{js_file_name_without_ex}.js'
+    js_file_name = f"{js_file_name_without_ex}.js"
 
     file = DIST_ROOT / js_file_name
     lines = file.read_text(encoding="utf8").splitlines()
@@ -43,13 +46,13 @@ def tran_vue_imports(js_file_name_without_ex:str):
         const_stms = "\n".join(each_const_stms) + "\n"
         # print(const_stms)
 
-        to_file = EX_DEST_DIR_ROOT/ js_file_name
+        to_file = EX_DEST_DIR_ROOT / js_file_name
 
         with open(to_file, mode="w", encoding="utf8") as f:
             f.write(const_stms)
             f.write("\n".join(lines[1:]))
 
-        print(f'create file[{str(to_file)}]')
+        print(f"create file[{str(to_file)}]")
 
     # print(RE_import_stm.match(import_stm))
 
@@ -62,12 +65,11 @@ def copy2styls(dist_file, dest_file):
 
     shutil.copy(src, to_file)
 
-cp_name='trackBall'
+
+cp_name = "trackBall"
 tran_vue_imports(cp_name)
-copy2styls(f'{cp_name}.css',f'{cp_name}.css')
+copy2styls(f"{cp_name}.css", f"{cp_name}.css")
 
 # for cp in ['TrackBall','Aiming','ClayBox']:
 #     tran_vue_imports(cp)
 #     copy2styls(f'{cp}/style.css',f'{cp}.css')
-
-
