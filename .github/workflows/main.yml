@@ -15,18 +15,8 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.8'
-      - name: set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - name: Install pnpm
-        run: npm install -g pnpm
-      - name: install dependencies
-        run: pnpm install
-        working-directory: vue_component
       - name: build vue component
-        run: pnpm run build
-        working-directory: vue_component
+        uses: ../actions/build-vue-component
       - name: set up Poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
@@ -51,17 +41,8 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
-      - name: set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'npm'
-      - name: install dependencies
-        run: npm ci
-        working-directory: ./vue_component
       - name: build vue component
-        run: npm run build
-        working-directory: ./vue_component
+        uses: ../actions/build-vue-component
       - name: set up Poetry
         uses: abatilo/actions-poetry@v2.0.0
         with:
