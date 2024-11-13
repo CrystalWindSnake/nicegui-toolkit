@@ -58,8 +58,6 @@ def tran_vue_imports(js_file_name_without_ex: str):
 
         print(f"create file[{str(to_file)}]")
 
-    # print(RE_import_stm.match(import_stm))
-
 
 def copy2styls(dist_file, dest_file):
     src = DIST_ROOT / dist_file
@@ -67,13 +65,13 @@ def copy2styls(dist_file, dest_file):
         return
     to_file = CSS_DEST_DIR_ROOT / dest_file
 
+    if not CSS_DEST_DIR_ROOT.exists():
+        CSS_DEST_DIR_ROOT.mkdir(exist_ok=True)
+
     shutil.copy(src, to_file)
+    print(f"copy css file to [{str(to_file)}]")
 
 
 cp_name = "trackBall"
 tran_vue_imports(cp_name)
 copy2styls(f"{cp_name}.css", f"{cp_name}.css")
-
-# for cp in ['TrackBall','Aiming','ClayBox']:
-#     tran_vue_imports(cp)
-#     copy2styls(f'{cp}/style.css',f'{cp}.css')
