@@ -71,7 +71,7 @@ export default defineConfig({
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === "style.css") {
-            return "trackball.css";
+            return "trackBall.css";
           }
           return assetInfo.name;
         },

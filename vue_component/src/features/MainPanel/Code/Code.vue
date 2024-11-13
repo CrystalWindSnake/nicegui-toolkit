@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import ClassesListEditorArea from "@/features/ClassesList/EditorArea.vue";
 import { useTargetContextDesc } from "./targetContextDesc";
 import TargetContextDesc from "./TargetContextDesc.vue";
-import ClassesListEditorArea from "@/features/ClassesList/EditorArea.vue";
 
 const targetContextDescModel = useTargetContextDesc();
 </script>
