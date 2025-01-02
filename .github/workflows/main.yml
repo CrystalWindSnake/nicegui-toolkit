@@ -26,6 +26,7 @@ jobs:
           set -x
           poetry config virtualenvs.create false
           poetry install --all-extras
+          poetry update nicegui
           python -m playwright install 
       - run: pytest __tests/
 
@@ -52,6 +53,7 @@ jobs:
           set -x
           poetry config virtualenvs.create false
           poetry install --all-extras
+          poetry update nicegui
       - run: poetry build
       - name: run
         run: |
