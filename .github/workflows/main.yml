@@ -17,6 +17,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-env
 
+      - name: build vue component
+        uses: ./.github/actions/build-vue-component
+
       - name: run test
         timeout-minutes: 4
         run: uv run pytest __tests/
