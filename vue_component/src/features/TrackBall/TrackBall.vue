@@ -24,7 +24,7 @@ import { useHoverElement } from "@/shared/hoverElement";
 const props = defineProps<{
   selectorConfig: TSelectorConfig;
   currentTargetContext: TTargetContext;
-  resource_path?: string;
+  resourcePath?: string;
   elementTreeData: TElementTreeData;
   languageConfig: TLanguageConfig;
 }>();
@@ -41,7 +41,7 @@ tbUtils.initTrackBall({
 
 // onMounted
 onMounted(async () => {
-  await tbUtils.createClientStyleLinkTag(props.resource_path);
+  await tbUtils.createClientStyleLinkTag(props.resourcePath);
   emit("init");
 });
 

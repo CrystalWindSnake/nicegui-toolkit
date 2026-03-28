@@ -10,51 +10,37 @@ on:
 jobs:
   run-all-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10']
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-env
+
       - name: build vue component
         uses: ./.github/actions/build-vue-component
-      - name: set up Poetry
-        uses: abatilo/actions-poetry@v2.0.0
-        with:
-          poetry-version: "1.6.1"
-      - name: install dependencies
-        run: |
-          set -x
-          poetry config virtualenvs.create false
-          poetry install --all-extras
-          python -m playwright install 
-      - run: pytest __tests/
+
+      - name: run test
+        timeout-minutes: 4
+        run: uv run pytest __tests/
+        shell: bash
 
   try-startup:
     strategy:
       matrix:
-        python: ["3.8", "3.11"]
+        python-version: ['3.10']
       fail-fast: false
     runs-on: ubuntu-latest
     needs: [run-all-test]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python }}
+
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-env
+
       - name: build vue component
         uses: ./.github/actions/build-vue-component
-      - name: set up Poetry
-        uses: abatilo/actions-poetry@v2.0.0
-        with:
-          poetry-version: "1.6.1"
-      - name: install dependencies
-        run: |
-          set -x
-          poetry config virtualenvs.create false
-          poetry install --all-extras
-      - run: poetry build
+
       - name: run
         run: |
-          poetry install
-          python actions_scripts/try_startup_script.py
+          uv run actions_scripts/try_startup_script.py
     
