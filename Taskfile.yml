@@ -5,7 +5,7 @@ tasks:
     - uv run --frozen pytest -v __tests --html=temp/pytest-report.html
 
   build-npm:
-    dir: vue_components/
+    dir: vue_component/
     cmds: 
       - pnpm run build
     

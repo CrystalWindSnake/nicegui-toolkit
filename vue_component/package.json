@@ -7,7 +7,7 @@
     "dev": "vite",
     "test": "vitest",
     "only build": "vite build",
-    "build": "vite build && python scripts/vue_build_file_tran.py",
+    "build": "vite build && uv run --no-project scripts/vue_build_file_tran.py",
     "preview": "vite preview"
   },
   "dependencies": {
