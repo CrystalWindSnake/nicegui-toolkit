@@ -1,6 +1,6 @@
 [project]
 name = "niceguiToolkit"
-version = "0.3.0"
+version = "0.4.0"
 description = "toolkit for nicegui."
 keywords = ["nicegui", "webui", "tool"]
 Repository = "https://github.com/CrystalWindSnake/nicegui-toolkit"
