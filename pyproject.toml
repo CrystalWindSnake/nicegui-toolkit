@@ -12,7 +12,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 
 dependencies = [
-    "nicegui>=3.0.0",
+    "nicegui~=3.5",
     "executing>=2.1.0",
     "asttokens>=2.4.1"
 ]
