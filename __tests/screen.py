@@ -1,12 +1,18 @@
 from __future__ import annotations
 
+import os
+import re
 import threading
-from playwright.sync_api import Browser, Page, expect
+from typing import Union
+from playwright.sync_api import Browser, Page, Locator, expect
 from nicegui import ui, app
+from nicegui.testing.general import prepare_simulation
 from nicegui.server import Server
+from . import utils
 from . import common
 
 PORT = 3392
+os.environ["NICEGUI_SCREEN_TEST_PORT"] = str(PORT)
 
 
 class ServerManager:
@@ -16,14 +22,22 @@ class ServerManager:
 
         self._context = browser.new_context()
         self._context.set_default_timeout(10000)
-        self.ui_run_kwargs = {"port": PORT, "show": False, "reload": False}
+
+        self.ui_run_kwargs = {
+            "port": PORT,
+            "show": False,
+            "reload": False,
+        }
         self.connected = threading.Event()
 
         app.on_startup(self.connected.set)
 
     def start_server(self) -> None:
         """Start the webserver in a separate thread. This is the equivalent of `ui.run()` in a normal script."""
-        self.server_thread = threading.Thread(target=ui.run, kwargs=self.ui_run_kwargs)
+        prepare_simulation()
+        self.server_thread = threading.Thread(
+            target=lambda: ui.run(**self.ui_run_kwargs)
+        )
         self.server_thread.start()
 
     def stop_server(self) -> None:
@@ -39,7 +53,9 @@ class ServerManager:
             self.start_server()
 
         # self.connected.clear()
-
+        is_connected = self.connected.wait(5)
+        if not is_connected:
+            raise TimeoutError("Failed to connect to server")
         return BrowserManager(self, self.connected)
 
 
@@ -142,6 +158,12 @@ class PageUtils:
 
     def should_not_contain(self, text: str):
         expect(self._page.locator("body")).not_to_contain_text(text)
+
+    def should_equal_text(self, expected):
+        expected = re.escape(expected)
+        return expect(self._page.locator("body")).to_contain_text(
+            re.compile(f"^{expected}$")
+        )
 
     def get_by_text(self, text: str):
         return self._page.get_by_text(text)
