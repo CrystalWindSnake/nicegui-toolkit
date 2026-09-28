@@ -48,6 +48,9 @@ jobs:
   verify-wheel:
     runs-on: ubuntu-latest
     needs: [run-all-test]
+    strategy:
+      matrix:
+        python-version: ['3.10']
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-env
