@@ -40,6 +40,14 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.sdist]
 only-include = ["nicegui_toolkit"]
+artifacts = [
+  "nicegui_toolkit/layout_tool/track_ball/trackBall.js",
+  "nicegui_toolkit/layout_tool/track_ball/libs/trackBall.css",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["nicegui_toolkit"]
+artifacts = [
+  "nicegui_toolkit/layout_tool/track_ball/trackBall.js",
+  "nicegui_toolkit/layout_tool/track_ball/libs/trackBall.css",
+]

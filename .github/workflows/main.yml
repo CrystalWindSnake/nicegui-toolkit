@@ -44,3 +44,28 @@ jobs:
         run: |
           uv run actions_scripts/try_startup_script.py
     
+
+  verify-wheel:
+    runs-on: ubuntu-latest
+    needs: [run-all-test]
+    strategy:
+      matrix:
+        python-version: ['3.10']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-env
+
+      - name: build vue component
+        uses: ./.github/actions/build-vue-component
+
+      - name: build wheel
+        run: uv build
+
+      - name: install wheel into clean env
+        run: |
+          uv venv .verify-env
+          uv pip install --python .verify-env dist/*.whl
+
+      - name: assert track_ball assets present and import works
+        run: |
+          .verify-env/bin/python -c "from nicegui_toolkit.layout_tool.track_ball.trackBall import _RESOURCE; assert _RESOURCE.exists(), 'libs dir missing'; assert (_RESOURCE.parent / 'trackBall.js').exists(), 'trackBall.js missing'; print('OK: track_ball assets present')"
