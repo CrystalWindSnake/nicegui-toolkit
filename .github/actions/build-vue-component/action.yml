@@ -10,7 +10,7 @@ runs:
       with:
         node-version: '18'
     - name: Install pnpm
-      run: npm install -g pnpm
+      run: npm install -g pnpm@9
       shell: bash
     - name: install dependencies
       run: pnpm install
